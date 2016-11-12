@@ -85,7 +85,8 @@
 -define:UNITY_EDITOR_64
 -define:UNITY_EDITOR_LINUX
 -define:UNITY_TEAM_LICENSE
-Assets/Scripts/Char.cs
+Assets/NewBehaviourScript.cs
 Assets/Scripts/DeadlyPlank.cs
+Assets/Scripts/Gravity.cs
 -r:/opt/Unity/Editor/Data/Mono/lib/mono/unity/System.Runtime.Serialization.dll
 -r:/opt/Unity/Editor/Data/Mono/lib/mono/unity/System.Xml.Linq.dll

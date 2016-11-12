@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Char : MonoBehaviour {
+public class Gravity : MonoBehaviour {
 
 	float nextUsage;
 	public float delay = 0.1f;
