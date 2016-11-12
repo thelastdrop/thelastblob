@@ -25,22 +25,18 @@ public class Gravity : MonoBehaviour {
 		if(Input.GetKeyDown (KeyCode.W) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
 			gravity.y = gravityValue;
-			Debug.Log("Grav: " + Physics2D.gravity);
 		}
 		if(Input.GetKeyDown (KeyCode.A) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
 			gravity.x = -gravityValue;
-			Debug.Log("Grav: " + Physics2D.gravity);
 		}
 		if(Input.GetKeyDown (KeyCode.S) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
 			gravity.y = -gravityValue;
-			Debug.Log("Grav: " + Physics2D.gravity);
 		}
 		if(Input.GetKeyDown (KeyCode.D) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
 			gravity.x = gravityValue;
-			Debug.Log("Grav: " + Physics2D.gravity);
 		}
 	}
 }

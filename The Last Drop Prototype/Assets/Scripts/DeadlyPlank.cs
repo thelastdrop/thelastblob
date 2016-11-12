@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DeadlyPlank : MonoBehaviour
-{
+public class DeadlyPlank : MonoBehaviour {
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
+    }
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Player") {
+            collision.gameObject.SetActive(false);
+            Debug.Log("U ded");
+        }
     }
 }
