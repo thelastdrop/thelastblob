@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/FirstPrototipeLevel.unity
+- path: Assets/Scenes/GravityTest.unity
   isLoaded: 1
   isActive: 1
