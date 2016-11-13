@@ -24,19 +24,20 @@ public class Gravity : MonoBehaviour {
 	void changeGravity() {
 		if(Input.GetKeyDown (KeyCode.W) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
-			gravity.y = gravityValue;
+			gravity = new Vector3(0f, gravityValue, 0f);
 		}
 		if(Input.GetKeyDown (KeyCode.A) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
-			gravity.x = -gravityValue;
+			gravity = new Vector3(-gravityValue, 0f, 0f);
 		}
 		if(Input.GetKeyDown (KeyCode.S) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
-			gravity.y = -gravityValue;
+			gravity = new Vector3(0f, -gravityValue, 0f);			
 		}
 		if(Input.GetKeyDown (KeyCode.D) && Time.time > nextUsage) {
      		nextUsage = Time.time + delay;
-			gravity.x = gravityValue;
+			gravity = new Vector3(gravityValue, 0f, 0f);
+			
 		}
 	}
 }
