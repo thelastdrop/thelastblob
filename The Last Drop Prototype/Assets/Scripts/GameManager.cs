@@ -3,10 +3,32 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
     public static GameManager Instance = null;
+    
 
-    [Header("Prefab for object pooling")]
+    [Space(5), Header("Prefab for object pooling"), Tooltip("Liquid Particles object")]
     public GameObject m_dynam_particle;
+    [Tooltip("Number of instances"), Range(0, 300)]
+    public int m_dynam_particle_no_instaces = 0;
 
+
+
+    [Space(5), Header("Gravity"), Tooltip("Type of gravity changes: defined vector directions(uncheck), or continuus(check)")]
+    public bool m_Gravity_Type = false;
+
+    // Gravity defined by vector is changed using Gravity_Change( bool clockwise) method in this script
+    [Tooltip("The directions that gravity can assume")]
+    public Vector2[] m_Gravity_Vectors = { new Vector2(0f, -9.8f),
+                                           new Vector2(-9.8f, 0f),
+                                           new Vector2(0f, 9.8f),
+                                           new Vector2(9.8f, 0f), };
+    private int m_current_grav_ind = 0;
+
+    [Tooltip("How much time it gets to change gravity direction"), Range(0.1f,3f)]
+    public float m_Gravity_change_CD = 0.3f;
+    private float m_last_gravity_change = 0.0f;
+
+
+    
     void Awake()
     {
         if( Instance == null)
@@ -20,11 +42,26 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, 130, 130);
+        ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    public void Gravity_Change( bool clockwise )
+    {
+        if( (Time.time - m_last_gravity_change) > m_Gravity_change_CD)
+        {
+            // if clockwise add one to ind, or remove one if counter-clockwise
+            // if ind is equal than gravity vector length, set it to 0
+            m_current_grav_ind += (clockwise) ? -1 : 1;
+            if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
+            if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
+            Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind]; // set current gravity
+
+            m_last_gravity_change = Time.time;
+        }
+    }
 }
