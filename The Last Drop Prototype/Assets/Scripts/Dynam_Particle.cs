@@ -10,7 +10,8 @@ public class Dynam_Particle : MonoBehaviour
     public GameObject currentImage; //The image is for the metaball shader for the effect, it is onle seen by the liquids camera.
     public GameObject[] particleImages; //We need multiple particle images to reduce drawcalls
     float GAS_FLOATABILITY = 1.0f; //How fast does the gas goes up?
-    float particleLifeTime = 3.0f, startTime;//How much time before the particle scalesdown and dies	
+    float particleLifeTime = 3.0f, startTime;//How much time before the particle scalesdown and dies
+    public bool scales_down = false;
 
     void start()
     {
@@ -68,18 +69,18 @@ public class Dynam_Particle : MonoBehaviour
         {
             case STATES.WATER: //Water and lava got the same behaviour
                 MovementAnimation();
-                ScaleDown();
+                if(scales_down) ScaleDown();
                 break;
             case STATES.LAVA:
                 MovementAnimation();
-                ScaleDown();
+                if (scales_down) ScaleDown();
                 break;
             case STATES.GAS:
                 if (rb.velocity.y < 50)
                 { //Limits the speed in Y to avoid reaching mach 7 in speed
                     rb.AddForce( -Physics2D.gravity * GAS_FLOATABILITY ); // Gas always goes upwards
                 }
-                ScaleDown();
+                if (scales_down) ScaleDown();
                 break;
 
         }
