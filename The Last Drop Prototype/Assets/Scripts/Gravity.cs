@@ -10,11 +10,13 @@ public class Gravity : MonoBehaviour {
  
 	void Start() {
 		gravity = Physics2D.gravity;
+		gravity = new Vector3(0f, -gravityValue, 0f);
    		nextUsage = Time.time + delay;
  	}
 
 	void Update () {
 		changeGravity();
+
 	}
 
 	void FixedUpdate() {
@@ -40,4 +42,7 @@ public class Gravity : MonoBehaviour {
 			
 		}
 	}
+
+
+
 }
