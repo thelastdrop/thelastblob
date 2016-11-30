@@ -1,0 +1,521 @@
+fileFormatVersion: 2
+guid: 20638b76844874c5eacebdddd5fafacf
+timeCreated: 1480430805
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Drop_AssetsMap1_0
+    21300002: Drop_AssetsMap1_1
+    21300004: Drop_AssetsMap1_2
+    21300006: Drop_AssetsMap1_3
+    21300008: Drop_AssetsMap1_4
+    21300010: Drop_AssetsMap1_5
+    21300012: Drop_AssetsMap1_6
+    21300014: Drop_AssetsMap1_7
+    21300016: Drop_AssetsMap1_8
+    21300018: Drop_AssetsMap1_9
+    21300020: Drop_AssetsMap1_10
+    21300022: Drop_AssetsMap1_11
+    21300024: Drop_AssetsMap1_12
+    21300026: Drop_AssetsMap1_13
+    21300028: Drop_AssetsMap1_14
+    21300030: Drop_AssetsMap1_15
+    21300032: Drop_AssetsMap1_16
+    21300034: Drop_AssetsMap1_17
+    21300036: Drop_AssetsMap1_18
+    21300038: Drop_AssetsMap1_19
+    21300040: Drop_AssetsMap1_20
+    21300042: Drop_AssetsMap1_21
+    21300044: Drop_AssetsMap1_22
+    21300046: Drop_AssetsMap1_23
+    21300048: Drop_AssetsMap1_24
+    21300050: Drop_AssetsMap1_25
+    21300052: Drop_AssetsMap1_26
+    21300054: Drop_AssetsMap1_27
+    21300056: Drop_AssetsMap1_28
+    21300058: Drop_AssetsMap1_29
+    21300060: Drop_AssetsMap1_30
+    21300062: Drop_AssetsMap1_31
+    21300064: Drop_AssetsMap1_32
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 329
+        width: 186
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_1
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 248
+        width: 62
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_2
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 323
+        width: 29
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_3
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 327
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_4
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 326
+        width: 19
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_5
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 322
+        width: 29
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_6
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 320
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_7
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 319
+        width: 11
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 266
+        width: 62
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_9
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 248
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_10
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 262
+        width: 29
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_11
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 266
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_12
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 266
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_13
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 262
+        width: 29
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_14
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 258
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_15
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 258
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 197
+        width: 186
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_17
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 205
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_18
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 205
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_19
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 205
+        width: 19
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_20
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 205
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_21
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 194
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_22
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 194
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 186
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_24
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 142
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_25
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 142
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_26
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 142
+        width: 19
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_27
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 142
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_28
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 134
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_29
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 134
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_30
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 0
+        width: 91
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_31
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 82
+        width: 31
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Drop_AssetsMap1_32
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 81
+        width: 57
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
