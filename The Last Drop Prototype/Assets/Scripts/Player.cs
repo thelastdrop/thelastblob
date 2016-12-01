@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
-    Rigidbody2D rb;
     Transform tr;
 
     public GameObject m_Player_Camera;
@@ -24,6 +23,7 @@ public class Player : MonoBehaviour {
     [Tooltip("Recoil force from ability 1 applied to player(*0-1)"), Range(0f,1f)]
     public float m_ability1_recoil;
 
+
     private float m_V_Axis1;
     private float m_H_Axis1;
     private float m_V_Axis2;
@@ -34,10 +34,11 @@ public class Player : MonoBehaviour {
     private float m_last_time_ability1;
 
     // Use this for initialization
-    void Start () {
-        rb = gameObject.GetComponent<Rigidbody2D>();
+    void Start ()
+    {
         tr = gameObject.GetComponent<Transform>();
         m_cam_grav_vector = new Vector3(Physics2D.gravity.x, Physics2D.gravity.y, 0.0f);
+        if (m_Player_Camera == null) m_Player_Camera = GameObject.Find("Player_Cameras");
         m_Player_Camera.transform.rotation.SetLookRotation(m_cam_grav_vector, Vector3.up);
     }
 
@@ -85,7 +86,7 @@ public class Player : MonoBehaviour {
         }
         else   // continous gravity adjustments
         {
-            m_player_applied_speed.Set(0.0f, 0.0f);
+ /*           m_player_applied_speed.Set(0.0f, 0.0f);
             if (m_H_Axis1 != 0.0f) m_player_applied_speed += new Vector2(Physics2D.gravity.y, -Physics2D.gravity.x).normalized * m_Speed_H * m_H_Axis1 * Time.fixedDeltaTime * -1;//force applied perpendiculary to gravity
             if (m_V_Axis1 != 0.0f) m_player_applied_speed += new Vector2(-Physics2D.gravity.x, -Physics2D.gravity.y).normalized * m_Speed_V * m_V_Axis1 * Time.fixedDeltaTime;
             m_player_applied_speed += rb.velocity;
@@ -93,8 +94,8 @@ public class Player : MonoBehaviour {
             if ((m_H_Axis2 != 0.0f) && (!Input.GetButton("Fire1")))
             {
                 Physics2D.gravity = Quaternion.Euler(0f, 0f, m_H_Axis2 * Time.fixedDeltaTime * 100.0f) * Physics2D.gravity;
-            }
         }
+ */       }
     }
 
     /*  

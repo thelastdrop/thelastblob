@@ -74,10 +74,10 @@ public class PlayerAvatar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        raycast_adjustment();
-        Mesh_Maker(); // function to create the mesh. It's also used during update to re-make it(only way to update)
+ //       raycast_adjustment();
+ //       Mesh_Maker(); // function to create the mesh. It's also used during update to re-make it(only way to update)
 
-        coll_update(); // update the collider matching the 
+//        coll_update(); // update the collider matching the 
     }
 
     /************************************/
@@ -100,8 +100,6 @@ public class PlayerAvatar : MonoBehaviour {
     { 
         m_Vlist.Clear();
         m_Vlist.Add(new RB_vert( new Vector2(0f,0f)));
-        Vector2 gravity_ef = Physics2D.gravity * m_Gravity_Mult;
-        Vector2 accel_ef = (rb.velocity - m_old_speed) * m_Accel_Mult;
         Vector2 position = new Vector2();
 
 //        int num_Vertices = 0;
