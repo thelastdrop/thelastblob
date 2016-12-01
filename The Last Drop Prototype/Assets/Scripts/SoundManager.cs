@@ -5,7 +5,9 @@ namespace Completed
 {
     public class SoundManager : MonoBehaviour 
     {
+		[Header("Effect sound")]
         public AudioSource efxSource;
+		[Header("Music sound")]
         public AudioSource musicSource;
         public static SoundManager instance = null;        
         
