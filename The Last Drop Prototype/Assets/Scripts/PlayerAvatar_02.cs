@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class PlayerAvatar_02 : MonoBehaviour
 {
     Transform tr;
-    Rigidbody2D rb;
     //    CircleCollider2D m_Circle_Coll;
 
     public string m_Layer_Static;
@@ -17,13 +16,11 @@ public class PlayerAvatar_02 : MonoBehaviour
     public int m_No_Particles = 8;
     [Tooltip("Distance of the Raycast at rest, radius of the drop")]
     public float m_Radius = 1.0f;
-    [Tooltip("maximum % of change in the gravity axis"), Range(-5f, 5f)]
-    public float m_Max_Change = 0.2f;
-    [Tooltip("Gravity multiplier, it will multiply the effect of gravity changing the offset of the circle collider"), Range(-5f, 5f)]
-    public float m_Gravity_Mult = 0.2f;
-    [Tooltip("Acceleration multiplier, it will multiply the effect of acceleration"), Range(-1f, 1f)]
-    public float m_Accel_Mult = 0.2f;
-    public AnimationCurve m_GravDistance_Curve;
+
+    [Tooltip("Strenght of the bounds toward center")]
+    public float m_Buond_To_Center;
+    [Tooltip("Strenght of the surface buond")]
+    public float m_Surface_Buond;
 
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
     // Record [0] store the center of the mesh information.
@@ -46,7 +43,9 @@ public class PlayerAvatar_02 : MonoBehaviour
         
         public RB_vert( GameObject part_ref )
         {
+            part_ref.tag = "Player";
             particle = part_ref;
+            
             tr = particle.GetComponent<Transform>();
             rb = particle.GetComponent<Rigidbody2D>();
 
@@ -70,13 +69,39 @@ public class PlayerAvatar_02 : MonoBehaviour
             to_prev = particle.AddComponent<SpringJoint2D>();
             to_prev.connectedBody = prev_ref.GetComponent<Rigidbody2D>();
         }
+
+        public Vector3 get_center_position()
+        {
+            return Center.transform.position;
+        }
+
+        public void set_bound_tocenter(float str)
+        {
+            //            to_center.frequency = str;
+//            if (to_center == null) Debug.Log("Cacchiarola");
+            SpringJoint2D[] joints = particle.GetComponents<SpringJoint2D>();
+            joints[0].frequency = str;
+        }
+
+        public void set_bound_surface(float str)
+        {
+            SpringJoint2D[] joints = particle.GetComponents<SpringJoint2D>();
+            joints[1].frequency = str;
+        }
+    }
+
+    void OnValidate()
+    {
+        if (m_Vlist.Count == 0) return;
+        Debug.Log(m_Vlist.Count) ;
+        Set_Buond_To_Center();
+        Set_Surface_Buond();
     }
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         tr = gameObject.GetComponent<Transform>();
-        rb = gameObject.GetComponent<Rigidbody2D>();
 
         //        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer(m_Layer_Player), LayerMask.NameToLayer(m_Layer_Static));
 
@@ -86,6 +111,11 @@ public class PlayerAvatar_02 : MonoBehaviour
         make_vertex_list(); // actually building the list of vertices used by mesh maker
 
  
+    }
+
+    void Update()
+    {
+        tr.position = m_Vlist[0].get_center_position();
     }
 
     /************************************/
@@ -106,9 +136,10 @@ public class PlayerAvatar_02 : MonoBehaviour
 
     void make_vertex_list()  // First time run to make the vertex list used by procedural mesh and polygon collider path
     {
-        m_Vlist.Clear();
-        m_Vlist.Add(new RB_vert( Instantiate(m_Particle, tr.position, Quaternion.identity, tr) as GameObject));
+//        m_Vlist.Clear();
+        m_Vlist.Add(new RB_vert( Instantiate(m_Particle, tr.position, Quaternion.identity) as GameObject));
         m_Vlist[0].set_center();
+        
         Vector3 position = Vector3.zero;
         
 
@@ -116,20 +147,44 @@ public class PlayerAvatar_02 : MonoBehaviour
         {
             position.Set(m_Radius * m_CosSin[i].x, m_Radius * m_CosSin[i].y, tr.position.z);
 
-            m_Vlist.Add(new RB_vert(Instantiate(m_Particle, tr.position + position,Quaternion.identity, tr) as GameObject));
+            m_Vlist.Add(new RB_vert(Instantiate(m_Particle, tr.position + position,Quaternion.identity) as GameObject));
             m_Vlist[i + 1].center_spring();
             if (i != 0)
             {
                 if (i == m_No_Particles - 1)
                 {
                     m_Vlist[1].prev_spring(m_Vlist[i + 1].particle);
+                    m_Vlist[i + 1].prev_spring(m_Vlist[i].particle);
                 } else
                 {
                     m_Vlist[i + 1].prev_spring(m_Vlist[i].particle);
                 }
             }
         }
-
         // Setup the Polygon Collider
+    }
+
+
+    //[Tooltip("Strenght of the bounds toward center")]
+    //public float m_Buond_To_Center;
+    //[Tooltip("Strenght of the surface buond")]
+    //public float m_Surface_Buond;
+
+    public void Set_Buond_To_Center()
+    {
+        for(int i = 1; i < m_No_Particles + 1; i++) //start from 1, skipping center
+        {
+            Debug.Log(i);
+            m_Vlist[i].set_bound_tocenter( m_Buond_To_Center );
+        }
+    }
+
+    public void Set_Surface_Buond()
+    {
+        for (int i = 1; i < m_No_Particles + 1; i++) //start from 1, skipping center
+        {
+            Debug.Log(i);
+            m_Vlist[i].set_bound_surface( m_Surface_Buond );
+        }
     }
 }
