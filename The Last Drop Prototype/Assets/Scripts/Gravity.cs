@@ -4,7 +4,7 @@ using System.Collections;
 public class Gravity : MonoBehaviour {
 
 	float nextUsage;
-	public float delay = 0.1f;
+	public float delay = 2f;
 	public float gravityValue = 9.81f;
 	Vector3 gravity;
  
