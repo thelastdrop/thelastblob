@@ -8,9 +8,7 @@ public class GameManager : MonoBehaviour {
     [Space(5), Header("Prefab for object pooling"), Tooltip("Liquid Particles object")]
     public GameObject m_dynam_particle;
     [Tooltip("Number of instances"), Range(0, 300)]
-    public int m_dynam_particle_no_instaces = 0;
-
-
+    public int m_dynam_particle_no_instaces = 30;
 
     [Space(5), Header("Gravity"), Tooltip("Type of gravity changes: defined vector directions(uncheck), or continuus(check)")]
     public bool m_Gravity_Type = false;
@@ -25,10 +23,14 @@ public class GameManager : MonoBehaviour {
 
     [Tooltip("How much time it gets to change gravity direction"), Range(0.1f,3f)]
     public float m_Gravity_change_CD = 0.3f;
+
     private float m_last_gravity_change = 0.0f;
 
 
-    
+    public GameObject m_Player;
+
+
+
     void Awake()
     {
         if( Instance == null)
@@ -39,11 +41,11 @@ public class GameManager : MonoBehaviour {
             Destroy(gameObject);
         }
     }
-
 	// Use this for initialization
-	void Start () {
-        ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
-	}
+	void Start ()
+    {
+        POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
+    }
 	
 	// Update is called once per frame
 	void Update () {
