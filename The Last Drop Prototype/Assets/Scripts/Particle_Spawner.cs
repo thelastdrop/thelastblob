@@ -17,7 +17,7 @@ public class Particle_Spawner : MonoBehaviour
     {
         if (lastSpawnTime + SPAWN_INTERVAL < Time.time)
         { // Is it time already for spawning a new particle?
-            GameObject newLiquidParticle = ObjectPoolingManager.Instance.GetObject(Particle.name); //Spawn a particle
+            GameObject newLiquidParticle = POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(Particle.name); //Spawn a particle
             Dynam_Particle particleScript = newLiquidParticle.GetComponent<Dynam_Particle>(); // Get the particle script
             particleScript.SetLifeTime(PARTICLE_LIFETIME); //Set each particle lifetime
             particleScript.SetState(particlesState); //Set the particle State
