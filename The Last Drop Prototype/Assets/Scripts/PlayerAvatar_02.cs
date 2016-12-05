@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerAvatar_02 : MonoBehaviour
+public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 {
     Transform tr;
     //    CircleCollider2D m_Circle_Coll;
@@ -14,7 +14,7 @@ public class PlayerAvatar_02 : MonoBehaviour
 
     [Header("Shape Stats"), Tooltip("Number of particles around the center"), Range(8, 100)]
     public int m_No_Particles = 8;
-    [Tooltip("Distance of the Raycast at rest, radius of the drop")]
+    [Tooltip("Ideal radius of the drop")]
     public float m_Radius = 1.0f;
 
     [Tooltip("Strenght of the bounds toward center")]
@@ -22,12 +22,16 @@ public class PlayerAvatar_02 : MonoBehaviour
     [Tooltip("Strenght of the surface buond")]
     public float m_Surface_Buond;
 
+    [Header("Iteractions with other scripts")]
+    [Tooltip("Time must pass between a telepot and the other in secs")]
+    public float m_Min_Time_ToTeleport = 0.2f;
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
     // Record [0] store the center of the mesh information.
     private List<RB_vert> m_Vlist = new List<RB_vert>();
 
     private Vector2 m_old_speed;
     private bool m_isgrounded;
+    private float m_Last_Teleport;
 
     private Vector2[] m_CosSin;
     float m_Radii_Segment; // radial segment size by number of raycasts
@@ -41,11 +45,14 @@ public class PlayerAvatar_02 : MonoBehaviour
         public SpringJoint2D to_center;
         public SpringJoint2D to_prev;
         
-        public RB_vert( GameObject part_ref )
+        public RB_vert( GameObject part_ref, Vector3 arg_position, Quaternion arg_rotation)
         {
             part_ref.tag = "Player";
             particle = part_ref;
-            
+
+            part_ref.transform.position = arg_position;
+            part_ref.transform.rotation = arg_rotation;
+
             tr = particle.GetComponent<Transform>();
             rb = particle.GetComponent<Rigidbody2D>();
 
@@ -88,6 +95,11 @@ public class PlayerAvatar_02 : MonoBehaviour
             SpringJoint2D[] joints = particle.GetComponents<SpringJoint2D>();
             joints[1].frequency = str;
         }
+
+        public void set_location( Vector3 arg_location)
+        {
+            particle.transform.position =  arg_location;
+        }
     }
 
     void OnValidate()
@@ -118,6 +130,16 @@ public class PlayerAvatar_02 : MonoBehaviour
         tr.position = m_Vlist[0].get_center_position();
     }
 
+    void OnEnable()
+    {
+
+    }
+
+    void OnDisable()
+    {
+
+    }
+
     /************************************/
     /******** Internal methods **********/
     /************************************/
@@ -137,7 +159,7 @@ public class PlayerAvatar_02 : MonoBehaviour
     void make_vertex_list()  // First time run to make the vertex list used by procedural mesh and polygon collider path
     {
 //        m_Vlist.Clear();
-        m_Vlist.Add(new RB_vert( Instantiate(m_Particle, tr.position, Quaternion.identity) as GameObject));
+        m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position, Quaternion.identity));
         m_Vlist[0].set_center();
         
         Vector3 position = Vector3.zero;
@@ -146,8 +168,7 @@ public class PlayerAvatar_02 : MonoBehaviour
         for (int i = 0; i < m_No_Particles; i++)
         {
             position.Set(m_Radius * m_CosSin[i].x, m_Radius * m_CosSin[i].y, tr.position.z);
-
-            m_Vlist.Add(new RB_vert(Instantiate(m_Particle, tr.position + position,Quaternion.identity) as GameObject));
+            m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position + position, Quaternion.identity));
             m_Vlist[i + 1].center_spring();
             if (i != 0)
             {
@@ -186,5 +207,20 @@ public class PlayerAvatar_02 : MonoBehaviour
             Debug.Log(i);
             m_Vlist[i].set_bound_surface( m_Surface_Buond );
         }
+    }
+
+    public void Teleport_To(Vector3 relative_position, Vector3 direction)
+    {
+        if( Time.time - m_Last_Teleport >= m_Min_Time_ToTeleport )
+        {
+            for (int i = 0; i < m_No_Particles + 1; i++)
+            {
+                m_Vlist[i].set_location(relative_position);
+                float speed = m_Vlist[i].rb.velocity.magnitude;
+                m_Vlist[i].rb.velocity = direction * speed;
+            }
+            m_Last_Teleport = Time.time;
+        }
+        
     }
 }
