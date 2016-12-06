@@ -14,8 +14,7 @@ public class DeadlyPlatform : MonoBehaviour {
     }
     void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Player") {
-            collision.gameObject.SetActive(false);
-            Debug.Log("U ded");
+            GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle( collision.gameObject );
         }
     }
 }

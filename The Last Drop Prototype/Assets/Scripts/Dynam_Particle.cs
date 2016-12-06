@@ -30,6 +30,18 @@ public class Dynam_Particle : MonoBehaviour
         startTime = Time.time;
     }
 
+    void OnDisable()  // Reset state of the particle so that can be placed back to the pool
+    {
+        /*
+        SpringJoint2D[] joints = gameObject.GetComponents<SpringJoint2D>();
+        foreach( SpringJoint2D elem in joints )
+        {
+            Destroy(elem);
+        }
+        */
+        UnityEditor.PrefabUtility.ResetToPrefabState(gameObject);
+    }
+
     //The definitios to each state
     public void SetState(STATES newState)
     {
