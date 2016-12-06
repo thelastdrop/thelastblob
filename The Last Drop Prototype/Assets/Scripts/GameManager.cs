@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using POLIMIGameCollective;
 using System.Collections;
 
-public class GameManager : MonoBehaviour {
-    public static GameManager Instance = null;
+public class GameManager : Singleton<GameManager> {
+ //   public static GameManager Instance = null;
     
 
     [Space(5), Header("Prefab for object pooling"), Tooltip("Liquid Particles object")]
@@ -26,31 +27,39 @@ public class GameManager : MonoBehaviour {
 
     private float m_last_gravity_change = 0.0f;
 
-
+    // Used player references(scripts, informations ecc)
     public GameObject m_Player;
+    public PlayerAvatar_02 m_Player_Avatar_Cs;
 
 
 
     void Awake()
     {
-        if( Instance == null)
+/*        if( Instance == null)
         {
             Instance = this;
         } else
         {
             Destroy(gameObject);
         }
-    }
-	// Use this for initialization
-	void Start ()
-    {
+*/
+        // Loading Pools
+
         POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    void Start()
+    {
+        m_Player = GameObject.Find("Player");
+        if (m_Player == null)
+        {
+            Debug.Log("Found no Player in scene");
+        }
+        else
+        {
+            m_Player_Avatar_Cs = m_Player.GetComponent<PlayerAvatar_02>() as PlayerAvatar_02;
+        }
+    }
 
     public void Gravity_Change( bool clockwise )
     {

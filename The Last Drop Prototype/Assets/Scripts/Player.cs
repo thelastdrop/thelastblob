@@ -3,11 +3,10 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
     Transform tr;
-
-    public GameObject m_Player_Camera;
+    
     public GameObject m_Particle;
 
-    [Header("Character Movement Stats")]
+    [Header("Character Movement Stats -- Not in Use")]
     [Tooltip("Character increments of speed H axis")]
     public float m_Speed_H;
     [Tooltip("Character increments of speed V axis")]
@@ -15,20 +14,20 @@ public class Player : MonoBehaviour {
     [Tooltip("Character max total speed, counting gravity too")]
     public float m_Max_Speed;
 
-    [Space(5), Header("Character Abilities")]
+    [Space(5), Header("Character Ability, Stretching")]
     [Tooltip("Cooldown for ability on Fire1 input")]
-    public float m_CD_ability1;
+    public float m_Ability1_CD;
     [Tooltip("Force applied to ability")]
-    public float m_ability1_force;
-    [Tooltip("Recoil force from ability 1 applied to player(*0-1)"), Range(0f,1f)]
-    public float m_ability1_recoil;
+    public float m_Ability1_force;
+    [Tooltip("%(0.0 - 1.0) of particles used for stretching"), Range(0f, 1f)]
+    public float m_Ability1_Perc_Particle_Used;
 
 
     private float m_V_Axis1;
     private float m_H_Axis1;
     private float m_V_Axis2;
     private float m_H_Axis2;
-    private Vector3 m_cam_grav_vector;
+
     private Vector2 m_player_applied_speed;
 
     private float m_last_time_ability1;
@@ -37,9 +36,7 @@ public class Player : MonoBehaviour {
     void Start ()
     {
         tr = gameObject.GetComponent<Transform>();
-        m_cam_grav_vector = new Vector3(Physics2D.gravity.x, Physics2D.gravity.y, 0.0f);
-        if (m_Player_Camera == null) m_Player_Camera = GameObject.Find("Player_Cameras");
-        m_Player_Camera.transform.rotation.SetLookRotation(m_cam_grav_vector, Vector3.up);
+
     }
 
     // Update is called once per frame
@@ -52,21 +49,15 @@ public class Player : MonoBehaviour {
 /********************************************/
 /*    Ability(jump, shoot, stretch ecc)     */
 /********************************************/
-/*
+
         if ( (      Input.GetButton("Fire1")                   ) &&
-             (Time.time - m_last_time_ability1) > m_CD_ability1) 
+             (Time.time - m_last_time_ability1) > m_Ability1_CD) 
         {
                 m_last_time_ability1 = Time.time;
-                GameObject particle = ObjectPoolingManager.Instance.GetObject(m_Particle.name);
-                Dynam_Particle particleScript = particle.GetComponent<Dynam_Particle>();
-                particleScript.SetLifeTime(3);
-                particleScript.SetState(Dynam_Particle.STATES.LAVA);
-                particleScript.rb.AddForce(new Vector2(m_H_Axis2, m_V_Axis2) * m_ability1_force);
-                rb.AddForce((new Vector2(-m_H_Axis2, -m_V_Axis2) - Physics2D.gravity.normalized ).normalized * m_ability1_force * m_ability1_recoil);
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), particle.GetComponent<Collider2D>());
-                particle.transform.position = tr.position;
+                Stretch(new Vector2(1.0f, 1.0f).normalized);
+            // Logic of ability one
         }
-
+/*
         if (Input.GetButton("Fire2"))
         {
         }
@@ -95,25 +86,21 @@ public class Player : MonoBehaviour {
             {
                 Physics2D.gravity = Quaternion.Euler(0f, 0f, m_H_Axis2 * Time.fixedDeltaTime * 100.0f) * Physics2D.gravity;
         }
- */       }
+ */      }
     }
-
-    /*  
-    void LateUpdate()
+    
+    void Stretch( Vector2 direction )
     {
-        // Camera Logic, changing so that camera.vector.up is opposite to gravity.vector
-        if ((Physics2D.gravity.x != m_cam_grav_vector.x) ||
-            (Physics2D.gravity.y != m_cam_grav_vector.y))
-        {
-            m_cam_grav_vector = Physics2D.gravity;
-            m_Player_Camera.transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, 1), -m_cam_grav_vector);
-        }
-        if ( (tr.transform.position.x != m_Player_Camera.transform.position.x)  ||
-             (tr.transform.position.y != m_Player_Camera.transform.position.y) )
-        {
-            m_Player_Camera.transform.position = new Vector3(tr.position.x, tr.position.y, m_Player_Camera.transform.position.z);
-        }
+        // Stretching is a line of particles, that are taken from the list and thrown
+        float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
+        
+        /*
+         * Possibilities:
+         1) The particles are removed and linked togheder one after the other, made not collide between each others and
+            then thrown in a direction, then the player will be naturally be pushed towards the things, and if they overlaps then are absorbed back
+         2) The particles are throwed with different forces in the direction of the stretch: easiest way out, but it will make the player going around strangely
+            _ maybe i can compensate the impulse added to the particles so that the player can't really move much with it.
+         * */
 
     }
-    */
 }
