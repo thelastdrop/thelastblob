@@ -12,8 +12,9 @@ public class MenuManager : Singleton<MenuManager> {
 	public GameObject	m_score;
 	public GameObject	m_settings;
 	public GameObject	m_about;
+	public GameObject	m_playlevel;
 
-	public enum eMenuScreen {SplashScreen=0, MainMenu=1, Tutorial=2, Score=3, Settings=4, About=5};
+	public enum eMenuScreen {SplashScreen=0, MainMenu=1, Tutorial=2, Score=3, Settings=4, About=5, PlayLevel=6};
 
 	[Header("Start with Splashscreen?")]
 	public bool m_start_with_splashscreen = true;
@@ -81,6 +82,8 @@ public class MenuManager : Singleton<MenuManager> {
 			m_settings.SetActive(false);
 		if (m_about!=null) 
 			m_about.SetActive(false);
+		if (m_playlevel!=null) 
+			m_playlevel.SetActive(false);
 	}
 
 	/// <summary>
@@ -114,12 +117,10 @@ public class MenuManager : Singleton<MenuManager> {
 		SwitchMenuTo (eMenuScreen.Settings);
 	}
 
-	public void Play() {
+	public void Play(){
 		MusicManager.Instance.StopAll ();
 		MusicManager.Instance.PlayMusic ("GameplayMusic");
-		SceneManager.LoadScene ("Gameplay");
+		SceneManager.LoadScene ("FirstPrototipeLevel");
 	}
-
-
 
 }
