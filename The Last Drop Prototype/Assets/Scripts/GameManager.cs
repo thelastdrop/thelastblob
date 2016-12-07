@@ -30,8 +30,7 @@ public class GameManager : Singleton<GameManager> {
     // Used player references(scripts, informations ecc)
     public GameObject m_Player;
     public PlayerAvatar_02 m_Player_Avatar_Cs;
-
-
+    public GameObject m_Central_Particle;
 
     void Awake()
     {

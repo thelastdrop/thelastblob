@@ -32,9 +32,11 @@ public class SwipeTest : MonoBehaviour {
 
 		#endif
 	}
-
+    
+/*
 	void FixedUpdate() {
 		// Moving a GameObject test
 		tr.position = tr.position + swipeVector.x * transform.right * speed * Time.fixedDeltaTime + swipeVector.y * transform.up * speed * Time.fixedDeltaTime;
 	}
+    */
 }
