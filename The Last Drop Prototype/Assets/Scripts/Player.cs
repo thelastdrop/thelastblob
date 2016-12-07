@@ -19,6 +19,8 @@ public class Player : MonoBehaviour {
     public float m_Ability1_CD;
     [Tooltip("Length multiplier")]
     public float m_Ability1_Length = 0.05f;
+    [Tooltip("Min Length, after which the elastic will break")]
+    public float m_Ability1_Min_Length = 0.1f;
     [Tooltip("Layers the stretching will stick to")]
     public LayerMask m_Ability1_Layers;
     [Tooltip("%(0.0 - 1.0) of particles used for stretching"), Range(0f, 1f)]
@@ -108,7 +110,9 @@ public class Player : MonoBehaviour {
             m_Central_Particle_rb.velocity = m_Central_Particle_rb.velocity + ( ( new Vector2(m_Streching_Points[0].x, m_Streching_Points[0].y) - new Vector2( m_Streching_Points[1].x, m_Streching_Points[1].y) ) * m_Ability1_Tensile_Str);
             Set_Points();
             // Current maximum lenght is: 1.0f * parts_used* m_Ability1_Length
-            if( Vector3.Magnitude(m_Streching_Points[0] - m_Streching_Points[1] ) > (float)GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used * m_Ability1_Length )
+            float lenght = Vector3.Magnitude(m_Streching_Points[0] - m_Streching_Points[1]);
+            if( ( lenght > (float)GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used * m_Ability1_Length ) ||
+                ( lenght < m_Ability1_Min_Length )                                                                                                )
             {
                 m_Line_Renderer.enabled = false;
             }
@@ -124,8 +128,6 @@ public class Player : MonoBehaviour {
         yield return new WaitForSeconds(.05f);
         m_Central_Particle = GameManager.Instance.m_Central_Particle;
         m_Central_Particle_rb = m_Central_Particle.GetComponent<Rigidbody2D>();
-        if (m_Central_Particle_rb == null) Debug.Log("NO!");
-        Debug.Log("It's ok");
     }
 
     void Stretch( Vector2 direction )
@@ -135,7 +137,7 @@ public class Player : MonoBehaviour {
         // Stretching is a line of particles, that are taken from the list and thrown
         float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
 
-        Debug.Log("Position: " + (new Vector2(tr.position.x, tr.position.y) + (direction * parts_used * m_Ability1_Length)) );
+//        Debug.Log("Position: " + (new Vector2(tr.position.x, tr.position.y) + (direction * parts_used * m_Ability1_Length)) );
 
         RaycastHit2D[] hits = Physics2D.LinecastAll(tr.position, new Vector2 (tr.position.x, tr.position.y) + ( direction * parts_used * m_Ability1_Length ) );
         //        Debug.Log( "Hits:" + hits.Length );
