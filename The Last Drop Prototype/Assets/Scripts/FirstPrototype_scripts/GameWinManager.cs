@@ -107,9 +107,9 @@ public class GameWinManager : MonoBehaviour
 		//initialization
 		this.ClearScreens ();
 		gravityInput.ResetGravity ();
-		//TODO
 
-		m_gameplay_screens [current_level].SetActive (true);
+		m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
+		m_playing_screen.SetActive (true);
 	
 	
 	}
@@ -119,7 +119,6 @@ public class GameWinManager : MonoBehaviour
 	public void NextLevel ()
 	{
 		current_level++;
-		//m_levels_accessible [current_level] = true;
 		StartCoroutine (LoadLevel ());
 
 	}
@@ -130,7 +129,6 @@ public class GameWinManager : MonoBehaviour
 	public void ReloadLevel ()
 	{
 		StartCoroutine (LoadLevel ());
-		//TODO ADD EVENT MANAGER? EventManager.TriggerEvent ("EndLevel");
 	}
 
 
@@ -150,7 +148,7 @@ public class GameWinManager : MonoBehaviour
 	{
 		this.ClearScreens ();
 		m_endlevel_screen.SetActive (true);
-		//Destroy(m_gameplay_screens[current_level]
+		Destroy (m_playing_screen);
 		
 	}
 
@@ -162,6 +160,8 @@ public class GameWinManager : MonoBehaviour
 			m_endlevel_screen.SetActive (false);
 		if (m_levels_screen != null)
 			m_levels_screen.SetActive (false);
+		if (m_playing_screen != null)
+			m_playing_screen.SetActive (false);
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
 			if (m_gameplay_screens [i] != null)
 				m_gameplay_screens [i].SetActive (false);
