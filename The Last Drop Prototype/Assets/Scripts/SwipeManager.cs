@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwipeTest : MonoBehaviour {
+public class SwipeManager : MonoBehaviour {
 
-	Transform tr;
+	private static SwipeManager instance;
+	public static SwipeManager Instance{get{return instance;}}
+
 	private Vector2 touchOrigin = -Vector2.one;
 	private Vector2 swipeVector; // Vector representing swipe input
-	public float speed = .03f;
-
-	void Start () {
-		tr = GetComponent<Transform>() as Transform;
-	}
 	
+	void Start() {
+		instance = this;
+	}
+
 	void Update () {
 		#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
+
+		swipeVector = new Vector2(0, 0);
 
 		if (Input.touchCount > 0) {
         	Touch myTouch = Input.touches[0];
@@ -32,11 +35,13 @@ public class SwipeTest : MonoBehaviour {
 
 		#endif
 	}
-    
-/*
-	void FixedUpdate() {
-		// Moving a GameObject test
-		tr.position = tr.position + swipeVector.x * transform.right * speed * Time.fixedDeltaTime + swipeVector.y * transform.up * speed * Time.fixedDeltaTime;
+
+	public Vector2 GetSwipeVector() {
+		return swipeVector;		
 	}
-    */
+
+	public bool IsSwiping() {
+		return swipeVector.magnitude != 0f;
+	}
+
 }
