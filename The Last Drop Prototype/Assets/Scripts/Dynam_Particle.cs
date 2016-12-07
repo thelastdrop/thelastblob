@@ -13,6 +13,12 @@ public class Dynam_Particle : MonoBehaviour
     float particleLifeTime = 3.0f, startTime;//How much time before the particle scalesdown and dies
     public bool scales_down = false;
 
+    bool m_IsSticky = false;
+    [Tooltip("How much force the particle use vs the elements it collide with")]
+    public float m_Sticknes = 0.5f;
+    [Tooltip("Which layers the drop collide with")]
+    public LayerMask m_Stick_To_Layers;
+
     void start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -28,6 +34,13 @@ public class Dynam_Particle : MonoBehaviour
     void OnEnable()
     {
         startTime = Time.time;
+
+        //If it's parented with the player, activate stickyness
+        if (gameObject.transform.parent != null)
+        {
+            if (gameObject.transform.parent.name == "Player") Debug.Log("Yes");
+
+        }
     }
 
     void OnDisable()  // Reset state of the particle so that can be placed back to the pool
@@ -128,17 +141,40 @@ public class Dynam_Particle : MonoBehaviour
     {
         particleLifeTime = time;
     }
-    // Here we handle the collision events with another particles, in this example water+lava= water-> gas
+
+    // If the particle is Sticky and hit something in the sticky layer mask, it will adhere with some force
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (currentState == STATES.WATER && other.gameObject.tag == "DynamParticle")
+
+        // Stickness, anything not related to it before this line!
+        if (!m_IsSticky) return; // return if not sticky!
+
+        foreach (ContactPoint2D elem in other.contacts)
         {
-            if (other.collider.GetComponent<Dynam_Particle>().currentState == STATES.LAVA)
+            if (m_Stick_To_Layers == (m_Stick_To_Layers | ( 1 << elem.collider.gameObject.layer )))
             {
-                SetState(STATES.GAS);
+                Debug.Log("Normal: " + elem.normal );
+                
+                rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
             }
         }
+    }
 
+    void OnCollisionStay2D(Collision2D other)
+    {
+
+        // Stickness, anything not related to it before this line!
+        if (!m_IsSticky) return; // return if not sticky!
+
+        foreach (ContactPoint2D elem in other.contacts)
+        {
+            if (m_Stick_To_Layers == (m_Stick_To_Layers | (1 << elem.collider.gameObject.layer)))
+            {
+                Debug.Log("Normal: " + elem.normal);
+
+                rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
+            }
+        }
     }
 
     public Rigidbody2D get_rb()
