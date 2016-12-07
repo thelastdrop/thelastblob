@@ -94,8 +94,9 @@ public class GameWinManager : MonoBehaviour {
 	IEnumerator LoadLevel(){
 
 		yield return new WaitForSeconds (m_loading_time);
-		m_levels_screen.SetActive (false);
+		//m_levels_screen.SetActive (false);
 		//TODO MOVE current_level = n;
+		this.ClearScreens();
 
 		m_gameplay_screens [current_level].SetActive (true);
 
@@ -111,8 +112,8 @@ public class GameWinManager : MonoBehaviour {
 	//use with the button play next level
 	public void NextLevel() {
 		current_level++;
-		m_levels_accessible [current_level] = true;
-		LoadLevel ();
+		//m_levels_accessible [current_level] = true;
+		StartCoroutine(LoadLevel ());
 
 	}
 
@@ -124,5 +125,28 @@ public class GameWinManager : MonoBehaviour {
 			//TODO ADD EVENT MANAGER? EventManager.TriggerEvent ("EndLevel");
 		}
 
+
+	public void WinLevel(){
+		if (current_level + 1 < m_levels_accessible.Length) {
+			Debug.Log ("Next level true");
+			m_levels_accessible [current_level + 1] = true;
+		}
+		this.ClearScreens ();
+		m_endlevel_screen.SetActive (true);
+		
+
+	}
+
+	void ClearScreens() {
+		if (m_endlevel_screen != null)
+			m_endlevel_screen.SetActive (false);
+		if (m_levels_screen != null)
+			m_levels_screen.SetActive (false);
+		for (int i = 0; i < m_gameplay_screens.Length; i++) {
+			if (m_gameplay_screens [i] != null)
+				m_gameplay_screens [i].SetActive (false);
+		}
+	}
+		 
 
 	}
