@@ -16,6 +16,13 @@ public class GameWinManager : MonoBehaviour
 	public GameObject m_endlevel_screen;
 	public Text m_ending_text;
 
+
+	[Header ("LoseLevel Screen")]
+	public GameObject m_loselevel_screen;
+
+	[Header ("PauseLevel Screen")]
+	public GameObject m_pauselevel_screen;
+
 	//[Header("Gameplay Screen")]
 	//public GameObject m_timer_screen;
 	//public Text m_timer_text;
@@ -69,8 +76,10 @@ public class GameWinManager : MonoBehaviour
 			} else {
 				m_levels_accessible [i] = false;
 			}
+			m_gameplay_screens [i].SetActive (false);
 		}
 		ClearScreens ();
+
 		m_levels_screen.SetActive (true);
 
 	}
@@ -80,6 +89,10 @@ public class GameWinManager : MonoBehaviour
 	{
 		if (Input.GetKeyDown (KeyCode.Backspace)) {
 			ReloadLevel ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.P)) {
+			PauseLevel ();
 		}
 	}
 
@@ -138,21 +151,38 @@ public class GameWinManager : MonoBehaviour
 			m_levels_accessible [current_level + 1] = true;
 		}
 		this.EndLevel ();
-		
+		m_endlevel_screen.SetActive (true);
 
 	}
-
-
+		
 
 	void EndLevel()
 	{
 		this.ClearScreens ();
-		m_endlevel_screen.SetActive (true);
 		Destroy (m_playing_screen);
 		
 	}
 
 
+	public void LoseLevel()
+	{
+		this.EndLevel ();
+		m_loselevel_screen.SetActive (true);
+	}
+
+
+	public void PauseLevel()
+	{
+		m_playing_screen.SetActive (false);
+		m_pauselevel_screen.SetActive (true);
+	}
+
+
+	public void ResumeLevel(){
+		m_pauselevel_screen.SetActive (false);
+		m_playing_screen.SetActive (true);
+	}
+		
 
 	void ClearScreens ()
 	{
@@ -162,10 +192,18 @@ public class GameWinManager : MonoBehaviour
 			m_levels_screen.SetActive (false);
 		if (m_playing_screen != null)
 			m_playing_screen.SetActive (false);
-		for (int i = 0; i < m_gameplay_screens.Length; i++) {
-			if (m_gameplay_screens [i] != null)
-				m_gameplay_screens [i].SetActive (false);
-		}
+		if (m_loselevel_screen != null)
+			m_loselevel_screen.SetActive (false);
+		if (m_pauselevel_screen != null)
+			m_pauselevel_screen.SetActive (false);
+		
+	}
+
+
+
+	public void SwitchToMenu()
+	{
+		SceneManager.LoadScene ("Menu");
 	}
 		 
 
