@@ -133,8 +133,7 @@ public class Player : MonoBehaviour {
     void Stretch( Vector2 direction )
     {
         direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
-
-        // Stretching is a line of particles, that are taken from the list and thrown
+        
         float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
 
 //        Debug.Log("Position: " + (new Vector2(tr.position.x, tr.position.y) + (direction * parts_used * m_Ability1_Length)) );
