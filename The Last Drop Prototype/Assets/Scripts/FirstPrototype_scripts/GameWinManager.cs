@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameWinManager : MonoBehaviour {
+public class GameWinManager : MonoBehaviour
+{
 	
 	public static GameWinManager Instance = null;
 	private int current_level = 0;
-	private int tutorial =0;
+	private int tutorial = 0;
 
 
-	[Header("EndLevel Screen")]
+	[Header ("EndLevel Screen")]
 	public GameObject m_endlevel_screen;
 	public Text m_ending_text;
 
@@ -19,30 +20,37 @@ public class GameWinManager : MonoBehaviour {
 	//public GameObject m_timer_screen;
 	//public Text m_timer_text;
 
-	[Header("Choose-Levels Screen")]
+	[Header ("Choose-Levels Screen")]
 	public GameObject m_levels_screen;
 
 
-	[Header("Gameplay Screens")]
+	[Header ("Gameplay Screens")]
 	public GameObject[] m_gameplay_screens;
 
-	[Range(0f,4f)]
+	[Range (0f, 4f)]
 	private float m_current_time = 0;
-	public float CurrentTime { get { return m_current_time; } } 
+
+	public float CurrentTime { get { return m_current_time; } }
 
 
-	[Header("Levels")]
+	[Header ("Levels")]
 	public Level[] m_levels;
 
-	[Header("Levels accessible")]
+	[Header ("Levels accessible")]
 	public bool[] m_levels_accessible;
 
 
-	[Range(0f,4f)]
+	[Range (0f, 4f)]
 	public float m_loading_time = 0.5f;
 
+	[Header ("Gravity Input")]
+	public Gravity gravityInput;
 
-	void Awake() {
+
+	private GameObject m_playing_screen;
+
+	void Awake ()
+	{
 		if (Instance == null) {
 			Instance = this;
 		} else {
@@ -52,7 +60,8 @@ public class GameWinManager : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		//set all the levels except the first non accessible
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
 			if (i == tutorial) {
@@ -61,26 +70,25 @@ public class GameWinManager : MonoBehaviour {
 				m_levels_accessible [i] = false;
 			}
 		}
-			
-		m_endlevel_screen.SetActive (false);
+		ClearScreens ();
 		m_levels_screen.SetActive (true);
 
-		for (int i = 0; i < m_gameplay_screens.Length; i++) {
-			m_gameplay_screens [i].SetActive (false);
-		}
-		
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+	{
+		if (Input.GetKeyDown (KeyCode.Backspace)) {
+			ReloadLevel ();
+		}
 	}
 
 
 
 	//bind this with the buttons of every level
-	public void ChooseLevel(int n){
-		if (m_levels_accessible [n]){
+	public void ChooseLevel (int n)
+	{
+		if (m_levels_accessible [n]) {
 			current_level = n;
 			StartCoroutine (LoadLevel ());
 		}
@@ -91,53 +99,65 @@ public class GameWinManager : MonoBehaviour {
 
 
 
-	IEnumerator LoadLevel(){
+	IEnumerator LoadLevel ()
+	{
 
 		yield return new WaitForSeconds (m_loading_time);
-		//m_levels_screen.SetActive (false);
-		//TODO MOVE current_level = n;
-		this.ClearScreens();
+
+		//initialization
+		this.ClearScreens ();
+		gravityInput.ResetGravity ();
+		//TODO
 
 		m_gameplay_screens [current_level].SetActive (true);
-
-		for (int i = 0; i < m_gameplay_screens.Length; i++) {
-			if(current_level!=i)
-				m_gameplay_screens [i].SetActive (false);
-		}
 	
 	
 	}
 
 
 	//use with the button play next level
-	public void NextLevel() {
+	public void NextLevel ()
+	{
 		current_level++;
 		//m_levels_accessible [current_level] = true;
-		StartCoroutine(LoadLevel ());
+		StartCoroutine (LoadLevel ());
 
 	}
 
 
 
 	//use with the button play again
-	public void ReloadLevel() {
-			StartCoroutine (LoadLevel ());
-			//TODO ADD EVENT MANAGER? EventManager.TriggerEvent ("EndLevel");
-		}
+	public void ReloadLevel ()
+	{
+		StartCoroutine (LoadLevel ());
+		//TODO ADD EVENT MANAGER? EventManager.TriggerEvent ("EndLevel");
+	}
 
 
-	public void WinLevel(){
+	public void WinLevel ()
+	{
 		if (current_level + 1 < m_levels_accessible.Length) {
-			Debug.Log ("Next level true");
 			m_levels_accessible [current_level + 1] = true;
 		}
-		this.ClearScreens ();
-		m_endlevel_screen.SetActive (true);
+		this.EndLevel ();
 		
 
 	}
 
-	void ClearScreens() {
+
+
+	void EndLevel()
+	{
+		this.ClearScreens ();
+		m_endlevel_screen.SetActive (true);
+		//Destroy(m_gameplay_screens[current_level]
+		
+	}
+
+
+
+	void ClearScreens ()
+	{
 		if (m_endlevel_screen != null)
 			m_endlevel_screen.SetActive (false);
 		if (m_levels_screen != null)
@@ -149,4 +169,4 @@ public class GameWinManager : MonoBehaviour {
 	}
 		 
 
-	}
+}
