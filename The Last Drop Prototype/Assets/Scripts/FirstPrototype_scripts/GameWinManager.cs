@@ -144,7 +144,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	//triggered by the button "play again"
 	public void ReloadLevel ()
 	{
-		EndLevel ();
+		//TODO this doesn't go here EndLevel ();
 		StartCoroutine (LoadLevel ());
 	}
 
