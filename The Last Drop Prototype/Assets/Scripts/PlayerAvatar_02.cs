@@ -124,6 +124,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         make_vertex_list(); // actually building the list of vertices used by mesh maker
 
         Set_Buond_To_Center(m_Center_Bound_Freq);
+
+        GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
     }
 
     void Update()
@@ -242,6 +244,11 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public int No_Particles()
     {
         return m_Vlist.Count;
+    }
+
+    public GameObject Get_Central_Particle()
+    {
+        return m_Vlist[0].particle;
     }
 
 /*
