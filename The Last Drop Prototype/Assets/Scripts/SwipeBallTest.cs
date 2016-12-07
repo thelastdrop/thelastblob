@@ -6,6 +6,7 @@ public class SwipeBallTest : MonoBehaviour {
 
 	Transform tr;
 	Vector2 swipeVector = new Vector2(0,0);
+	public float m_speed = .1f;
 
 
 	void Start () {
@@ -19,6 +20,6 @@ public class SwipeBallTest : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		tr.position = tr.position + swipeVector.x * transform.right * Time.fixedDeltaTime + swipeVector.y * transform.up * Time.fixedDeltaTime;
+		tr.position = tr.position + swipeVector.x * m_speed * transform.right * Time.fixedDeltaTime + swipeVector.y * m_speed * transform.up * Time.fixedDeltaTime;
 	}
 }
