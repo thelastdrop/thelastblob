@@ -57,7 +57,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             tr = particle.GetComponent<Transform>();
             rb = particle.GetComponent<Rigidbody2D>();
 
- //           to_prev = null;
+ //         to_prev = null;
             to_center = null;
         }
 
@@ -69,6 +69,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         public void center_spring()
         {
             to_center = particle.AddComponent<SpringJoint2D>();
+            to_center.enableCollision = false;
             to_center.connectedBody = Center.GetComponent<Rigidbody2D>();
         }
 /*
@@ -86,7 +87,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         public void set_bound_tocenter(float str)
         {
             //            to_center.frequency = str;
-//            if (to_center == null) Debug.Log("Cacchiarola");
+            //            if (to_center == null) Debug.Log("Cacchiarola");
             SpringJoint2D[] joints = particle.GetComponents<SpringJoint2D>();
             joints[0].frequency = str;
         }
