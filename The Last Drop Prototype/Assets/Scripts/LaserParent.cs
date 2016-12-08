@@ -32,11 +32,13 @@ public class LaserParent : MonoBehaviour {
 	void FixedUpdate() {
 
 		// Invert direction of movement if offset is reached
+		/*
 		if(starting_pos.x != 0 && (tr.position.x == (starting_pos.x + m_offset) || tr.position.x == starting_pos.x)) {
 			alongX *= -1;
 		} else if(starting_pos.y != 0 && (tr.position.y == (starting_pos.y + m_offset) || tr.position.y == starting_pos.y)) {
 			alongY *= -1;
 		}
+		*/
 		child1tr.position = child1tr.position + alongX * m_speed * transform.right * Time.fixedDeltaTime + alongY * m_speed * transform.up * Time.fixedDeltaTime;
 		child2tr.position = child2tr.position + alongX * m_speed * transform.right * Time.fixedDeltaTime + alongY * m_speed * transform.up * Time.fixedDeltaTime;
 	}

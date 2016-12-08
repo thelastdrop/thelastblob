@@ -38,7 +38,7 @@ public class Dynam_Particle : MonoBehaviour
         {
             m_IsSticky = true;
         }
-        StartCoroutine(is_sticky());
+    //    StartCoroutine(is_sticky());
     }
 
     void OnDisable()  // Reset state of the particle so that can be placed back to the pool
