@@ -34,13 +34,11 @@ public class Dynam_Particle : MonoBehaviour
     void OnEnable()
     {
         startTime = Time.time;
-
-        //If it's parented with the player, activate stickyness
-        if (gameObject.transform.parent != null)
+        if (gameObject.tag == "Player")
         {
-            if (gameObject.transform.parent.name == "Player") Debug.Log("Yes");
-
+            m_IsSticky = true;
         }
+        StartCoroutine(is_sticky());
     }
 
     void OnDisable()  // Reset state of the particle so that can be placed back to the pool
@@ -51,7 +49,8 @@ public class Dynam_Particle : MonoBehaviour
         {
             Destroy(elem);
         }
-        
+        m_IsSticky = true;
+
     }
 
     //The definitios to each state
@@ -87,6 +86,7 @@ public class Dynam_Particle : MonoBehaviour
             }
         }
     }
+
     void Update()
     {
         switch (currentState)
@@ -109,6 +109,7 @@ public class Dynam_Particle : MonoBehaviour
 
         }
     }
+
     // This scales the particle image acording to its velocity, so it looks like its deformable... but its not ;)
     void MovementAnimation()
     {
@@ -118,6 +119,7 @@ public class Dynam_Particle : MonoBehaviour
         movementScale.y = 1.0f;
         currentImage.gameObject.transform.localScale = movementScale;
     }
+
     // The effect for the particle to seem to fade away
     void ScaleDown()
     {
@@ -152,7 +154,7 @@ public class Dynam_Particle : MonoBehaviour
         {
             if (m_Stick_To_Layers == (m_Stick_To_Layers | ( 1 << elem.collider.gameObject.layer )))
             {
-                Debug.Log("Normal: " + elem.normal );
+          //      Debug.Log("Normal: " + elem.normal );
                 
                 rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
             }
@@ -169,12 +171,22 @@ public class Dynam_Particle : MonoBehaviour
         {
             if (m_Stick_To_Layers == (m_Stick_To_Layers | (1 << elem.collider.gameObject.layer)))
             {
-                Debug.Log("Normal: " + elem.normal);
+              //  Debug.Log("Normal: " + elem.normal);
 
                 rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
             }
         }
     }
+
+    IEnumerator is_sticky()
+    {
+        yield return new WaitForSeconds(.05f);
+        if(gameObject.tag == "Player")
+        {
+            m_IsSticky = true;
+        }
+    }
+
 
     public Rigidbody2D get_rb()
     {
