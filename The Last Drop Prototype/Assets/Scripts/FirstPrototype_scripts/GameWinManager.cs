@@ -21,6 +21,9 @@ public class GameWinManager : Singleton<GameWinManager>
 	[Header ("EndLevel Screen")]
 	public GameObject m_endlevel_screen;
 
+	[Header ("Loading Screen")]
+	public GameObject m_loading_screen;
+
 
 	[Header ("LoseLevel Screen")]
 	public GameObject m_loselevel_screen;
@@ -141,12 +144,14 @@ public class GameWinManager : Singleton<GameWinManager>
 
 
 
-	//triggered by the button "play again"
+	//triggered by the button "play again" in Lose/Win screens
 	public void ReloadLevel ()
 	{
-		EndLevel ();
 		StartCoroutine (LoadLevel ());
 	}
+
+
+
 
 
 	//called when the player reaches the end of the level
@@ -197,6 +202,15 @@ public class GameWinManager : Singleton<GameWinManager>
 	}
 
 
+
+	public void LoadingLevel ()
+	{
+		this.EndLevel ();
+		m_loading_screen.SetActive (true);
+		this.ReloadLevel ();
+	}
+
+
 	// deactivate all the screens
 	void ClearScreens ()
 	{
@@ -210,6 +224,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			m_loselevel_screen.SetActive (false);
 		if (m_pauselevel_screen != null)
 			m_pauselevel_screen.SetActive (false);
+		if (m_loading_screen != null)
+			m_loading_screen.SetActive (false);
 		
 	}
 
