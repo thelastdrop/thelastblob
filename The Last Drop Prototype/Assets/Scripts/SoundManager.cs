@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using POLIMIGameCollective;
 
 public class SoundManager : Singleton<SoundManager> {
 		
