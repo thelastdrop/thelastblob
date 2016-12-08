@@ -1,28 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Completed
-{
-    public class SoundManager : MonoBehaviour 
-    {
-		[Header("Effect sound")]
+public class SoundManager : Singleton<SoundManager> {
+		
+        [Header("Effect sound")]
         public AudioSource efxSource;
 		[Header("Music sound")]
         public AudioSource musicSource;
         public static SoundManager instance = null;
         public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
         public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
-        
-        void Awake ()
-        {
-            // Singleton pattern
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy (gameObject);
-            DontDestroyOnLoad (gameObject);
-        }
-        
+              
         
         //Used to play single sound clips.
         public void PlaySingle(AudioClip clip)
@@ -38,5 +26,4 @@ namespace Completed
             efxSource.clip = clip;
             efxSource.Play();
         }
-    }
 }
