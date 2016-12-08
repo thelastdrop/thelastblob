@@ -41,6 +41,7 @@ public class Player : MonoBehaviour {
     private GameObject m_Central_Particle;
     private Rigidbody2D m_Central_Particle_rb;
     private Vector3[] m_Streching_Points;
+    private Vector3 m_Screen_Size;
 
     // Use this for initialization
     void Start ()
@@ -52,7 +53,9 @@ public class Player : MonoBehaviour {
         m_Line_Renderer.enabled = false;
 
         StartCoroutine(set_central_particle());
-        
+
+        m_Screen_Size = new Vector3( Screen.width, Screen.height, 0f) / 2;
+
     }
 
     // Update is called once per frame
@@ -61,6 +64,10 @@ public class Player : MonoBehaviour {
         m_H_Axis1 = Input.GetAxis("Horizontal");
         m_V_Axis2 = Input.GetAxis("Vertical2");
         m_H_Axis2 = Input.GetAxis("Horizontal2");
+        
+
+
+        
 
 /********************************************/
 /*    Ability(jump, shoot, stretch ecc)     */
@@ -132,7 +139,8 @@ public class Player : MonoBehaviour {
 
     void Stretch( Vector2 direction )
     {
-        direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
+        direction = Input.mousePosition - m_Screen_Size;
+//        direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
         
         float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
 
