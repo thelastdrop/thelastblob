@@ -56,6 +56,7 @@ public class Player : MonoBehaviour {
 
         m_Screen_Size = new Vector3( Screen.width, Screen.height, 0f) / 2;
 
+        POLIMIGameCollective.EventManager.StartListening("Swipe", swipe);
     }
 
     // Update is called once per frame
@@ -137,9 +138,15 @@ public class Player : MonoBehaviour {
         m_Central_Particle_rb = m_Central_Particle.GetComponent<Rigidbody2D>();
     }
 
+    void swipe()
+    {
+        Stretch( SwipeManager.Instance.GetSwipeVector() );
+    }
+
     void Stretch( Vector2 direction )
     {
         direction = Input.mousePosition - m_Screen_Size;
+        direction = direction.normalized;
 //        direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
         
         float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
