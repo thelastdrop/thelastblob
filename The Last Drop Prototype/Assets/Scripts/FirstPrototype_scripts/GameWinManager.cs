@@ -21,6 +21,9 @@ public class GameWinManager : Singleton<GameWinManager>
 	[Header ("EndLevel Screen")]
 	public GameObject m_endlevel_screen;
 
+	[Header ("Loading Screen")]
+	public GameObject m_loading_screen;
+
 
 	[Header ("LoseLevel Screen")]
 	public GameObject m_loselevel_screen;
@@ -53,6 +56,9 @@ public class GameWinManager : Singleton<GameWinManager>
 	[Header ("Levels accessible")]
 	public bool[] m_levels_accessible;
 
+	[Header ("Buttons in Choose-Levels Screen")]
+	public GameObject[] m_levels_buttons;
+
 
 	[Header ("Loading time for Level")]
 	[Range (0f, 4f)]
@@ -70,8 +76,10 @@ public class GameWinManager : Singleton<GameWinManager>
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
 			if (i == tutorial) {
 				m_levels_accessible [i] = true;
+				m_levels_buttons [i].SetActive (true);
 			} else {
 				m_levels_accessible [i] = false;
+				m_levels_buttons [i].SetActive (false);
 			}
 			//deactivate all the level screens, they will never be used directly 
 			m_gameplay_screens [i].SetActive (false);
@@ -141,12 +149,14 @@ public class GameWinManager : Singleton<GameWinManager>
 
 
 
-	//triggered by the button "play again"
+	//triggered by the button "play again" in Lose/Win screens
 	public void ReloadLevel ()
 	{
-		EndLevel ();
 		StartCoroutine (LoadLevel ());
 	}
+
+
+
 
 
 	//called when the player reaches the end of the level
@@ -155,6 +165,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		// set as accessible (true) the next level if the current one is won
 		if (current_level + 1 < m_levels_accessible.Length) {
 			m_levels_accessible [current_level + 1] = true;
+			m_levels_buttons [current_level + 1].SetActive (true);
 		}
 		this.EndLevel ();
 		m_endlevel_screen.SetActive (true);
@@ -197,6 +208,22 @@ public class GameWinManager : Singleton<GameWinManager>
 	}
 
 
+	public void ListLevels ()
+	{
+		this.EndLevel ();
+		m_levels_screen.SetActive (true);
+	}
+
+
+
+	public void LoadingLevel ()
+	{
+		this.EndLevel ();
+		m_loading_screen.SetActive (true);
+		this.ReloadLevel ();
+	}
+
+
 	// deactivate all the screens
 	void ClearScreens ()
 	{
@@ -210,6 +237,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			m_loselevel_screen.SetActive (false);
 		if (m_pauselevel_screen != null)
 			m_pauselevel_screen.SetActive (false);
+		if (m_loading_screen != null)
+			m_loading_screen.SetActive (false);
 		
 	}
 
