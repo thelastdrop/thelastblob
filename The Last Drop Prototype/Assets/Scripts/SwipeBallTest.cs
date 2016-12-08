@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwipeBallTest : MonoBehaviour {
 
 	Transform tr;
-	Vector2 swipeVector = new Vector2(0,0);
+	Vector2 swipeVector = Vector2.zero;
 	public float m_speed = .1f;
 
 
@@ -16,6 +16,8 @@ public class SwipeBallTest : MonoBehaviour {
 	void Update () {
 		if(SwipeManager.Instance.IsSwiping()) {
 			swipeVector = SwipeManager.Instance.GetSwipeVector();
+		} else {
+			swipeVector = Vector2.zero;
 		}
 	}
 
