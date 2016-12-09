@@ -14,8 +14,8 @@ public class SwipeBallTest : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(SwipeManager.Instance.IsSwiping()) {
-			swipeVector = SwipeManager.Instance.GetSwipeVector();
+		if(TouchControlManager.Instance.IsSwiping()) {
+			swipeVector = TouchControlManager.Instance.GetSwipeVector();
 		} else {
 			swipeVector = Vector2.zero;
 		}

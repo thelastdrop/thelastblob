@@ -140,7 +140,7 @@ public class Player : MonoBehaviour {
 
     void swipe()
     {
-        Stretch( SwipeManager.Instance.GetSwipeVector() );
+        Stretch( TouchControlManager.Instance.GetSwipeVector() );
     }
 
     void Stretch( Vector2 direction )

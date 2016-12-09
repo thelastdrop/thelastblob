@@ -28,7 +28,10 @@ public class LaserParent : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		LaserMovement();		
+	}
 
+	void LaserMovement() {
 		// Invert direction of movement if offset is reached
 		if(Time.time > timeToTurn) {
 			m_mov_verse *= -1;
@@ -37,4 +40,13 @@ public class LaserParent : MonoBehaviour {
 		child1tr.position = child1tr.position + m_mov_verse * m_speed * transform.right * Time.fixedDeltaTime;
 		child2tr.position = child2tr.position + m_mov_verse * m_speed * transform.right * Time.fixedDeltaTime;
 	}
+
+	public void DestroyLaser(Transform childLaserSource) {
+		// TODO exploding animation
+		if(childLaserSource == child1tr || childLaserSource == child2tr) {
+			gameObject.SetActive(false);
+			
+		}
+	}
+
 }

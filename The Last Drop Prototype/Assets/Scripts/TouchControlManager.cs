@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using POLIMIGameCollective;
 
-public class SwipeManager : Singleton<SwipeManager> {
+public class TouchControlManager : Singleton<TouchControlManager> {
 
 	private Rect leftR;
 	private Rect rightR;
@@ -44,7 +44,6 @@ public class SwipeManager : Singleton<SwipeManager> {
 						break;
 					case TouchPhase.Moved:
 						moveDirection = touch.position - moveStartPos;
-						EventManager.TriggerEvent("MoveHappening");
 						break;
 					case TouchPhase.Ended:
 						EventManager.TriggerEvent("MoveEnd");
