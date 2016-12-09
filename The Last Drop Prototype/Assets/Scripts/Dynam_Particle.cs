@@ -88,7 +88,7 @@ public class Dynam_Particle : MonoBehaviour
             }
         }
     }
-
+    /*
     void Update()
     {
         switch (currentState)
@@ -111,6 +111,7 @@ public class Dynam_Particle : MonoBehaviour
 
         }
     }
+    */
 
     // This scales the particle image acording to its velocity, so it looks like its deformable... but its not ;)
     void MovementAnimation()
@@ -159,11 +160,11 @@ public class Dynam_Particle : MonoBehaviour
           //      Debug.Log("Normal: " + elem.normal );
                 
                 rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
+                m_Is_InContact_With_Floor = true;
             }
         }
 
 
-        m_Is_InContact_With_Floor = true;
     }
 
     void OnCollisionStay2D(Collision2D other)
@@ -186,7 +187,11 @@ public class Dynam_Particle : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        m_Is_InContact_With_Floor = false;
+        foreach (ContactPoint2D elem in collision.contacts)
+        {
+            if (m_Stick_To_Layers == (m_Stick_To_Layers | (1 << elem.collider.gameObject.layer)))
+                m_Is_InContact_With_Floor = false;
+        }
     }
 
     IEnumerator is_sticky()
