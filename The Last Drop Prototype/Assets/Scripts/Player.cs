@@ -81,11 +81,12 @@ public class Player : MonoBehaviour {
                 Stretch(new Vector2(1.0f, 1.0f).normalized);
             // Logic of ability one
         }
-/*
+
         if (Input.GetButton("Fire2"))
         {
+            POLIMIGameCollective.EventManager.TriggerEvent("PlayerReset");
         }
-*/
+
         //  Debug to test input
         //        Debug.Log("H axis1: " + m_H_Axis1.ToString() + "H axis2: " +  m_H_Axis2.ToString() + "V axis1: " + m_V_Axis1.ToString() + "V axis2: " + m_V_Axis2.ToString());
     }
@@ -146,9 +147,34 @@ public class Player : MonoBehaviour {
     void Stretch( Vector2 direction )
     {
         direction = Input.mousePosition - m_Screen_Size;
-        direction = direction.normalized;
-//        direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
-        
+        Vector3 direction3 = direction.normalized;
+
+        switch (GameManager.Instance.current_gravity)
+            {
+            case 0:
+                break;
+
+            case 1:
+                direction = Quaternion.AngleAxis( -90f, Vector3.forward) * direction;
+                break;
+
+            case 2:
+                direction = Quaternion.AngleAxis( 180f, Vector3.forward) * direction; ;
+                break;
+
+            case 3:
+                direction = Quaternion.AngleAxis( 90f, Vector3.forward) * direction;
+                break;
+        }
+
+        // Gravity vector, angle between downward vector and current vector
+ //       Debug.Log(direction + " " + GameManager.Instance.current_gravity);
+
+        // Correct direction by that angle.
+
+
+        //        direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
+
         float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
 
 //        Debug.Log("Position: " + (new Vector2(tr.position.x, tr.position.y) + (direction * parts_used * m_Ability1_Length)) );

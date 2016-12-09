@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager> {
                                            new Vector2(0f, 9.8f),
                                            new Vector2(9.8f, 0f), };
     private int m_current_grav_ind = 0;
+    public int current_gravity { get { return m_current_grav_ind; } }
 
     [Tooltip("How much time it gets to change gravity direction"), Range(0.1f,3f)]
     public float m_Gravity_change_CD = 0.3f;
