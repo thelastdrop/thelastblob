@@ -41,6 +41,7 @@ public class LaserParent : MonoBehaviour {
 		child2tr.position = child2tr.position + m_mov_verse * m_speed * transform.right * Time.fixedDeltaTime;
 	}
 
+	// TODO
 	public void DestroyLaser(Transform childLaserSource) {
 		// TODO exploding animation
 		if(childLaserSource == child1tr || childLaserSource == child2tr) {
