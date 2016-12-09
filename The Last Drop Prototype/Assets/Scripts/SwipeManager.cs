@@ -5,41 +5,61 @@ using POLIMIGameCollective;
 
 public class SwipeManager : Singleton<SwipeManager> {
 
-	private Rect left_rect;
-	private Rect right_rect;
+	private Rect leftR;
+	private Rect rightR;
 	private Vector2 touchOrigin = -Vector2.one;
-	// Vector representing swipe input
-	private Vector2 swipeVector;
+
+	// [Left portion] Move info 
+	public Vector2 moveStartPos;
+	public Vector2 moveDirection;
+	// [Right portion] Vector representing swipe input
+	public Vector2 swipeVector;
 	
 	void Start() {
-		left_rect = new Rect(0f, 0f, Screen.width * 0.5f, Screen.height);
-     	right_rect = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
+		// These rectangles represent the two halfs of the screen
+		leftR = new Rect(0f, 0f, Screen.width * 0.5f, Screen.height);
+     	rightR = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
 	}
 
 	void Update () {
-		SwipeDetectionNTrigger();
+		TouchInputTrigger();
 	}
 
 	// Import this in GameManager
-	void SwipeDetectionNTrigger() {
+	void TouchInputTrigger() {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
-
 		// reset value each frame
 		swipeVector = Vector2.zero;
 
 		if (Input.touchCount > 0) {
 			
-			Touch myTouch = Input.touches[0];
+			Touch touch = Input.touches[0];
 
-        	if(right_rect.Contains(myTouch.position)) {
-				if (myTouch.phase == TouchPhase.Began) {
-            		touchOrigin = myTouch.position;
-            	} else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0) {
-            		Vector2 touchEnd = myTouch.position;                    
+			// Left portion of the screen: movement
+			if(leftR.Contains(touch.position)) {
+				switch (touch.phase) {
+					case TouchPhase.Began:
+						moveStartPos = touch.position;
+						EventManager.TriggerEvent("MoveStart");
+						break;
+					case TouchPhase.Moved:
+						moveDirection = touch.position - moveStartPos;
+						EventManager.TriggerEvent("MoveHappening");
+						break;
+					case TouchPhase.Ended:
+						EventManager.TriggerEvent("MoveEnd");
+						break;
+				}		
+            }
+
+			// Right portion of the screen: stretch mechanic
+        	if(rightR.Contains(touch.position)) {
+				if (touch.phase == TouchPhase.Began) {
+            		touchOrigin = touch.position;
+            	} else if (touch.phase == TouchPhase.Ended && touchOrigin.x >= 0) {
+            		Vector2 touchEnd = touch.position;                    
                 	swipeVector = new Vector2(touchEnd.x - touchOrigin.x, touchEnd.y - touchOrigin.y);
-					//float dist = Vector2.Distance(touchOrigin,touchEnd);
-                	touchOrigin.x = -1;
-
+					touchOrigin.x = -1;
 					// Trigger event: i.e. swipeVector has changed 
 					EventManager.TriggerEvent("Swipe");
             	}
