@@ -47,10 +47,10 @@ public class LaserRenderer : MonoBehaviour {
 	void LaserInteraction() {
 		RaycastHit2D[] hits = Physics2D.LinecastAll(start, end);
 
-        foreach(RaycastHit2D elem in hits) {
-			GameObject elemGO = elem.collider.gameObject;
-			if(elemGO.tag == "Player") {
-				GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elemGO);
+        foreach(RaycastHit2D hit in hits) {
+			GameObject elem = hit.collider.gameObject;
+			if(elem.tag == "Player") {
+				GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elem);
 			}
         }
 	}
