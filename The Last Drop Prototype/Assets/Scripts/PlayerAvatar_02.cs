@@ -127,6 +127,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         Set_Buond_To_Center(m_Center_Bound_Freq);
 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
+
+
+        POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
     }
 
     void Update()
@@ -252,17 +255,36 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         return m_Vlist[0].particle;
     }
 
-/*
-    public void Set_Surface_Buond()
-    {
-        for (int i = 1; i < m_No_Particles + 1; i++) //start from 1, skipping center
+    /*
+        public void Set_Surface_Buond()
         {
-            Debug.Log(i);
-            m_Vlist[i].set_bound_surface( m_Surface_Buond );
+            for (int i = 1; i < m_No_Particles + 1; i++) //start from 1, skipping center
+            {
+                Debug.Log(i);
+                m_Vlist[i].set_bound_surface( m_Surface_Buond );
+            }
         }
-    }
-*/
+    */
 
+    /***************************************/
+    /********* TRIGGER EVENTS **************/
+    /***************************************/
+    public void PlayerReset()
+    {
+
+        for (int i = 0; i < m_Vlist.Count; i++)
+        {
+            m_Vlist[i].particle.SetActive(false);
+        }
+
+        m_Vlist.Clear();
+
+        calc_cossin(); 
+        make_vertex_list(); 
+        Set_Buond_To_Center(m_Center_Bound_Freq);
+        GameManager.Instance.m_Central_Particle = Get_Central_Particle();
+  //      Debug.Log("Reset!");
+    }
 
     /***************************************/
     /*********    INTERFACES ***************/
