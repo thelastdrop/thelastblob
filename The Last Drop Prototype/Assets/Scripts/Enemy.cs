@@ -5,34 +5,28 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 
 	public float m_speed = 2f;
-	
+
 	private int verse = 1;
 	private Transform tr;
-	private Collider2D col2D;
+	private Vector2 raycastDirection = new Vector2(1f,-1f);
 	private SpriteRenderer sr;
 
     void Start () {
         tr = GetComponent<Transform>() as Transform;
-		col2D = GetComponent<Collider2D>() as Collider2D;
 		sr = GetComponent<SpriteRenderer>() as SpriteRenderer;
     }
 
     void FixedUpdate () {
-		// TODO
-		RaycastHit2D[] hits = null;
-		int hitsCount = col2D.Raycast(Vector2.down, hits, 3f);
-		if(hitsCount > 0) {
-			
-		} else {
-			verse *= -1;
-			sr.flipX = verse > 0 ? false : true; 
+		RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, raycastDirection, 0.5f);
+
+		// If there's no platform under this collider2D
+		if(hits.Length <= 1) {
+			verse *= -1;	// Move in other direction
+			sr.flipX = verse > 0 ? false : true;	// Flip the sprite
+			raycastDirection = new Vector2(verse * 1f, -1f); // Flip the raycast direction
 		}
+
+		// Move
 		tr.position = tr.position + verse * m_speed * transform.right * Time.fixedDeltaTime;
     }
-
-	/*void OnCollisionExit2D(Collision2D coll) {
-        // if (coll.gameObject.tag == "Platform")
-        verse *= -1;
-		sr.flipX = verse > 0 ? false : true; 
-    }*/
 }

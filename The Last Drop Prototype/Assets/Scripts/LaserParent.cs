@@ -45,7 +45,7 @@ public class LaserParent : MonoBehaviour {
 		// TODO exploding animation
 		if(childLaserSource == child1tr || childLaserSource == child2tr) {
 			gameObject.SetActive(false);
-			
+
 		}
 	}
 
