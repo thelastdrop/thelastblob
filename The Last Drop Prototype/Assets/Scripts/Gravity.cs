@@ -35,7 +35,7 @@ public class Gravity : MonoBehaviour
 	void changeGravity ()
 	{
 
-		#if UNITY_STANDALONE || UNITY_WEBPLAYER // Unity3D editor or web player
+		//#if UNITY_STANDALONE || UNITY_WEBPLAYER  Unity3D editor or web player
 
 		if (Input.GetKeyDown (KeyCode.W) && Time.time > nextUsage) {
 			nextUsage = Time.time + delay;
@@ -54,9 +54,9 @@ public class Gravity : MonoBehaviour
 			gravity = new Vector3 (gravityValue, 0f, 0f);
 		}
 
-		#elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
+		//#elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
 
-		int horizontal = 0;
+		/*int horizontal = 0;
 		int vertical = 0;
 
 		if (Input.touchCount > 0) {
@@ -94,6 +94,6 @@ public class Gravity : MonoBehaviour
 			gravity = new Vector3(gravityValue, 0f, 0f);
 		}
 
-		#endif
+		#endif*/
 	}
 }
