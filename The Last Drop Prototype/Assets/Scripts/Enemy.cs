@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 
 	public float m_speed = 2f;
+	
 	private int verse = 1;
 	private Transform tr;
 	private Collider2D col2D;
@@ -19,7 +20,7 @@ public class Enemy : MonoBehaviour {
     void FixedUpdate () {
 		// TODO
 		RaycastHit2D[] hits = null;
-		int hitsCount = col2D.Raycast(Vector2.down, hits);
+		int hitsCount = col2D.Raycast(Vector2.down, hits, 3f);
 		if(hitsCount > 0) {
 			
 		} else {
