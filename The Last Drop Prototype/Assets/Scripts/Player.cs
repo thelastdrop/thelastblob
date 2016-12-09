@@ -33,6 +33,8 @@ public class Player : MonoBehaviour {
     private float m_V_Axis2;
     private float m_H_Axis2;
 
+    // Player Movement
+    private bool m_Is_Moving = false;
     private Vector2 m_player_applied_speed;
 
     // Used by ability1(stretch)
@@ -56,7 +58,10 @@ public class Player : MonoBehaviour {
 
         m_Screen_Size = new Vector3( Screen.width, Screen.height, 0f) / 2;
 
+        // Triggers Events registration
         POLIMIGameCollective.EventManager.StartListening("Swipe", swipe);
+        POLIMIGameCollective.EventManager.StartListening("MoveStart", MoveStart);
+        POLIMIGameCollective.EventManager.StartListening("MoveEnd", MoveEnd);
     }
 
     // Update is called once per frame
@@ -111,7 +116,13 @@ public class Player : MonoBehaviour {
             {
                 Physics2D.gravity = Quaternion.Euler(0f, 0f, m_H_Axis2 * Time.fixedDeltaTime * 100.0f) * Physics2D.gravity;
         }
- */      }
+ */     }
+
+        if(m_Is_Moving)  // Is moving!
+        {
+            Vector2 direction = GameManager.Instance.Rotate_By_Gravity( TouchControlManager.Instance.moveDirection ).normalized; // change rotation by gravity
+            
+        }
 
         // Strecthing logic, if there is a stretch in action(which is true if the Line Render is enabled)
         if(m_Line_Renderer.enabled)
@@ -128,9 +139,27 @@ public class Player : MonoBehaviour {
         }
     }
 
-    /*************************************/
-    /****    Internal Methods         ****/
-    /*************************************/
+    /************************************/
+    /***     Trigger Events methods   ***/
+    /************************************/
+    void swipe()
+    {
+        Stretch(TouchControlManager.Instance.GetSwipeVector());
+    }
+
+    void MoveStart()
+    {
+        m_Is_Moving = true;
+    }
+
+    void MoveEnd()
+    {
+        m_Is_Moving = false;
+    }
+
+    /*********************************/
+    /****    Internal Methods     ****/
+    /*********************************/
 
     IEnumerator set_central_particle()
     {
@@ -139,41 +168,11 @@ public class Player : MonoBehaviour {
         m_Central_Particle_rb = m_Central_Particle.GetComponent<Rigidbody2D>();
     }
 
-    void swipe()
-    {
-        Stretch( TouchControlManager.Instance.GetSwipeVector() );
-    }
-
     void Stretch( Vector2 direction )
     {
         direction = Input.mousePosition - m_Screen_Size;
         Vector3 direction3 = direction.normalized;
-
-        switch (GameManager.Instance.current_gravity)
-            {
-            case 0:
-                break;
-
-            case 1:
-                direction = Quaternion.AngleAxis( -90f, Vector3.forward) * direction;
-                break;
-
-            case 2:
-                direction = Quaternion.AngleAxis( 180f, Vector3.forward) * direction; ;
-                break;
-
-            case 3:
-                direction = Quaternion.AngleAxis( 90f, Vector3.forward) * direction;
-                break;
-        }
-
-        // Gravity vector, angle between downward vector and current vector
- //       Debug.Log(direction + " " + GameManager.Instance.current_gravity);
-
-        // Correct direction by that angle.
-
-
-        //        direction = CameraManager.Instance.m_Player_Camera.transform.up ; // Test porpuse
+        direction = GameManager.Instance.Rotate_By_Gravity(direction);
 
         float parts_used = (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used;
 
