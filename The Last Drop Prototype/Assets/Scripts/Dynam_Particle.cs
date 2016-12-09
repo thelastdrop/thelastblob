@@ -19,6 +19,8 @@ public class Dynam_Particle : MonoBehaviour
     [Tooltip("Which layers the drop collide with")]
     public LayerMask m_Stick_To_Layers;
 
+    public bool m_Is_InContact_With_Floor;
+
     void start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -159,6 +161,9 @@ public class Dynam_Particle : MonoBehaviour
                 rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
             }
         }
+
+
+        m_Is_InContact_With_Floor = true;
     }
 
     void OnCollisionStay2D(Collision2D other)
@@ -176,6 +181,12 @@ public class Dynam_Particle : MonoBehaviour
                 rb.velocity = rb.velocity + (-elem.normal * m_Sticknes);
             }
         }
+
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        m_Is_InContact_With_Floor = false;
     }
 
     IEnumerator is_sticky()

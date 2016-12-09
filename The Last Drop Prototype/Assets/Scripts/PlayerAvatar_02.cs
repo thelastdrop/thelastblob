@@ -23,8 +23,13 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public float m_Surface_Buond;
 
     [Header("Iteractions with other scripts")]
-    [Tooltip("Time must pass between a telepot and the other in secs")]
+    [Tooltip("Time must pass between a teleport and the other in secs")]
     public float m_Min_Time_ToTeleport = 0.2f;
+
+    [Tooltip("Check if a particle is in contact with the floor every this seconds"), Range(0.008f, 0.1f)]
+    public float m_CheckForContact_Repeat_Time = 0.008f;
+
+
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
     // Record [0] store the center of the mesh information.
     private List<RB_vert> m_Vlist = new List<RB_vert>();
@@ -130,6 +135,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
 
         POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+
+        InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
     }
 
     void Update()
@@ -139,12 +146,23 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnEnable()
     {
-
+        InvokeRepeating("Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+        Debug.Log("One Time");
     }
 
     void OnDisable()
     {
+        CancelInvoke();
+    }
 
+    /************************************/
+    /***    Invoke and coroutines     ***/
+    /************************************/
+    void Check_For_Contact()
+    {
+        foreach( RB_vert elem in m_Vlist )
+        {
+        }
     }
 
     /************************************/
@@ -253,6 +271,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public GameObject Get_Central_Particle()
     {
         return m_Vlist[0].particle;
+    }
+
+    public void AddSpeed( Vector2 Speed )
+    {
     }
 
     /*
