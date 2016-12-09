@@ -8,8 +8,7 @@ public class SoundManager : Singleton<SoundManager> {
         public AudioSource efxSource;
 		[Header("Music sound")]
         public AudioSource musicSource;
-        public static SoundManager instance = null;
-        public float lowPitchRange = .95f;
+        public float lowPitchRange = 0.95f;
         public float highPitchRange = 1.05f;
               
         
