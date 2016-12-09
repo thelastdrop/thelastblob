@@ -75,4 +75,30 @@ public class GameManager : Singleton<GameManager> {
             m_last_gravity_change = Time.time;
         }
     }
+
+    /*******************************/
+    /****        UTILITY        ****/
+    /*******************************/
+
+    // return vector rotated depending on the gravity
+    public Vector3 Rotate_By_Gravity( Vector3 direction )
+    {
+
+        switch ( m_current_grav_ind )
+        {
+            case 1:
+                direction = Quaternion.AngleAxis(-90f, Vector3.forward) * direction;
+                break;
+
+            case 2:
+                direction = Quaternion.AngleAxis(180f, Vector3.forward) * direction;
+                break;
+
+            case 3:
+                direction = Quaternion.AngleAxis(90f, Vector3.forward) * direction;
+                break;
+        }
+
+        return direction;
+    }
 }

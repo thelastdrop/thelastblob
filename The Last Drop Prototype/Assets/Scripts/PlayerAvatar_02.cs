@@ -23,8 +23,13 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public float m_Surface_Buond;
 
     [Header("Iteractions with other scripts")]
-    [Tooltip("Time must pass between a telepot and the other in secs")]
+    [Tooltip("Time must pass between a teleport and the other in secs")]
     public float m_Min_Time_ToTeleport = 0.2f;
+
+    [Tooltip("Check if a particle is in contact with the floor every this seconds"), Range(0.008f, 0.1f)]
+    public float m_CheckForContact_Repeat_Time = 0.008f;
+
+
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
     // Record [0] store the center of the mesh information.
     private List<RB_vert> m_Vlist = new List<RB_vert>();
@@ -66,11 +71,12 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             Center = particle;
         }
 
-        public void center_spring()
+        public void center_spring( float freq )
         {
             to_center = particle.AddComponent<SpringJoint2D>();
             to_center.enableCollision = false;
             to_center.connectedBody = Center.GetComponent<Rigidbody2D>();
+            to_center.frequency = freq;
         }
 /*
         public void prev_spring(GameObject prev_ref)
@@ -123,13 +129,14 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
                        // vertices for the mesh generation ecc
 
         make_vertex_list(); // actually building the list of vertices used by mesh maker
-
-        Set_Buond_To_Center(m_Center_Bound_Freq);
+        
 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
 
 
         POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+
+        InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
     }
 
     void Update()
@@ -139,12 +146,23 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnEnable()
     {
-
+        InvokeRepeating("Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+        Debug.Log("One Time");
     }
 
     void OnDisable()
     {
+        CancelInvoke();
+    }
 
+    /************************************/
+    /***    Invoke and coroutines     ***/
+    /************************************/
+    void Check_For_Contact()
+    {
+        foreach( RB_vert elem in m_Vlist )
+        {
+        }
     }
 
     /************************************/
@@ -176,7 +194,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         {
             position.Set(m_Radius * m_CosSin[i].x, m_Radius * m_CosSin[i].y, tr.position.z);
             m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position + position, Quaternion.identity));
-            m_Vlist[i + 1].center_spring();
+            m_Vlist[i + 1].center_spring( m_Center_Bound_Freq );
 
             // Surface bound removed, it's not really usefull
          /*   if (i != 0)
@@ -199,7 +217,6 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     public void Set_Buond_To_Center( float freq )
     {
-        m_Center_Bound_Freq = freq;
         for(int i = 1; i < m_Vlist.Count; i++) //start from 1, skipping center
         {
             //Debug.Log(i);
@@ -255,6 +272,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         return m_Vlist[0].particle;
     }
 
+    public void AddSpeed( Vector2 Speed )
+    {
+    }
+
     /*
         public void Set_Surface_Buond()
         {
@@ -281,9 +302,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
         calc_cossin(); 
         make_vertex_list(); 
-        Set_Buond_To_Center(m_Center_Bound_Freq);
         GameManager.Instance.m_Central_Particle = Get_Central_Particle();
-  //      Debug.Log("Reset!");
+ //       Set_Buond_To_Center(m_Center_Bound_Freq);
+        //      Debug.Log("Reset!");
     }
 
     /***************************************/
