@@ -23,9 +23,7 @@ public class LaserParent : MonoBehaviour {
 		timeToTurn = Time.time + m_sec_offset;
 	}
 
-	void Update () {
-		
-	}
+	void Update () {}
 
 	void FixedUpdate() {
 		LaserMovement();		
