@@ -37,7 +37,7 @@ public class TouchControlManager : Singleton<TouchControlManager> {
 
 			// Left portion of the screen: movement
 			if(leftR.Contains(touch.position)) {
-				switch (touch.phase) {
+				switch(touch.phase) {
 					case TouchPhase.Began:
 						moveStartPos = touch.position;
 						EventManager.TriggerEvent("MoveStart");

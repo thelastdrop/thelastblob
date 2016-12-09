@@ -9,8 +9,8 @@ public class SoundManager : Singleton<SoundManager> {
 		[Header("Music sound")]
         public AudioSource musicSource;
         public static SoundManager instance = null;
-        public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
-        public float highPitchRange = 1.05f;            //The highest a sound effect will be randomly pitched.
+        public float lowPitchRange = .95f;
+        public float highPitchRange = 1.05f;
               
         
         //Used to play single sound clips.
