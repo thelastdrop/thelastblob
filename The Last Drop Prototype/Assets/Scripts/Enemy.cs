@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour {
 
 	public float m_speed = 2f;
+	// Test clip
+	public AudioClip testClip;
 
 	private int verse = 1;
 	private Transform tr;
@@ -30,6 +32,7 @@ public class Enemy : MonoBehaviour {
 
 		// Shoot player if seen in straight line
 		// TODO
+		/*
 		RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, verse * Vector2.right);
 		if(hits != null) {
 			foreach(RaycastHit2D hit in hits) {
@@ -38,6 +41,7 @@ public class Enemy : MonoBehaviour {
 				}
 			}
 		}
+		*/
     }
 
 	void Move() {
@@ -63,6 +67,8 @@ public class Enemy : MonoBehaviour {
 	// [TEMP] SetActive(false) if collides with player
 	void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.tag == "Player")
+		// Play test sound when this dies
+			SoundManager.Instance.PlayModPitch(testClip);
             gameObject.SetActive(false);
     }
 }
