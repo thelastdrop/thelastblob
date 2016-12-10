@@ -17,9 +17,16 @@ public class GameWinManager : Singleton<GameWinManager>
 	// index of the first level accesible by the player at the first opening
 	private const int tutorial = 0;
 
+	[Header ("Cheat Flag")]
+	public bool cheat;
+
 
 	[Header ("EndLevel Screen")]
 	public GameObject m_endlevel_screen;
+
+	[Header ("Timer Screen")]
+	public GameObject m_timer_screen;
+	public Text m_timer_text;
 
 	[Header ("Loading Screen")]
 	public GameObject m_loading_screen;
@@ -74,7 +81,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	{
 		//set all the levels except the first as not accessible
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
-			if (i == tutorial) {
+			if (i == tutorial || cheat) {
 				m_levels_accessible [i] = true;
 				m_levels_buttons [i].SetActive (true);
 			} else {
@@ -134,6 +141,9 @@ public class GameWinManager : Singleton<GameWinManager>
 		//duplicate the required level and activate it
 		m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
 		m_playing_screen.SetActive (true);
+
+		//activate timer screen
+		m_timer_screen.SetActive (true);
 	
 	
 	}
@@ -239,6 +249,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			m_pauselevel_screen.SetActive (false);
 		if (m_loading_screen != null)
 			m_loading_screen.SetActive (false);
+		if (m_timer_screen != null)
+			m_timer_screen.SetActive (false);
 		
 	}
 
