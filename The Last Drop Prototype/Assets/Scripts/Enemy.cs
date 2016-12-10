@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour {
 	private Vector2 raycastDirection = Vector2.down; //new Vector2(1f,-1f); diagonal vector
 	private SpriteRenderer sr;
 
+	// Animator related variables
 	private Animator animator;
 	private bool moving = false;
 	private bool shooting = false;
@@ -23,8 +24,12 @@ public class Enemy : MonoBehaviour {
         tr = GetComponent<Transform>() as Transform;
 		sr = GetComponent<SpriteRenderer>() as SpriteRenderer;
 		animator = GetComponent<Animator>() as Animator;
-		animator.SetBool("Moving", moving);
     }
+
+	void Update() {
+		animator.SetFloat("Speed", m_speed);
+		animator.SetBool("Shooting", shooting);
+	}
 
     void FixedUpdate () {
 		if(m_speed == 0f) {
@@ -33,8 +38,6 @@ public class Enemy : MonoBehaviour {
 		Move();
 
 		// Shoot player if seen in straight line
-		// TODO
-		/*
 		RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, verse * Vector2.right);
 		if(hits != null) {
 			foreach(RaycastHit2D hit in hits) {
@@ -43,7 +46,7 @@ public class Enemy : MonoBehaviour {
 				}
 			}
 		}
-		*/
+		
     }
 
 	void Idle() {
@@ -70,9 +73,10 @@ public class Enemy : MonoBehaviour {
 	void Shoot(GameObject player) {
 		shooting = true;
 		GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
-		// go.transform.position = m_shootleft.position;
-		// go.transform.rotation = m_shootleft.rotation;
-		// SoundManager.Instance.PlayModPitch(shoot_clip;
+		playertr = player.transform;
+		Vector2 direction = playertr - tr;
+		
+		// SoundManager.Instance.PlayModPitch(shoot_clip);
 	}
 
 	// [TEMP] SetActive(false) if collides with player

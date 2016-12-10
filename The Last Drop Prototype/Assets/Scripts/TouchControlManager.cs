@@ -25,7 +25,6 @@ public class TouchControlManager : Singleton<TouchControlManager> {
 		TouchInputTrigger();
 	}
 
-	// Import this in GameManager
 	void TouchInputTrigger() {
 #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
 		// reset value each frame

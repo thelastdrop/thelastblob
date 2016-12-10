@@ -7,14 +7,12 @@ public class Shot : MonoBehaviour {
 	public float m_speed = 200f;
 	Transform tr;
 
-	void Start () {
+	void Start() {
 		tr = GetComponent<Transform> () as Transform;
 	}
 	
-	void FixedUpdate () {
-		tr.position = tr.position +
-		tr.right * m_speed * Time.fixedDeltaTime;
-
+	void FixedUpdate() {
+		tr.position = tr.position + tr.right * m_speed * Time.fixedDeltaTime;
 		if (Mathf.Abs (tr.position.x) > 220f)
 			gameObject.SetActive(false);
 		if (Mathf.Abs (tr.position.y) > 120f)
