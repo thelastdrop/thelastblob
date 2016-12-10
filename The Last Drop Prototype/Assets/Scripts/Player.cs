@@ -11,8 +11,8 @@ public class Player : MonoBehaviour {
     public float m_Speed_H;
     [Tooltip("Character increments of speed V axis")]
     public float m_Speed_V;
-    [Tooltip("Character max total speed, counting gravity too")]
-    public float m_Max_Speed;
+    [Tooltip("Character speed, it will be multiply by the number of particle in contact with layermasks(dynam particle)")]
+    public float m_Speed;
 
     [Space(5), Header("Character Ability, Stretching")]
     [Tooltip("Cooldown for ability on Fire1 input")]
@@ -98,6 +98,7 @@ public class Player : MonoBehaviour {
 
     void FixedUpdate()
     {
+        /*
         if ( !GameManager.Instance.m_Gravity_Type )
         {   // gravity changed to the next, or previous index based on H Axis 1, check game manager
             if (m_H_Axis1 != 0.0f)
@@ -107,7 +108,7 @@ public class Player : MonoBehaviour {
         }
         else   // continous gravity adjustments
         {
- /*           m_player_applied_speed.Set(0.0f, 0.0f);
+            m_player_applied_speed.Set(0.0f, 0.0f);
             if (m_H_Axis1 != 0.0f) m_player_applied_speed += new Vector2(Physics2D.gravity.y, -Physics2D.gravity.x).normalized * m_Speed_H * m_H_Axis1 * Time.fixedDeltaTime * -1;//force applied perpendiculary to gravity
             if (m_V_Axis1 != 0.0f) m_player_applied_speed += new Vector2(-Physics2D.gravity.x, -Physics2D.gravity.y).normalized * m_Speed_V * m_V_Axis1 * Time.fixedDeltaTime;
             m_player_applied_speed += rb.velocity;
@@ -115,13 +116,20 @@ public class Player : MonoBehaviour {
             if ((m_H_Axis2 != 0.0f) && (!Input.GetButton("Fire1")))
             {
                 Physics2D.gravity = Quaternion.Euler(0f, 0f, m_H_Axis2 * Time.fixedDeltaTime * 100.0f) * Physics2D.gravity;
+            }
         }
- */     }
+        */
+        if( (m_H_Axis1 != 0) ||
+            (m_V_Axis1 != 0)    )
+        {
+            Vector2 direction = new Vector2(m_H_Axis1, m_V_Axis1);
+            GameManager.Instance.m_Player_Avatar_Cs.AddSpeed(direction * Time.fixedDeltaTime * m_Speed);
+        }
 
         if(m_Is_Moving)  // Is moving!
         {
-            Vector2 direction = GameManager.Instance.Rotate_By_Gravity( TouchControlManager.Instance.moveDirection ).normalized; // change rotation by gravity
-            
+            Vector2 direction = GameManager.Instance.Rotate_By_Gravity( TouchControlManager.Instance.moveDirection ); // change rotation by gravity
+            GameManager.Instance.m_Player_Avatar_Cs.AddSpeed( direction * Time.fixedDeltaTime * m_Speed);
         }
 
         // Strecthing logic, if there is a stretch in action(which is true if the Line Render is enabled)
@@ -131,11 +139,8 @@ public class Player : MonoBehaviour {
             Set_Points();
             // Current maximum lenght is: 1.0f * parts_used* m_Ability1_Length
             float lenght = Vector3.Magnitude(m_Streching_Points[0] - m_Streching_Points[1]);
-            if( ( lenght > (float)GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used * m_Ability1_Length ) ||
-                ( lenght < m_Ability1_Min_Length )                                                                                                )
-            {
-                m_Line_Renderer.enabled = false;
-            }
+
+            m_Line_Renderer.enabled = Check_Stretch_Length();
         }
     }
 
@@ -198,6 +203,11 @@ public class Player : MonoBehaviour {
         {
             m_Line_Renderer.enabled = false;
         }
+        else
+        {
+            m_Line_Renderer.enabled = Check_Stretch_Length();
+        }
+
 
         /*
          * Possibilities:
@@ -208,6 +218,17 @@ public class Player : MonoBehaviour {
             _ maybe i can compensate the impulse added to the particles so that the player can't really move much with it.
          * */
 
+    }
+
+    bool Check_Stretch_Length()
+    {
+        float lenght = Vector3.Magnitude(m_Streching_Points[0] - m_Streching_Points[1]);
+        if ((lenght > (float)GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used * m_Ability1_Length) ||
+            (lenght < m_Ability1_Min_Length))
+        {
+            return false;
+        }
+        return true;
     }
 
     void Set_Points(Vector3 distant_point)
