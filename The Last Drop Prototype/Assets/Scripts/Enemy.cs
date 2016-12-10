@@ -60,13 +60,17 @@ public class Enemy : MonoBehaviour {
 
 		// If there's no platform under this collider2D
 		if(hits.Length <= 1) {
-			verse *= -1;	// Move in other direction
-			sr.flipX = verse > 0 ? false : true;	// Flip the sprite
+			Turn();
 			// For diagonal vectors
 			// raycastDirection = new Vector2(verse * 1f, -1f); // Flip the raycast direction
 		}
 		// Move
 		tr.position = tr.position + verse * m_speed * transform.right * Time.fixedDeltaTime;
+	}
+
+	void Turn() {
+		verse *= -1;	// Move in other direction
+		sr.flipX = verse > 0 ? false : true;	// Flip the sprite
 	}
 
 	// TODO
@@ -80,9 +84,11 @@ public class Enemy : MonoBehaviour {
 
 	// [TEMP] SetActive(false) if collides with player
 	void OnCollisionEnter2D(Collision2D coll) {
-        if (coll.gameObject.tag == "Player")
+		if (coll.gameObject.tag == "Player") {
 		// Play test sound when this dies
 			SoundManager.Instance.PlayModPitch(testClip);
             gameObject.SetActive(false);
+		}
+		Turn();
     }
 }

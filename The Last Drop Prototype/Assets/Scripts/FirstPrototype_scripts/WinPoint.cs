@@ -2,23 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WinPoint : MonoBehaviour {
+public class WinPoint : MonoBehaviour
+{
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		
 	}
 
 
-	void OnCollisionEnter2D (Collision2D other){
-		if (other.gameObject.name == "Ball") {
-			Debug.Log ("You win");
-			GameWinManager.Instance.WinLevel ();
-		}
+	void OnCollisionEnter2D (Collision2D other)
+	{
+		//if (other.gameObject.name == "Ball") {
+		Debug.Log ("You win");
+		GameWinManager.Instance.WinLevel ();
+		//}
 	}
 }
