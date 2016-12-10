@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager> {
                                            new Vector2(0f, 9.8f),
                                            new Vector2(9.8f, 0f), };
     private int m_current_grav_ind = 0;
+    public int current_gravity { get { return m_current_grav_ind; } }
 
     [Tooltip("How much time it gets to change gravity direction"), Range(0.1f,3f)]
     public float m_Gravity_change_CD = 0.3f;
@@ -73,5 +74,31 @@ public class GameManager : Singleton<GameManager> {
 
             m_last_gravity_change = Time.time;
         }
+    }
+
+    /*******************************/
+    /****        UTILITY        ****/
+    /*******************************/
+
+    // return vector rotated depending on the gravity
+    public Vector3 Rotate_By_Gravity( Vector3 direction )
+    {
+
+        switch ( m_current_grav_ind )
+        {
+            case 1:
+                direction = Quaternion.AngleAxis(-90f, Vector3.forward) * direction;
+                break;
+
+            case 2:
+                direction = Quaternion.AngleAxis(180f, Vector3.forward) * direction;
+                break;
+
+            case 3:
+                direction = Quaternion.AngleAxis(90f, Vector3.forward) * direction;
+                break;
+        }
+
+        return direction;
     }
 }

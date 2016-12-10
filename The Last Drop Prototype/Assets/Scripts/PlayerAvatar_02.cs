@@ -23,15 +23,25 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public float m_Surface_Buond;
 
     [Header("Iteractions with other scripts")]
-    [Tooltip("Time must pass between a telepot and the other in secs")]
+    [Tooltip("Time must pass between a teleport and the other in secs")]
     public float m_Min_Time_ToTeleport = 0.2f;
+
+    [Tooltip("Check if a particle is in contact with the floor every this seconds"), Range(0.008f, 0.1f)]
+    public float m_CheckForContact_Repeat_Time = 0.008f;
+
+
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
     // Record [0] store the center of the mesh information.
     private List<RB_vert> m_Vlist = new List<RB_vert>();
-
-    private Vector2 m_old_speed;
-    private bool m_isgrounded;
+    
     private float m_Last_Teleport;
+
+    /// <summary>
+    /// m_Num_In_Contact tell us how many particle are "sticked" to a surface, it should be used to move around the blob
+    /// It's speed must be proportional to the number of particle in contact
+    /// </summary>
+    public int m_Num_In_Contact;
+    private int m_TotalParticles; //Used by checkforcontact, to get a rough(not real time!!!) estimate on how big is the blob
 
     private Vector2[] m_CosSin;
     float m_Radii_Segment; // radial segment size by number of raycasts
@@ -41,6 +51,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         public static GameObject Center;
         public GameObject particle;
+        public Dynam_Particle particle_script;
         public Transform tr;
         public Rigidbody2D rb;
         public SpringJoint2D to_center;
@@ -57,6 +68,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             tr = particle.GetComponent<Transform>();
             rb = particle.GetComponent<Rigidbody2D>();
 
+            particle_script = particle.GetComponent<Dynam_Particle>();
+            particle_script.m_IsSticky = true;
+
  //         to_prev = null;
             to_center = null;
         }
@@ -64,13 +78,15 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         public void set_center()
         {
             Center = particle;
+            particle_script.m_IsSticky = false;
         }
 
-        public void center_spring()
+        public void center_spring( float freq )
         {
             to_center = particle.AddComponent<SpringJoint2D>();
             to_center.enableCollision = false;
             to_center.connectedBody = Center.GetComponent<Rigidbody2D>();
+            to_center.frequency = freq;
         }
 /*
         public void prev_spring(GameObject prev_ref)
@@ -123,10 +139,16 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
                        // vertices for the mesh generation ecc
 
         make_vertex_list(); // actually building the list of vertices used by mesh maker
-
-        Set_Buond_To_Center(m_Center_Bound_Freq);
+        
 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
+
+
+        POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+/*
+        InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+        Debug.Log("Enable");
+*/
     }
 
     void Update()
@@ -136,12 +158,31 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnEnable()
     {
-
+        InvokeRepeating("Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+        Debug.Log("Enable");
     }
 
     void OnDisable()
     {
+        CancelInvoke();
+        Debug.Log("Disable");
+    }
 
+    /************************************/
+    /***    Invoke and coroutines     ***/
+    /************************************/
+    void Check_For_Contact()
+    {
+        m_Num_In_Contact = 0;
+        m_TotalParticles = m_Vlist.Count;
+        for (int i = 1; i < m_TotalParticles; i++)
+        {
+            if( m_Vlist[i].particle_script.m_Is_InContact_With_Floor )
+            {
+                m_Num_In_Contact += 1;
+            }
+        }
+        //Debug.Log("Num in contacts:" + m_Num_In_Contact);
     }
 
     /************************************/
@@ -173,10 +214,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         {
             position.Set(m_Radius * m_CosSin[i].x, m_Radius * m_CosSin[i].y, tr.position.z);
             m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position + position, Quaternion.identity));
-            m_Vlist[i + 1].center_spring();
+            m_Vlist[i + 1].center_spring( m_Center_Bound_Freq );
 
             // Surface bound removed, it's not really usefull
-         /*   if (i != 0)
+       /*   if (i != 0)
             {
                 if (i == m_No_Particles - 1)
                 {
@@ -196,7 +237,6 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     public void Set_Buond_To_Center( float freq )
     {
-        m_Center_Bound_Freq = freq;
         for(int i = 1; i < m_Vlist.Count; i++) //start from 1, skipping center
         {
             //Debug.Log(i);
@@ -252,17 +292,43 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         return m_Vlist[0].particle;
     }
 
-/*
-    public void Set_Surface_Buond()
+    public void AddSpeed( Vector2 Speed )
     {
-        for (int i = 1; i < m_No_Particles + 1; i++) //start from 1, skipping center
-        {
-            Debug.Log(i);
-            m_Vlist[i].set_bound_surface( m_Surface_Buond );
-        }
+        m_Vlist[0].rb.AddForce(Speed * m_Num_In_Contact);
+//        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
-*/
 
+    /*
+        public void Set_Surface_Buond()
+        {
+            for (int i = 1; i < m_No_Particles + 1; i++) //start from 1, skipping center
+            {
+                Debug.Log(i);
+                m_Vlist[i].set_bound_surface( m_Surface_Buond );
+            }
+        }
+    */
+
+    /***************************************/
+    /********* TRIGGER EVENTS **************/
+    /***************************************/
+    public void PlayerReset()
+    {
+
+        for (int i = 0; i < m_Vlist.Count; i++)
+        {
+            m_Vlist[i].particle.SetActive(false);
+        }
+
+        m_Vlist.Clear();
+
+        calc_cossin(); 
+        make_vertex_list(); 
+        GameManager.Instance.m_Central_Particle = Get_Central_Particle();
+
+ //       Set_Buond_To_Center(m_Center_Bound_Freq);
+        //      Debug.Log("Reset!");
+    }
 
     /***************************************/
     /*********    INTERFACES ***************/
