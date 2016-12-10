@@ -70,15 +70,16 @@ public class Player : MonoBehaviour {
         m_H_Axis1 = Input.GetAxis("Horizontal");
         m_V_Axis2 = Input.GetAxis("Vertical2");
         m_H_Axis2 = Input.GetAxis("Horizontal2");
-        
 
 
-        
 
-/********************************************/
-/*    Ability(jump, shoot, stretch ecc)     */
-/********************************************/
 
+
+        /********************************************/
+        /*    Ability(jump, shoot, stretch ecc)     */
+        /********************************************/
+
+#if UNITY_EDITOR
         if ( (      Input.GetButton("Fire1")                   ) &&
              (Time.time - m_last_time_ability1) > m_Ability1_CD) 
         {
@@ -91,7 +92,7 @@ public class Player : MonoBehaviour {
         {
             POLIMIGameCollective.EventManager.TriggerEvent("PlayerReset");
         }
-
+#endif
         //  Debug to test input
         //        Debug.Log("H axis1: " + m_H_Axis1.ToString() + "H axis2: " +  m_H_Axis2.ToString() + "V axis1: " + m_V_Axis1.ToString() + "V axis2: " + m_V_Axis2.ToString());
     }
@@ -119,14 +120,15 @@ public class Player : MonoBehaviour {
             }
         }
         */
-        if( (m_H_Axis1 != 0) ||
+#if UNITY_EDITOR	
+        if ( (m_H_Axis1 != 0) ||
             (m_V_Axis1 != 0)    )
         {
             Vector2 direction = new Vector2(m_H_Axis1, m_V_Axis1);
             GameManager.Instance.m_Player_Avatar_Cs.AddSpeed(direction * Time.fixedDeltaTime * m_Speed);
         }
-
-        if(m_Is_Moving)  // Is moving!
+#endif
+        if (m_Is_Moving)  // Is moving!
         {
             Vector2 direction = GameManager.Instance.Rotate_By_Gravity( TouchControlManager.Instance.moveDirection ); // change rotation by gravity
             GameManager.Instance.m_Player_Avatar_Cs.AddSpeed( direction * Time.fixedDeltaTime * m_Speed);

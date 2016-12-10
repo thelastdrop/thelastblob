@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 {
     Transform tr;
-    //    CircleCollider2D m_Circle_Coll;
+//    CircleCollider2D m_Circle_Coll; // Collider used for triggering player event(consoles for example)
 
     public string m_Layer_Static;
     public string m_Layer_Player;
@@ -133,13 +133,15 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         tr = gameObject.GetComponent<Transform>();
 
-        //        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer(m_Layer_Player), LayerMask.NameToLayer(m_Layer_Static));
+//        m_Circle_Coll = gameObject.GetComponent<CircleCollider2D>();
+//        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer("Player_Avatar"), LayerMask.NameToLayer("Metaballs"));
 
         calc_cossin(); // Setup everything needed depending on the number of "Raycasts", like CosSin, number of
                        // vertices for the mesh generation ecc
 
         make_vertex_list(); // actually building the list of vertices used by mesh maker
-        
+
+
 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
 
