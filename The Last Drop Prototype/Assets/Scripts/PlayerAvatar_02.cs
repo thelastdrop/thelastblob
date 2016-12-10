@@ -126,10 +126,12 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnValidate()
     {
+
         if (m_Vlist.Count == 0) return;
         Debug.Log(m_Vlist.Count);
         Set_Buond_To_Center( m_Center_Bound_Freq );
- //       Set_Surface_Buond();
+ //     Set_Surface_Buond();
+
     }
 
     // Use this for initialization
@@ -163,10 +165,19 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
 
         POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+
+        POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);
+        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
+
 /*
-        InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
-        Debug.Log("Enable");
+        POLIMIGameCollective.EventManager.StartListening("PauseLevel", PlayerDestroy);
+        POLIMIGameCollective.EventManager.StartListening("ResumeLevel", PlayerReset);
 */
+
+        /*
+                InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+                Debug.Log("Enable");
+        */
     }
 
     void Update()
@@ -340,6 +351,11 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
         m_Vlist.Clear();
 
+        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        if (m_Start_Position_Object != null)
+        {
+            m_Start_Position = m_Start_Position_Object.transform.position;
+        }
         tr.position = m_Start_Position;
 
         calc_cossin(); 
@@ -358,18 +374,21 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             m_Vlist[i].particle.SetActive(false);
         }
         m_Vlist.Clear();
+    }
 
+    public void PlayerRemake()
+    { 
         m_Start_Position_Object = GameObject.Find("PlayerStart");
         if (m_Start_Position_Object != null)
         {
             m_Start_Position = m_Start_Position_Object.transform.position;
-            tr.position = m_Start_Position;
-        }
-        else
-        {
-            m_Start_Position = tr.position;
         }
 
+        tr.position = m_Start_Position;
+
+        calc_cossin();
+        make_vertex_list();
+        GameManager.Instance.m_Central_Particle = Get_Central_Particle();
     }
 
     /***************************************/
