@@ -182,7 +182,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnDisable()
     {
-        CancelInvoke();
+        CancelInvoke( "Check_For_Contact" );
         Debug.Log("Disable");
     }
 
