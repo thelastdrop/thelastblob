@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using POLIMIGameCollective;
 
 public class Enemy : MonoBehaviour {
 
 	public float m_speed = 2f;
 	// Test clip
 	public AudioClip testClip;
+	public GameObject m_shot_prefab;
 
 	private int verse = 1;
 	private Transform tr;
@@ -44,6 +46,11 @@ public class Enemy : MonoBehaviour {
 		*/
     }
 
+	void Idle() {
+		moving = false;
+		m_speed = 0;
+	}
+
 	void Move() {
 		moving = true;
 		RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, raycastDirection, 0.5f);
@@ -62,6 +69,10 @@ public class Enemy : MonoBehaviour {
 	// TODO
 	void Shoot(GameObject player) {
 		shooting = true;
+		GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
+		// go.transform.position = m_shootleft.position;
+		// go.transform.rotation = m_shootleft.rotation;
+		// SoundManager.Instance.PlayModPitch(shoot_clip;
 	}
 
 	// [TEMP] SetActive(false) if collides with player
