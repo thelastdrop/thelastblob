@@ -35,6 +35,9 @@ public class GameWinManager : Singleton<GameWinManager>
 	[Header ("Choose-Levels Screen")]
 	public GameObject m_levels_screen;
 
+	[Header ("PlayerAvatar")]
+	public GameObject playerAvatar;
+
 
 
 	/* array of gameplay screens, each index is one level, this objects are never used directly nor mutated,
@@ -72,6 +75,8 @@ public class GameWinManager : Singleton<GameWinManager>
 
 	void Start ()
 	{
+		playerAvatar.SetActive (false);
+
 		//set all the levels except the first as not accessible
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
 			if (i == tutorial) {
@@ -129,11 +134,16 @@ public class GameWinManager : Singleton<GameWinManager>
 		//initialization
 		this.ClearScreens ();
 		gravityInput.ResetGravity ();
+		playerAvatar.SetActive (true);
+		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
+
 
 
 		//duplicate the required level and activate it
 		m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
 		m_playing_screen.SetActive (true);
+
+
 	
 	
 	}
@@ -178,6 +188,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	void EndLevel ()
 	{
 		this.ClearScreens ();
+		playerAvatar.SetActive (false);
 		// destroy the currently allocated level screen when a level ends winning/losing
 		Destroy (m_playing_screen);
 		
@@ -195,6 +206,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	//called when the player pauses the game
 	public void PauseLevel ()
 	{
+		playerAvatar.SetActive (false);
 		m_playing_screen.SetActive (false);
 		m_pauselevel_screen.SetActive (true);
 	}
@@ -203,6 +215,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	//triggered by the button "continue" in the pause screen
 	public void ResumeLevel ()
 	{
+		playerAvatar.SetActive (true);
 		m_pauselevel_screen.SetActive (false);
 		m_playing_screen.SetActive (true);
 	}
