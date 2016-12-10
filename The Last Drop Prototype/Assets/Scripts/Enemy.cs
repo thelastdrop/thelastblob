@@ -73,9 +73,8 @@ public class Enemy : MonoBehaviour {
 	void Shoot(GameObject player) {
 		shooting = true;
 		GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
-		playertr = player.transform;
-		Vector2 direction = playertr - tr;
-		
+		Vector2 direction = player.transform.position - tr.position;
+
 		// SoundManager.Instance.PlayModPitch(shoot_clip);
 	}
 
