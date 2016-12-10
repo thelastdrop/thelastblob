@@ -7,18 +7,22 @@ public class TouchControlManager : Singleton<TouchControlManager> {
 
 	private Rect leftR;
 	private Rect rightR;
-	private Vector2 touchOrigin = -Vector2.one;
 
 	// [Left portion] Move info 
 	public Vector2 moveStartPos;
 	public Vector2 moveDirection;
+	private float maxMovRange;
+	
 	// [Right portion] Vector representing swipe input
 	public Vector2 swipeVector;
+	private Vector2 touchOrigin = -Vector2.one;
 	
 	void Start() {
 		// These rectangles represent the two halfs of the screen
 		leftR = new Rect(0f, 0f, Screen.width * 0.5f, Screen.height);
-     	rightR = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
+    	rightR = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
+		
+		maxMovRange = Screen.width * 0.1f;
 	}
 
 	void Update () {
@@ -42,7 +46,8 @@ public class TouchControlManager : Singleton<TouchControlManager> {
 						EventManager.TriggerEvent("MoveStart");
 						break;
 					case TouchPhase.Moved:
-						moveDirection = touch.position - moveStartPos;
+						Vector2 tempDirection = touch.position - moveStartPos;
+						moveDirection = tempDirection.magnitude > maxMovRange ? tempDirection.normalized * maxMovRange : tempDirection;
 						break;
 					case TouchPhase.Ended:
 						EventManager.TriggerEvent("MoveEnd");
