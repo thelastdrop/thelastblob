@@ -187,6 +187,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	// never called directly by the UI
 	void EndLevel ()
 	{
+		POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
 		playerAvatar.SetActive (false);
 		this.ClearScreens ();
 		// destroy the currently allocated level screen when a level ends winning/losing
