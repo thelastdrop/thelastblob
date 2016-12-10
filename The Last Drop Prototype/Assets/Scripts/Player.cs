@@ -62,6 +62,7 @@ public class Player : MonoBehaviour {
         POLIMIGameCollective.EventManager.StartListening("Swipe", swipe);
         POLIMIGameCollective.EventManager.StartListening("MoveStart", MoveStart);
         POLIMIGameCollective.EventManager.StartListening("MoveEnd", MoveEnd);
+        POLIMIGameCollective.EventManager.StartListening("Shake", Shake);
     }
 
     // Update is called once per frame
@@ -162,6 +163,13 @@ public class Player : MonoBehaviour {
     void MoveEnd()
     {
         m_Is_Moving = false;
+    }
+
+    void Shake()
+    {
+//        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
+//grregorekgorepjgjrep
+//gergregergre
     }
 
     /*********************************/

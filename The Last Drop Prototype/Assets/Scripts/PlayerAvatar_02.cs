@@ -42,6 +42,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     /// </summary>
     public int m_Num_In_Contact;
     private int m_TotalParticles; //Used by checkforcontact, to get a rough(not real time!!!) estimate on how big is the blob
+    private Vector3 m_Start_Position;
 
     private Vector2[] m_CosSin;
     float m_Radii_Segment; // radial segment size by number of raycasts
@@ -132,7 +133,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     void Start()
     {
         tr = gameObject.GetComponent<Transform>();
-
+        m_Start_Position = tr.position;
 //        m_Circle_Coll = gameObject.GetComponent<CircleCollider2D>();
 //        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer("Player_Avatar"), LayerMask.NameToLayer("Metaballs"));
 
@@ -323,6 +324,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         }
 
         m_Vlist.Clear();
+
+        tr.position = m_Start_Position;
 
         calc_cossin(); 
         make_vertex_list(); 
