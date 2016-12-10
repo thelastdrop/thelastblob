@@ -134,10 +134,9 @@ public class GameWinManager : Singleton<GameWinManager>
 		//initialization
 		this.ClearScreens ();
 		gravityInput.ResetGravity ();
+		POLIMIGameCollective.EventManager.TriggerEvent ("LoadLevel");
 		playerAvatar.SetActive (true);
 		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
-
-
 
 		//duplicate the required level and activate it
 		m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
@@ -188,6 +187,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	void EndLevel ()
 	{
 		POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
+		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
 		playerAvatar.SetActive (false);
 		this.ClearScreens ();
 		// destroy the currently allocated level screen when a level ends winning/losing
@@ -207,6 +207,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	//called when the player pauses the game
 	public void PauseLevel ()
 	{
+		POLIMIGameCollective.EventManager.TriggerEvent ("PauseLevel");
 		playerAvatar.SetActive (false);
 		m_playing_screen.SetActive (false);
 		m_pauselevel_screen.SetActive (true);
@@ -216,6 +217,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	//triggered by the button "continue" in the pause screen
 	public void ResumeLevel ()
 	{
+		POLIMIGameCollective.EventManager.TriggerEvent ("ResumeLevel");
 		playerAvatar.SetActive (true);
 		m_pauselevel_screen.SetActive (false);
 		m_playing_screen.SetActive (true);
