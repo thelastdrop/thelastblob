@@ -167,7 +167,7 @@ public class Player : MonoBehaviour {
 
     void Shake()
     {
-        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
+//        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
     /*********************************/
