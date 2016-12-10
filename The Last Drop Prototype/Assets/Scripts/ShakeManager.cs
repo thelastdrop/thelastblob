@@ -29,7 +29,7 @@ public class ShakeManager : Singleton<ShakeManager> {
         // the variable counting tells when the device is being shaken:
         if (counting)
         {
-            print("Shaking up device");
+            EventManager.TriggerEvent("Shake");
         }
     }
 
