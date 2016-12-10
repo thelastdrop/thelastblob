@@ -172,12 +172,12 @@ public class GameWinManager : Singleton<GameWinManager>
 	//called when the player reaches the end of the level
 	public void WinLevel ()
 	{
+		this.EndLevel ();
 		// set as accessible (true) the next level if the current one is won
 		if (current_level + 1 < m_levels_accessible.Length) {
 			m_levels_accessible [current_level + 1] = true;
 			m_levels_buttons [current_level + 1].SetActive (true);
 		}
-		this.EndLevel ();
 		m_endlevel_screen.SetActive (true);
 
 	}
@@ -187,8 +187,8 @@ public class GameWinManager : Singleton<GameWinManager>
 	// never called directly by the UI
 	void EndLevel ()
 	{
-		this.ClearScreens ();
 		playerAvatar.SetActive (false);
+		this.ClearScreens ();
 		// destroy the currently allocated level screen when a level ends winning/losing
 		Destroy (m_playing_screen);
 		
