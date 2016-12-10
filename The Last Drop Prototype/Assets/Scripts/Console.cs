@@ -5,7 +5,10 @@ using UnityEngine;
 public class Console : MonoBehaviour {
 
     public GameObject[] Object_Linked;
+    [Tooltip("Time the console will take to recover, in secs")]
+    public float m_Time_To_Recover;
 
+    private float m_last_use;
     private int m_Player_Particle_Inside;
 
 	// Use this for initialization
@@ -45,5 +48,16 @@ public class Console : MonoBehaviour {
     void activate()
     {
         Debug.Log("Shake registered in console!");
+
+        if(Time.time - m_last_use > m_Time_To_Recover)
+        {
+            // Use The console!
+            foreach( GameObject elem in Object_Linked)
+            {
+
+            }
+
+            m_last_use = Time.time;
+        }
     }
 }
