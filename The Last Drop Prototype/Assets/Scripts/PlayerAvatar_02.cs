@@ -12,6 +12,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public LayerMask m_Layer_Raycast;
     public GameObject m_Particle;
 
+    [Header("Starting Position object"), Tooltip("if null it will start from transform position of player")]
+    public GameObject m_Start_Position_Object;
+
     [Header("Shape Stats"), Tooltip("Number of particles around the center"), Range(8, 100)]
     public int m_No_Particles = 8;
     [Tooltip("Ideal radius of the drop")]
@@ -133,9 +136,20 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     void Start()
     {
         tr = gameObject.GetComponent<Transform>();
-        m_Start_Position = tr.position;
-//        m_Circle_Coll = gameObject.GetComponent<CircleCollider2D>();
-//        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer("Player_Avatar"), LayerMask.NameToLayer("Metaballs"));
+
+        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        if (m_Start_Position_Object != null)
+        {
+            m_Start_Position = m_Start_Position_Object.transform.position;
+            tr.position = m_Start_Position;
+        }
+        else
+        {
+            m_Start_Position = tr.position;
+        }
+
+        //        m_Circle_Coll = gameObject.GetComponent<CircleCollider2D>();
+        //        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer("Player_Avatar"), LayerMask.NameToLayer("Metaballs"));
 
         calc_cossin(); // Setup everything needed depending on the number of "Raycasts", like CosSin, number of
                        // vertices for the mesh generation ecc
@@ -145,6 +159,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
+
 
 
         POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
@@ -333,6 +348,28 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
  //       Set_Buond_To_Center(m_Center_Bound_Freq);
         //      Debug.Log("Reset!");
+    }
+
+    public void PlayerDestroy()
+    {
+
+        for (int i = 0; i < m_Vlist.Count; i++)
+        {
+            m_Vlist[i].particle.SetActive(false);
+        }
+        m_Vlist.Clear();
+
+        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        if (m_Start_Position_Object != null)
+        {
+            m_Start_Position = m_Start_Position_Object.transform.position;
+            tr.position = m_Start_Position;
+        }
+        else
+        {
+            m_Start_Position = tr.position;
+        }
+
     }
 
     /***************************************/
