@@ -33,10 +33,15 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
     // Record [0] store the center of the mesh information.
     private List<RB_vert> m_Vlist = new List<RB_vert>();
-
-    private Vector2 m_old_speed;
-    private bool m_isgrounded;
+    
     private float m_Last_Teleport;
+
+    /// <summary>
+    /// m_Num_In_Contact tell us how many particle are "sticked" to a surface, it should be used to move around the blob
+    /// It's speed must be proportional to the number of particle in contact
+    /// </summary>
+    public int m_Num_In_Contact;
+    private int m_TotalParticles; //Used by checkforcontact, to get a rough(not real time!!!) estimate on how big is the blob
 
     private Vector2[] m_CosSin;
     float m_Radii_Segment; // radial segment size by number of raycasts
@@ -46,6 +51,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         public static GameObject Center;
         public GameObject particle;
+        public Dynam_Particle particle_script;
         public Transform tr;
         public Rigidbody2D rb;
         public SpringJoint2D to_center;
@@ -62,6 +68,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             tr = particle.GetComponent<Transform>();
             rb = particle.GetComponent<Rigidbody2D>();
 
+            particle_script = particle.GetComponent<Dynam_Particle>();
+            particle_script.m_IsSticky = true;
+
  //         to_prev = null;
             to_center = null;
         }
@@ -69,6 +78,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         public void set_center()
         {
             Center = particle;
+            particle_script.m_IsSticky = false;
         }
 
         public void center_spring( float freq )
@@ -135,8 +145,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
 
         POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
-
+/*
         InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+        Debug.Log("Enable");
+*/
     }
 
     void Update()
@@ -147,12 +159,13 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     void OnEnable()
     {
         InvokeRepeating("Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
-        Debug.Log("One Time");
+        Debug.Log("Enable");
     }
 
     void OnDisable()
     {
         CancelInvoke();
+        Debug.Log("Disable");
     }
 
     /************************************/
@@ -160,9 +173,16 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     /************************************/
     void Check_For_Contact()
     {
-        foreach( RB_vert elem in m_Vlist )
+        m_Num_In_Contact = 0;
+        m_TotalParticles = m_Vlist.Count;
+        for (int i = 1; i < m_TotalParticles; i++)
         {
+            if( m_Vlist[i].particle_script.m_Is_InContact_With_Floor )
+            {
+                m_Num_In_Contact += 1;
+            }
         }
+        //Debug.Log("Num in contacts:" + m_Num_In_Contact);
     }
 
     /************************************/
@@ -197,7 +217,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             m_Vlist[i + 1].center_spring( m_Center_Bound_Freq );
 
             // Surface bound removed, it's not really usefull
-         /*   if (i != 0)
+       /*   if (i != 0)
             {
                 if (i == m_No_Particles - 1)
                 {
@@ -274,6 +294,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     public void AddSpeed( Vector2 Speed )
     {
+        m_Vlist[0].rb.AddForce(Speed * m_Num_In_Contact);
+//        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
     /*
@@ -303,6 +325,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         calc_cossin(); 
         make_vertex_list(); 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle();
+
  //       Set_Buond_To_Center(m_Center_Bound_Freq);
         //      Debug.Log("Reset!");
     }
