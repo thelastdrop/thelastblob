@@ -44,6 +44,7 @@ public class LaserRenderer : MonoBehaviour {
 		lr.enabled = true;
 	}
 
+	// Laser kills particles here
 	void LaserInteraction() {
 		RaycastHit2D[] hits = Physics2D.LinecastAll(start, end);
 
