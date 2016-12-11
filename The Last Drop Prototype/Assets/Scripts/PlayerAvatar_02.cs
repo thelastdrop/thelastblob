@@ -19,6 +19,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public int m_No_Particles = 8;
     [Tooltip("Ideal radius of the drop")]
     public float m_Radius = 1.0f;
+    [Tooltip("The avatar will surrender to death after his particle count drop under this")]
+    public int m_No_PArticle_Death = 5;
 
     [Tooltip("Strenght of the bounds toward center")]
     public float m_Center_Bound_Freq;
@@ -164,9 +166,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
 
 
-        POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+/*      POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
 
-        POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);
+        POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);*/
         POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
 
 /*
@@ -291,6 +293,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
                 }
             }
         }
+        Check_For_Death();
     }
 
     // Remove N particles at random
@@ -300,8 +303,20 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         {
             int random_element = Random.Range(1, m_Vlist.Count - 1 );
             m_Vlist[random_element].particle.SetActive(false);
-            m_Vlist.RemoveAt(i);
+            m_Vlist.RemoveAt(random_element);
+            Check_For_Death();
         }
+    }
+
+    // Check to see if the player has to die, in case call the method from gamewinmanager
+    public bool Check_For_Death()
+    {
+        if (m_Vlist.Count < m_No_PArticle_Death)
+        {
+            GameWinManager.Instance.LoseLevel();
+            return true;
+        }
+        return false;
     }
 
     // Return a random particle reference save from the center
