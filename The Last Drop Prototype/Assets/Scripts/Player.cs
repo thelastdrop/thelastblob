@@ -63,7 +63,7 @@ public class Player : MonoBehaviour {
         POLIMIGameCollective.EventManager.StartListening("MoveStart", MoveStart);
         POLIMIGameCollective.EventManager.StartListening("MoveEnd", MoveEnd);
         POLIMIGameCollective.EventManager.StartListening("Shake", Shake);
-        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
+//        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
     }
 
     // Update is called once per frame
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour {
 
         if (Input.GetButton("Fire2"))
         {
-            POLIMIGameCollective.EventManager.TriggerEvent("PlayerReset");
+            POLIMIGameCollective.EventManager.TriggerEvent("Shake");
         }
 #endif
         //  Debug to test input
@@ -166,6 +166,7 @@ public class Player : MonoBehaviour {
     void Shake()
     {
         GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel.z + " " + Shake_Manager.Instance.m_Shake_Min_Accel;
+        m_Line_Renderer.enabled = false;
         //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
