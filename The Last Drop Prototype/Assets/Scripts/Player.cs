@@ -163,7 +163,7 @@ public class Player : MonoBehaviour {
 
     void Shake()
     {
-        GameManager.Instance.m_Debug_Text.text = " Shake Register ";
+        GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel;
         //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
@@ -180,7 +180,7 @@ public class Player : MonoBehaviour {
 
     void Stretch( Vector2 direction )
     {
-        GameManager.Instance.m_Debug_Text.text = "Swipe: " + direction;
+//        GameManager.Instance.m_Debug_Text.text = "Swipe: " + direction;
         Vector3 direction3 = direction.normalized;
         direction = GameManager.Instance.Rotate_By_Gravity(direction);
 
