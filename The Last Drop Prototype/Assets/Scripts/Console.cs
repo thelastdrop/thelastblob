@@ -22,7 +22,7 @@ public class Console : MonoBehaviour {
         {
             if( m_Player_Particle_Inside == 0 )
             {
-                POLIMIGameCollective.EventManager.StartListening( "PlayerShaking" , activate);
+                POLIMIGameCollective.EventManager.StartListening( "Shake" , activate);
             }
 
             m_Player_Particle_Inside++;
@@ -38,7 +38,7 @@ public class Console : MonoBehaviour {
 
             if (m_Player_Particle_Inside == 0)
             {
-                POLIMIGameCollective.EventManager.StopListening("PlayerShaking", activate);
+                POLIMIGameCollective.EventManager.StopListening("Shake", activate);
             }
 
             //Debug.Log( m_Player_Particle_Inside );
