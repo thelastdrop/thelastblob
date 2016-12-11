@@ -5,7 +5,8 @@ using POLIMIGameCollective;
 
 public class Enemy : MonoBehaviour {
 
-	public float m_speed = 2f;
+	[Range(0f,5f)]
+	public float m_speed = 1f;
 	// Test clip
 	public AudioClip testClip;
 	public GameObject m_shot_prefab;

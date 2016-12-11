@@ -64,7 +64,7 @@ public class TouchControlManager : Singleton<TouchControlManager> {
             		touchOrigin = touch.position;
             	} else if (touch.phase == TouchPhase.Ended) {
             		Vector2 touchEnd = touch.position;              
-                	swipeVector = Vector2.zero;
+                	swipeVector = touchEnd - touchOrigin;
 					
 					// Trigger event: i.e. swipeVector has changed 
 					EventManager.TriggerEvent("Swipe");
