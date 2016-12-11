@@ -17,7 +17,7 @@ public class TouchControlManager : Singleton<TouchControlManager> {
 	
 	// [Right portion] Vector representing swipe input
 	public Vector2 swipeVector;
-	private Vector2 touchOrigin = -Vector2.one;
+	private Vector2 touchOrigin;
 	
 	void Start() {
 		// These rectangles represent the two halfs of the screen
@@ -63,9 +63,9 @@ public class TouchControlManager : Singleton<TouchControlManager> {
 				if (touch.phase == TouchPhase.Began) {
             		touchOrigin = touch.position;
             	} else if (touch.phase == TouchPhase.Ended) {
-            		Vector2 touchEnd = touch.position;                    
-                	swipeVector = touchEnd - touchOrigin;
-					// touchOrigin.x = -1;
+            		Vector2 touchEnd = touch.position;              
+                	swipeVector = Vector2.zero;
+					
 					// Trigger event: i.e. swipeVector has changed 
 					EventManager.TriggerEvent("Swipe");
 
