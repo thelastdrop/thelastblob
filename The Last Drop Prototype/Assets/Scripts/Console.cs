@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Console : MonoBehaviour {
 
-    public GameObject[] Object_Linked;
+    public GameObject[] object_Linked;
     [Tooltip("Time the console will take to recover, in secs")]
     public float m_Time_To_Recover;
 
@@ -52,9 +52,14 @@ public class Console : MonoBehaviour {
         if(Time.time - m_last_use > m_Time_To_Recover)
         {
             // Use The console!
-            foreach( GameObject elem in Object_Linked)
+            foreach(GameObject go in object_Linked)
             {
-
+                // Cast to interface_console
+                IConsoleIteration iconGO = (IConsoleIteration)go.GetComponent(typeof(IConsoleIteration));
+                if (iconGO != null)
+                {
+                    iconGO.Activate_Once();
+                }
             }
 
             m_last_use = Time.time;
