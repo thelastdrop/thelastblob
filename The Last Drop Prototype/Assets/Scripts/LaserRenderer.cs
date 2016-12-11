@@ -19,7 +19,7 @@ public class LaserRenderer : MonoBehaviour
     private Transform source2tr;
     // Cooldown
     private float lastUse = 0f;
-    public float cooldown = 0.3f;
+    public float cooldown = 0.1f;
 
     // Use this for initialization
     void Start()
