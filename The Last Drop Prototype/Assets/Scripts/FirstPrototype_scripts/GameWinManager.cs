@@ -68,8 +68,6 @@ public class GameWinManager : Singleton<GameWinManager>
 	public float m_loading_time = 0.5f;
 
 
-	[Header ("Gravity Input")]
-	public Gravity gravityInput;
 
 
 
@@ -133,7 +131,6 @@ public class GameWinManager : Singleton<GameWinManager>
 
 		//initialization
 		this.ClearScreens ();
-		gravityInput.ResetGravity ();
 		POLIMIGameCollective.EventManager.TriggerEvent ("LoadLevel");
 		playerAvatar.SetActive (true);
 		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
