@@ -72,10 +72,6 @@ public class Player : MonoBehaviour {
         m_V_Axis2 = Input.GetAxis("Vertical2");
         m_H_Axis2 = Input.GetAxis("Horizontal2");
 
-
-
-
-
         /********************************************/
         /*    Ability(jump, shoot, stretch ecc)     */
         /********************************************/
@@ -167,7 +163,8 @@ public class Player : MonoBehaviour {
 
     void Shake()
     {
-//        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
+    //    GameManager.Instance.m_Debug_Text.text = " Shake Register ";
+        //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
     /*********************************/
@@ -184,6 +181,7 @@ public class Player : MonoBehaviour {
     void Stretch( Vector2 direction )
     {
         direction = Input.mousePosition - m_Screen_Size;
+        GameManager.Instance.m_Debug_Text.text = "Swipe: " + direction;
         Vector3 direction3 = direction.normalized;
         direction = GameManager.Instance.Rotate_By_Gravity(direction);
 

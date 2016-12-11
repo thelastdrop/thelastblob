@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using POLIMIGameCollective;
 using System.Collections;
 
@@ -28,6 +29,10 @@ public class GameManager : Singleton<GameManager> {
 
     private float m_last_gravity_change = 0.0f;
 
+    [Header("Debug"), Tooltip("Text box used to show debug text")]
+    public Text m_Debug_Text;
+
+    [Header("Public variable used externally, Do not set them")]
     // Used player references(scripts, informations ecc)
     public GameObject m_Player;
     public PlayerAvatar_02 m_Player_Avatar_Cs;
