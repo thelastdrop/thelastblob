@@ -125,6 +125,7 @@ public class Player : MonoBehaviour {
             GameManager.Instance.m_Player_Avatar_Cs.AddSpeed(direction * Time.fixedDeltaTime * m_Speed);
         }
 #endif
+
         if (m_Is_Moving)  // Is moving!
         {
             Vector2 direction = GameManager.Instance.Rotate_By_Gravity( TouchControlManager.Instance.moveDirection ); // change rotation by gravity
