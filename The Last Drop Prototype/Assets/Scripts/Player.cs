@@ -63,6 +63,7 @@ public class Player : MonoBehaviour {
         POLIMIGameCollective.EventManager.StartListening("MoveStart", MoveStart);
         POLIMIGameCollective.EventManager.StartListening("MoveEnd", MoveEnd);
         POLIMIGameCollective.EventManager.StartListening("Shake", Shake);
+        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
     }
 
     // Update is called once per frame
@@ -168,6 +169,10 @@ public class Player : MonoBehaviour {
         //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
+    void PlayerReset()
+    {
+        StartCoroutine( set_central_particle() );
+    }
     /*********************************/
     /****    Internal Methods     ****/
     /*********************************/

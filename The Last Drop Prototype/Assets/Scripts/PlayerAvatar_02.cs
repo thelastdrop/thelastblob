@@ -164,9 +164,9 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
 
 
-        POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+/*        POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
 
-        POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);
+        POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);*/
         POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
 
 /*
