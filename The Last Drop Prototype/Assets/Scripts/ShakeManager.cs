@@ -8,6 +8,8 @@ public class ShakeManager : Singleton<ShakeManager> {
     public float avrgTime = 0.5f;
     public float peakLevel = 0.6f;
     public float endCountTime = 0.6f;
+    [Tooltip("How many shakes are required")]
+    public float ShakeReq = 2; 
     public int shakeDir;
     public int shakeCount;
 
@@ -25,12 +27,17 @@ public class ShakeManager : Singleton<ShakeManager> {
         { // call ShakeDetector every Update!
           // the device was shaken up and the count is in shakeCount
           // the direction of the first shake is in shakeDir (1 or -1)
+
+            if( Mathf.Abs(shakeCount) > ShakeReq)
+                EventManager.TriggerEvent("Shake");
+
         }
-        // the variable counting tells when the device is being shaken:
-        if (counting)
+        // the variable counting tells when the device is being shaken:   <---- BULLSHIT!
+/*        if (counting)
         {
             EventManager.TriggerEvent("Shake");
         }
+        */
     }
 
     bool ShakeDetector()
