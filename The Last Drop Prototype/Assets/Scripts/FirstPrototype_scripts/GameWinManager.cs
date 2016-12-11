@@ -131,8 +131,8 @@ public class GameWinManager : Singleton<GameWinManager>
 
 		//initialization
 		this.ClearScreens ();
-		POLIMIGameCollective.EventManager.TriggerEvent ("LoadLevel");
-		playerAvatar.SetActive (true);
+		//POLIMIGameCollective.EventManager.TriggerEvent ("LoadLevel");
+		//playerAvatar.SetActive (true);
 		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
 
 		//duplicate the required level and activate it
@@ -183,9 +183,9 @@ public class GameWinManager : Singleton<GameWinManager>
 	// never called directly by the UI
 	void EndLevel ()
 	{
-		POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
+		//POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
 		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
-		playerAvatar.SetActive (false);
+		//playerAvatar.SetActive (false);
 		this.ClearScreens ();
 		// destroy the currently allocated level screen when a level ends winning/losing
 		Destroy (m_playing_screen);
