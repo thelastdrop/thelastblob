@@ -81,7 +81,7 @@ public class Player : MonoBehaviour {
              (Time.time - m_last_time_ability1) > m_Ability1_CD) 
         {
                 m_last_time_ability1 = Time.time;
-                Stretch(new Vector2(1.0f, 1.0f).normalized);
+                Stretch(Input.mousePosition - m_Screen_Size);
             // Logic of ability one
         }
 
@@ -163,7 +163,7 @@ public class Player : MonoBehaviour {
 
     void Shake()
     {
-    //    GameManager.Instance.m_Debug_Text.text = " Shake Register ";
+        GameManager.Instance.m_Debug_Text.text = " Shake Register ";
         //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
@@ -180,7 +180,6 @@ public class Player : MonoBehaviour {
 
     void Stretch( Vector2 direction )
     {
-        direction = Input.mousePosition - m_Screen_Size;
         GameManager.Instance.m_Debug_Text.text = "Swipe: " + direction;
         Vector3 direction3 = direction.normalized;
         direction = GameManager.Instance.Rotate_By_Gravity(direction);
