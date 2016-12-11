@@ -30,6 +30,7 @@ public class CameraManager : Singleton<CameraManager>{
     // Use this for initialization
     void Start () {
         tr = gameObject.GetComponent<Transform>();
+        if (m_Camera_Focus == null) m_Camera_Focus = GameObject.Find("Player");
 
         m_cam_grav_vector = new Vector3(Physics2D.gravity.x, Physics2D.gravity.y, 0.0f);
         if (m_Player_Camera == null) m_Player_Camera = GameObject.Find("Player_Cameras");
