@@ -97,14 +97,14 @@ public class Enemy : MonoBehaviour
     }
 
     // [TEMP] SetActive(false) if collides with player
-    void OnCollisionEnter2D(Collision2D coll)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        if (coll.gameObject.tag == "Player")
+        Turn();
+        if(other.gameObject.tag == "Player")
         {
             // Play test sound when this dies
             SoundManager.Instance.PlayModPitch(testClip);
             gameObject.SetActive(false);
         }
-        Turn();
     }
 }
