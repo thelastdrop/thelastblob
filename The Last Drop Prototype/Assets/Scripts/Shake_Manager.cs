@@ -7,13 +7,17 @@ public class Shake_Manager : Singleton<Shake_Manager> {
 
     //Every how much time the input acceleration is controlled:
     public float m_Shake_Tick = 0.03f;
+    //after how many up&down the shake is sent
+    public float m_Shake_No_Min = 3;
 
     // Counting the number of shakes the phone recieve
     public int m_Shake_No_Shakes = 0;
 
+
     // Minimum acceleration to register
-    public float m_Shake_Min_Accel = 0.6f;
-    public float m_Avrg_Time;
+    public float m_Shake_Min_Accel = 0.3f;
+    // After how much time without shake the shake_no counter reset
+    public float m_Shake_Time_Reset = 0.3f;
 
     public int m_Max_Values = 10;//max number of acceleration update to calculate averange
 
@@ -23,6 +27,9 @@ public class Shake_Manager : Singleton<Shake_Manager> {
     private Vector3 m_Avrg_Accel;
 
     private Queue<Vector3> m_Que_Accels;
+    private Vector3 m_Shake_Last_Peak;
+
+    private float m_Shake_Last_Time;
 
     void OnEnable()
     {
@@ -55,7 +62,40 @@ public class Shake_Manager : Singleton<Shake_Manager> {
 
         m_Unbiased_Accel = m_Current_Accel - m_Avrg_Accel;
 
-        EventManager.TriggerEvent("Shake");
+        if( Mathf.Abs(m_Unbiased_Accel.z) > m_Shake_Min_Accel )   // se l'accelerazione è ALMENO pari a
+        {
 
-	}
+            if ( m_Unbiased_Accel.z >= 0 )    // Se l'accelerazione è positiva, checka se il picco precedente era negativo e vice versa, se si, nuovo picco
+            {
+                if( m_Shake_Last_Peak.z <= 0)
+                {
+                    m_Shake_No_Shakes++;
+                    m_Shake_Last_Peak = m_Unbiased_Accel;
+                    m_Shake_Last_Time = Time.time;
+                } 
+            }
+            else
+            {
+                if (m_Shake_Last_Peak.z > 0)
+                {
+                    m_Shake_No_Shakes++;
+                    m_Shake_Last_Peak = m_Unbiased_Accel;
+                    m_Shake_Last_Time  = Time.time;
+                }
+            }
+        }
+
+        if( Time.time - m_Shake_Last_Time > m_Shake_Time_Reset )
+        {
+            m_Shake_No_Shakes = 0;
+        }
+
+        if(m_Shake_No_Shakes > m_Shake_No_Min)
+        {
+            m_Shake_No_Shakes = 0;
+            m_Shake_Last_Time = Time.time;
+            EventManager.TriggerEvent("Shake");
+        }
+
+    }
 }

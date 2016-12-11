@@ -163,7 +163,7 @@ public class Player : MonoBehaviour {
 
     void Shake()
     {
-        GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel;
+        GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel.z + " " + Shake_Manager.Instance.m_Shake_Min_Accel;
         //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
