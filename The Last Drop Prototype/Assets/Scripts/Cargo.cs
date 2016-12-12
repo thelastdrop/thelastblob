@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class Cargo : MonoBehaviour, IConsoleIteration {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void OnCollisionEnter2D(Collision2D other)
+	{
+		if(other.gameObject.tag == "LaserSource")
+		{
+			// Disable whole parentlaser if Cargo collides with LaserSource
+			// other.gameObject = LaserSource GO
+			// other.gameObject.transform.parent.gameObject = LaserParent GO
+			other.gameObject.transform.parent.gameObject.SetActive(false);
+		}
 	}
 
-	public void Activate_Once() {
+	public void Activate_Once()
+	{
         gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
     }
 }
