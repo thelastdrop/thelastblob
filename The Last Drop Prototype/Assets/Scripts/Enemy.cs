@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
 
     private int verse = 1;
     private Transform tr;
-    private Vector2 raycastDirection = Vector2.down; //new Vector2(1f,-1f); diagonal vector
+    public Vector2 raycastDirection = Vector2.down; //new Vector2(1f,-1f); diagonal vector
     private SpriteRenderer sr;
 
     // Animator related variables
@@ -66,10 +66,11 @@ public class Enemy : MonoBehaviour
     {
         moving = true;
         RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, raycastDirection, 0.5f);
-        RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, verse * Vector2.right, 0.5f);
+        RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, Vector2.right, 0.5f);
+        RaycastHit2D[] hitsLeft = Physics2D.RaycastAll(tr.position, Vector2.left, 0.5f);
 
         // If there's no platform under this collider2D
-        if(hits.Length <= 1 || hitsRight.Length > 1)
+        if(hits.Length <= 1 || hitsRight.Length > 1 || hitsLeft.Length > 1)
         {
             Turn();
             // For diagonal vectors
