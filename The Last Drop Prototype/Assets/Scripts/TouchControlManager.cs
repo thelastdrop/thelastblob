@@ -42,49 +42,51 @@ public class TouchControlManager : Singleton<TouchControlManager>
 
         if (Input.touchCount > 0)
         {
-
-            Touch touch = Input.touches[0];
-
-            // Left portion of the screen: movement
-            if (leftR.Contains(touch.position))
+            for(int i=0; i < Input.touchCount; i++)
             {
-                switch (touch.phase)
-                {
-                    case TouchPhase.Began:
-                        moving = true;
-                        moveStartPos = touch.position;
-                        EventManager.TriggerEvent("MoveStart");
-                        break;
-                    case TouchPhase.Moved:
-                        moving = true;
-                        Vector2 tempDirection = touch.position - moveStartPos;
-                        moveDirection = tempDirection.magnitude > maxMovRange ? tempDirection.normalized * maxMovRange * shrinkVectorFactor : tempDirection * shrinkVectorFactor;
-                        break;
-                    case TouchPhase.Ended:
-                        moving = false;
-                        EventManager.TriggerEvent("MoveEnd");
-                        break;
-                }
-                // Right portion of the screen: stretch mechanic
-            }
-            if (rightR.Contains(touch.position))
-            {
-                if (touch.phase == TouchPhase.Began)
-                {
-                    touchOrigin = touch.position;
-                }
-                else if (touch.phase == TouchPhase.Ended)
-                {
-                    Vector2 touchEnd = touch.position;
-                    swipeVector = touchEnd - touchOrigin;
+                Touch touch = Input.touches[i];
 
-                    // Trigger event: i.e. swipeVector has changed 
-                    EventManager.TriggerEvent("Swipe");
-
-                    if (moving)
+                // Left portion of the screen: movement
+                if (leftR.Contains(touch.position))
+                {
+                    switch (touch.phase)
                     {
-                        moving = false;
-                        EventManager.TriggerEvent("MoveEnd");
+                        case TouchPhase.Began:
+                            moving = true;
+                            moveStartPos = touch.position;
+                            EventManager.TriggerEvent("MoveStart");
+                            break;
+                        case TouchPhase.Moved:
+                            moving = true;
+                            Vector2 tempDirection = touch.position - moveStartPos;
+                            moveDirection = tempDirection.magnitude > maxMovRange ? tempDirection.normalized * maxMovRange * shrinkVectorFactor : tempDirection * shrinkVectorFactor;
+                            break;
+                        case TouchPhase.Ended:
+                            moving = false;
+                            EventManager.TriggerEvent("MoveEnd");
+                            break;
+                    }
+                    // Right portion of the screen: stretch mechanic
+                }
+                if (rightR.Contains(touch.position))
+                {
+                    if (touch.phase == TouchPhase.Began)
+                    {
+                        touchOrigin = touch.position;
+                    }
+                    else if (touch.phase == TouchPhase.Ended)
+                    {
+                        Vector2 touchEnd = touch.position;
+                        swipeVector = touchEnd - touchOrigin;
+
+                        // Trigger event: i.e. swipeVector has changed 
+                        EventManager.TriggerEvent("Swipe");
+
+                        if (moving)
+                        {
+                            moving = false;
+                            EventManager.TriggerEvent("MoveEnd");
+                        }
                     }
                 }
             }
