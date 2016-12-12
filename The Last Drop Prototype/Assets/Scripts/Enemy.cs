@@ -96,6 +96,7 @@ public class Enemy : MonoBehaviour
     }
 
     // [TEMP] SetActive(false) if collides with player
+    /*
     void OnCollisionEnter2D(Collision2D other)
     {
         //Turn();
@@ -105,4 +106,5 @@ public class Enemy : MonoBehaviour
             SoundManager.Instance.PlayModPitch(testClip);
         }
     }
+    */
 }
