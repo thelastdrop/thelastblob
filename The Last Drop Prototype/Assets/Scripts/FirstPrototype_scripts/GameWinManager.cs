@@ -35,6 +35,9 @@ public class GameWinManager : Singleton<GameWinManager>
 	[Header ("Choose-Levels Screen")]
 	public GameObject m_levels_screen;
 
+	[Header ("PlayerAvatar")]
+	public GameObject playerAvatar;
+
 
 
 	/* array of gameplay screens, each index is one level, this objects are never used directly nor mutated,
@@ -65,13 +68,12 @@ public class GameWinManager : Singleton<GameWinManager>
 	public float m_loading_time = 0.5f;
 
 
-	[Header ("Gravity Input")]
-	public Gravity gravityInput;
 
 
 
 	void Start ()
 	{
+
 		//set all the levels except the first as not accessible
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
 			if (i == tutorial) {
@@ -128,12 +130,18 @@ public class GameWinManager : Singleton<GameWinManager>
 
 		//initialization
 		this.ClearScreens ();
-		gravityInput.ResetGravity ();
+		//POLIMIGameCollective.EventManager.TriggerEvent ("LoadLevel");
+		//playerAvatar.SetActive (true);
+		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
 
+		//TODO check if it is correct
+		//Time.timeScale = 1f;
 
 		//duplicate the required level and activate it
 		m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
 		m_playing_screen.SetActive (true);
+
+
 	
 	
 	}
@@ -162,12 +170,12 @@ public class GameWinManager : Singleton<GameWinManager>
 	//called when the player reaches the end of the level
 	public void WinLevel ()
 	{
+		this.EndLevel ();
 		// set as accessible (true) the next level if the current one is won
 		if (current_level + 1 < m_levels_accessible.Length) {
 			m_levels_accessible [current_level + 1] = true;
 			m_levels_buttons [current_level + 1].SetActive (true);
 		}
-		this.EndLevel ();
 		m_endlevel_screen.SetActive (true);
 
 	}
@@ -177,6 +185,11 @@ public class GameWinManager : Singleton<GameWinManager>
 	// never called directly by the UI
 	void EndLevel ()
 	{
+		//POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
+		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
+		//TODO check if it is correct
+		//Time.timeScale = 0f;
+		//playerAvatar.SetActive (false);
 		this.ClearScreens ();
 		// destroy the currently allocated level screen when a level ends winning/losing
 		Destroy (m_playing_screen);
@@ -195,6 +208,11 @@ public class GameWinManager : Singleton<GameWinManager>
 	//called when the player pauses the game
 	public void PauseLevel ()
 	{
+		//POLIMIGameCollective.EventManager.TriggerEvent ("PauseLevel");
+		//playerAvatar.SetActive (false);
+
+		//TODO check if it is correct
+		//Time.timeScale = 0f;
 		m_playing_screen.SetActive (false);
 		m_pauselevel_screen.SetActive (true);
 	}
@@ -203,6 +221,10 @@ public class GameWinManager : Singleton<GameWinManager>
 	//triggered by the button "continue" in the pause screen
 	public void ResumeLevel ()
 	{
+		//POLIMIGameCollective.EventManager.TriggerEvent ("ResumeLevel");
+		//playerAvatar.SetActive (true);
+		//TODO check if it is correct
+		//Time.timeScale = 1f;
 		m_pauselevel_screen.SetActive (false);
 		m_playing_screen.SetActive (true);
 	}

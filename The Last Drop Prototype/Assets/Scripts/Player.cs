@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
     Transform tr;
@@ -28,6 +29,13 @@ public class Player : MonoBehaviour {
     [Tooltip("Strenght applied by the elastic")]
     public float m_Ability1_Tensile_Str = 1.0f;
 
+    [Header("Feeding Params"), Tooltip("Array of names of objects that the player can eat")]
+    public string[] m_Foods = { "Enemy" };
+    [Tooltip("How much each food increase particle counts")]
+    public int[] m_Nutrition_Value = { 2 };
+    [Tooltip("Maximum particles the player can have")]
+    public int m_Max_Health;
+
     private float m_V_Axis1;
     private float m_H_Axis1;
     private float m_V_Axis2;
@@ -44,6 +52,30 @@ public class Player : MonoBehaviour {
     private Rigidbody2D m_Central_Particle_rb;
     private Vector3[] m_Streching_Points;
     private Vector3 m_Screen_Size;
+
+    //Eating/carry
+    private List<carried_items> m_Carried_Items = new List<carried_items>();
+
+    public struct carried_items
+    {
+        public GameObject item;
+        public bool is_food;
+        public float time_since_eated;
+
+        public carried_items( GameObject obj_to_store, bool food )
+        {
+            item = obj_to_store;
+            is_food = food;
+            if(is_food)
+            {
+                time_since_eated = Time.time;
+            }
+            else
+            {
+                time_since_eated = 0f;
+            }
+        }
+    }
 
     // Use this for initialization
     void Start ()
@@ -62,6 +94,8 @@ public class Player : MonoBehaviour {
         POLIMIGameCollective.EventManager.StartListening("Swipe", swipe);
         POLIMIGameCollective.EventManager.StartListening("MoveStart", MoveStart);
         POLIMIGameCollective.EventManager.StartListening("MoveEnd", MoveEnd);
+        POLIMIGameCollective.EventManager.StartListening("Shake", Shake);
+//        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
     }
 
     // Update is called once per frame
@@ -70,28 +104,25 @@ public class Player : MonoBehaviour {
         m_H_Axis1 = Input.GetAxis("Horizontal");
         m_V_Axis2 = Input.GetAxis("Vertical2");
         m_H_Axis2 = Input.GetAxis("Horizontal2");
-        
 
+        /********************************************/
+        /*    Ability(jump, shoot, stretch ecc)     */
+        /********************************************/
 
-        
-
-/********************************************/
-/*    Ability(jump, shoot, stretch ecc)     */
-/********************************************/
-
+#if UNITY_EDITOR
         if ( (      Input.GetButton("Fire1")                   ) &&
              (Time.time - m_last_time_ability1) > m_Ability1_CD) 
         {
                 m_last_time_ability1 = Time.time;
-                Stretch(new Vector2(1.0f, 1.0f).normalized);
+                Stretch(Input.mousePosition - m_Screen_Size);
             // Logic of ability one
         }
 
         if (Input.GetButton("Fire2"))
         {
-            POLIMIGameCollective.EventManager.TriggerEvent("PlayerReset");
+            POLIMIGameCollective.EventManager.TriggerEvent("Shake");
         }
-
+#endif
         //  Debug to test input
         //        Debug.Log("H axis1: " + m_H_Axis1.ToString() + "H axis2: " +  m_H_Axis2.ToString() + "V axis1: " + m_V_Axis1.ToString() + "V axis2: " + m_V_Axis2.ToString());
     }
@@ -119,14 +150,16 @@ public class Player : MonoBehaviour {
             }
         }
         */
-        if( (m_H_Axis1 != 0) ||
+#if UNITY_EDITOR	
+        if ( (m_H_Axis1 != 0) ||
             (m_V_Axis1 != 0)    )
         {
             Vector2 direction = new Vector2(m_H_Axis1, m_V_Axis1);
             GameManager.Instance.m_Player_Avatar_Cs.AddSpeed(direction * Time.fixedDeltaTime * m_Speed);
         }
+#endif
 
-        if(m_Is_Moving)  // Is moving!
+        if (m_Is_Moving)  // Is moving!
         {
             Vector2 direction = GameManager.Instance.Rotate_By_Gravity( TouchControlManager.Instance.moveDirection ); // change rotation by gravity
             GameManager.Instance.m_Player_Avatar_Cs.AddSpeed( direction * Time.fixedDeltaTime * m_Speed);
@@ -141,6 +174,24 @@ public class Player : MonoBehaviour {
             float lenght = Vector3.Magnitude(m_Streching_Points[0] - m_Streching_Points[1]);
 
             m_Line_Renderer.enabled = Check_Stretch_Length();
+        }
+
+        for(int i = 0; i < m_Carried_Items.Count; i++)
+        {
+            
+            if( m_Carried_Items[i].is_food == true )
+            {
+                if (Time.time - m_Carried_Items[i].time_since_eated >= 1.0f)
+                {
+                    m_Carried_Items[i].item.SetActive(false);
+                    GameManager.Instance.m_Player_Avatar_Cs.Grow(5);
+                    m_Carried_Items.RemoveAt(i);                   
+                }
+                else
+                {
+                    m_Carried_Items[i].item.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, Time.time - m_Carried_Items[i].time_since_eated);
+                }
+            }
         }
     }
 
@@ -162,6 +213,17 @@ public class Player : MonoBehaviour {
         m_Is_Moving = false;
     }
 
+    void Shake()
+    {
+        GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel.z + " " + Shake_Manager.Instance.m_Shake_Min_Accel;
+        m_Line_Renderer.enabled = false;
+        //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
+    }
+
+    void PlayerReset()
+    {
+        StartCoroutine( set_central_particle() );
+    }
     /*********************************/
     /****    Internal Methods     ****/
     /*********************************/
@@ -175,7 +237,7 @@ public class Player : MonoBehaviour {
 
     void Stretch( Vector2 direction )
     {
-        direction = Input.mousePosition - m_Screen_Size;
+//        GameManager.Instance.m_Debug_Text.text = "Swipe: " + direction;
         Vector3 direction3 = direction.normalized;
         direction = GameManager.Instance.Rotate_By_Gravity(direction);
 
@@ -241,5 +303,13 @@ public class Player : MonoBehaviour {
     {
         m_Streching_Points[1] = tr.position;
         m_Line_Renderer.SetPositions(m_Streching_Points);
+    }
+
+    /************************************/
+    /***    PUBLIC METHODS            ***/
+    /************************************/
+    public void Eat_Carry( GameObject object_carried )
+    {
+        m_Carried_Items.Add(new carried_items(object_carried, true));
     }
 }

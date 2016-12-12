@@ -5,17 +5,22 @@ using System.Collections.Generic;
 public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 {
     Transform tr;
-    //    CircleCollider2D m_Circle_Coll;
+//    CircleCollider2D m_Circle_Coll; // Collider used for triggering player event(consoles for example)
 
     public string m_Layer_Static;
     public string m_Layer_Player;
     public LayerMask m_Layer_Raycast;
     public GameObject m_Particle;
 
+    [Header("Starting Position object"), Tooltip("if null it will start from transform position of player")]
+    public GameObject m_Start_Position_Object;
+
     [Header("Shape Stats"), Tooltip("Number of particles around the center"), Range(8, 100)]
     public int m_No_Particles = 8;
     [Tooltip("Ideal radius of the drop")]
     public float m_Radius = 1.0f;
+    [Tooltip("The avatar will surrender to death after his particle count drop under this")]
+    public int m_No_PArticle_Death = 5;
 
     [Tooltip("Strenght of the bounds toward center")]
     public float m_Center_Bound_Freq;
@@ -42,6 +47,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     /// </summary>
     public int m_Num_In_Contact;
     private int m_TotalParticles; //Used by checkforcontact, to get a rough(not real time!!!) estimate on how big is the blob
+    private Vector3 m_Start_Position;
 
     private Vector2[] m_CosSin;
     float m_Radii_Segment; // radial segment size by number of raycasts
@@ -122,10 +128,12 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnValidate()
     {
+
         if (m_Vlist.Count == 0) return;
         Debug.Log(m_Vlist.Count);
         Set_Buond_To_Center( m_Center_Bound_Freq );
- //       Set_Surface_Buond();
+ //     Set_Surface_Buond();
+
     }
 
     // Use this for initialization
@@ -133,22 +141,45 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         tr = gameObject.GetComponent<Transform>();
 
-        //        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer(m_Layer_Player), LayerMask.NameToLayer(m_Layer_Static));
+        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        if (m_Start_Position_Object != null)
+        {
+            m_Start_Position = m_Start_Position_Object.transform.position;
+            tr.position = m_Start_Position;
+        }
+        else
+        {
+            m_Start_Position = tr.position;
+        }
+
+        //        m_Circle_Coll = gameObject.GetComponent<CircleCollider2D>();
+        //        Physics2D.IgnoreLayerCollision( LayerMask.NameToLayer("Player_Avatar"), LayerMask.NameToLayer("Metaballs"));
 
         calc_cossin(); // Setup everything needed depending on the number of "Raycasts", like CosSin, number of
                        // vertices for the mesh generation ecc
 
         make_vertex_list(); // actually building the list of vertices used by mesh maker
-        
+
+
 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle(); // used to force the movement of the player
 
 
-        POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+
+/*      POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
+
+        POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);*/
+        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
+
 /*
-        InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
-        Debug.Log("Enable");
+        POLIMIGameCollective.EventManager.StartListening("PauseLevel", PlayerDestroy);
+        POLIMIGameCollective.EventManager.StartListening("ResumeLevel", PlayerReset);
 */
+
+        /*
+                InvokeRepeating( "Check_For_Contact", m_CheckForContact_Repeat_Time, m_CheckForContact_Repeat_Time);
+                Debug.Log("Enable");
+        */
     }
 
     void Update()
@@ -164,7 +195,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void OnDisable()
     {
-        CancelInvoke();
+        CancelInvoke( "Check_For_Contact" );
         Debug.Log("Disable");
     }
 
@@ -262,6 +293,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
                 }
             }
         }
+        Check_For_Death();
     }
 
     // Remove N particles at random
@@ -271,8 +303,20 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         {
             int random_element = Random.Range(1, m_Vlist.Count - 1 );
             m_Vlist[random_element].particle.SetActive(false);
-            m_Vlist.RemoveAt(i);
+            m_Vlist.RemoveAt(random_element);
+            Check_For_Death();
         }
+    }
+
+    // Check to see if the player has to die, in case call the method from gamewinmanager
+    public bool Check_For_Death()
+    {
+        if (m_Vlist.Count < m_No_PArticle_Death)
+        {
+            GameWinManager.Instance.LoseLevel();
+            return true;
+        }
+        return false;
     }
 
     // Return a random particle reference save from the center
@@ -298,6 +342,19 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 //        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
+    public void Grow( int no_particles )
+    {
+        Debug.Log("Add particle: " + no_particles);
+        Vector3 position = Vector3.zero;
+        for (int i = 0; i < no_particles; i++)
+        {
+            int rand_sincos_ind = Random.Range( 0, m_No_Particles );
+
+            position.Set(m_Radius * m_CosSin[rand_sincos_ind].x, m_Radius * m_CosSin[rand_sincos_ind].y, tr.position.z);
+            m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position + position, Quaternion.identity));
+            m_Vlist[m_Vlist.Count - 1].center_spring(m_Center_Bound_Freq);
+        }
+    }
     /*
         public void Set_Surface_Buond()
         {
@@ -314,7 +371,6 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     /***************************************/
     public void PlayerReset()
     {
-
         for (int i = 0; i < m_Vlist.Count; i++)
         {
             m_Vlist[i].particle.SetActive(false);
@@ -322,12 +378,45 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
         m_Vlist.Clear();
 
+        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        if (m_Start_Position_Object != null)
+        {
+            m_Start_Position = m_Start_Position_Object.transform.position;
+        }
+        tr.position = m_Start_Position;
+
         calc_cossin(); 
         make_vertex_list(); 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle();
+        CameraManager.Instance.Reset_To_Start();
 
  //       Set_Buond_To_Center(m_Center_Bound_Freq);
         //      Debug.Log("Reset!");
+    }
+
+    public void PlayerDestroy()
+    {
+
+        for (int i = 0; i < m_Vlist.Count; i++)
+        {
+            m_Vlist[i].particle.SetActive(false);
+        }
+        m_Vlist.Clear();
+    }
+
+    public void PlayerRemake()
+    { 
+        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        if (m_Start_Position_Object != null)
+        {
+            m_Start_Position = m_Start_Position_Object.transform.position;
+        }
+
+        tr.position = m_Start_Position;
+
+        calc_cossin();
+        make_vertex_list();
+        GameManager.Instance.m_Central_Particle = Get_Central_Particle();
     }
 
     /***************************************/
