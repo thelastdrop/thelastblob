@@ -50,14 +50,13 @@ public class Console : MonoBehaviour {
 
     void activate()
     {
-        Debug.Log("Shake registered in console!");
-        
-        if(used == false && Time.time - m_last_use > m_Time_To_Recover)
+        if (used == false && Time.time - m_last_use > m_Time_To_Recover)
         {
             used = true;
             // Use The console!
             foreach(GameObject go in object_Linked)
             {
+                Debug.Log("Funziona");
                 // Cast to interface_console
                 IConsoleIteration iconGO = (IConsoleIteration)go.GetComponent(typeof(IConsoleIteration));
                 if (iconGO != null)

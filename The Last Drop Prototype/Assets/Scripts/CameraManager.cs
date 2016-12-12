@@ -78,4 +78,12 @@ public class CameraManager : Singleton<CameraManager>{
     {
         return (Vector3.Magnitude(arg1 - arg2) < m_Camera_Abs_Alt_Distance) ? true : false;
     }
+
+    public void Reset_To_Start()
+    {
+        GameObject Player_start = GameObject.Find("PlayerStart");
+        Vector3 new_position = (Player_start != null) ? Player_start.transform.position : m_Camera_Focus.transform.position;
+        new_position.z = m_Player_Camera.transform.position.z;
+        m_Player_Camera.transform.position = new_position;
+    }
 }
