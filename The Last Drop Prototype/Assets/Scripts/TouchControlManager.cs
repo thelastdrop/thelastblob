@@ -67,7 +67,7 @@ public class TouchControlManager : Singleton<TouchControlManager>
                 }
                 // Right portion of the screen: stretch mechanic
             }
-            else if (rightR.Contains(touch.position))
+            if (rightR.Contains(touch.position))
             {
                 if (touch.phase == TouchPhase.Began)
                 {
