@@ -109,6 +109,9 @@ public class Player : MonoBehaviour {
         /*    Ability(jump, shoot, stretch ecc)     */
         /********************************************/
 
+        if (Input.GetKeyDown("escape")) GameWinManager.Instance.LoseLevel();
+
+
 #if UNITY_EDITOR
         if ( (      Input.GetButton("Fire1")                   ) &&
              (Time.time - m_last_time_ability1) > m_Ability1_CD) 
