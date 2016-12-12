@@ -342,6 +342,18 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 //        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
+    public void Grow( int no_particles )
+    {
+        Vector3 position = Vector3.zero;
+        for (int i = 0; i < no_particles; i++)
+        {
+            int rand_sincos_ind = Random.Range( 0, m_No_Particles );
+
+            position.Set(m_Radius * m_CosSin[rand_sincos_ind].x, m_Radius * m_CosSin[rand_sincos_ind].y, tr.position.z);
+            m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position + position, Quaternion.identity));
+            m_Vlist[m_Vlist.Count - 1].center_spring(m_Center_Bound_Freq);
+        }
+    }
     /*
         public void Set_Surface_Buond()
         {
