@@ -154,7 +154,7 @@ public class Player : MonoBehaviour {
         if ( (m_H_Axis1 != 0) ||
             (m_V_Axis1 != 0)    )
         {
-            Vector2 direction = new Vector2(m_H_Axis1, m_V_Axis1);
+            Vector2 direction = GameManager.Instance.Rotate_By_Gravity( new Vector2(m_H_Axis1, m_V_Axis1) );
             GameManager.Instance.m_Player_Avatar_Cs.AddSpeed(direction * Time.fixedDeltaTime * m_Speed);
         }
 #endif

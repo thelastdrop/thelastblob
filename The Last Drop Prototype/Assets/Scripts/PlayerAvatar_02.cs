@@ -389,6 +389,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         make_vertex_list(); 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle();
         CameraManager.Instance.Reset_To_Start();
+        GameManager.Instance.Gravity_Reset();
 
  //       Set_Buond_To_Center(m_Center_Bound_Freq);
         //      Debug.Log("Reset!");
