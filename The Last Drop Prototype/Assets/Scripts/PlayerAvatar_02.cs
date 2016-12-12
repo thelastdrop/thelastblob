@@ -344,6 +344,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     public void Grow( int no_particles )
     {
+        Debug.Log("Add particle: " + no_particles);
         Vector3 position = Vector3.zero;
         for (int i = 0; i < no_particles; i++)
         {
@@ -370,7 +371,6 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     /***************************************/
     public void PlayerReset()
     {
-
         for (int i = 0; i < m_Vlist.Count; i++)
         {
             m_Vlist[i].particle.SetActive(false);
@@ -388,6 +388,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         calc_cossin(); 
         make_vertex_list(); 
         GameManager.Instance.m_Central_Particle = Get_Central_Particle();
+        CameraManager.Instance.Reset_To_Start();
 
  //       Set_Buond_To_Center(m_Center_Bound_Freq);
         //      Debug.Log("Reset!");

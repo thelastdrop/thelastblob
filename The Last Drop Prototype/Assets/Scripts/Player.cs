@@ -184,7 +184,7 @@ public class Player : MonoBehaviour {
                 if (Time.time - m_Carried_Items[i].time_since_eated >= 1.0f)
                 {
                     m_Carried_Items[i].item.SetActive(false);
-                    GameManager.Instance.m_Player_Avatar_Cs.Grow(3);
+                    GameManager.Instance.m_Player_Avatar_Cs.Grow(5);
                     m_Carried_Items.RemoveAt(i);                   
                 }
                 else
