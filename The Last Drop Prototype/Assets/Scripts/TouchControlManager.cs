@@ -14,7 +14,7 @@ public class TouchControlManager : Singleton<TouchControlManager>
     public Vector2 moveDirection;
     private bool moving;
     private float maxMovRange;
-    private float shrinkVectorFactor = 0.01f;
+    private float shrinkVectorFactor = 0.05f;
 
     // [Right portion] Vector representing swipe input
     public Vector2 swipeVector;
