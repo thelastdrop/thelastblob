@@ -146,6 +146,17 @@ public class Dynam_Particle : MonoBehaviour
     // If the particle is Sticky and hit something in the sticky layer mask, it will adhere with some force
     void OnCollisionEnter2D(Collision2D other)
     {
+        if ( (other.gameObject.layer == LayerMask.NameToLayer("Enemy_Food")) &&
+            (gameObject.tag         == "Player") &&
+            (other.gameObject.GetComponent<Enemy>().enabled)                     )
+        {
+            Rigidbody2D otherRb = other.gameObject.GetComponent<Rigidbody2D>();
+            otherRb.isKinematic = false;
+            other.gameObject.GetComponent<Enemy>().enabled = false;
+            other.gameObject.GetComponent<Animator>().enabled = false;
+            GameManager.Instance.m_Player.GetComponent<Player>().Eat_Carry(other.gameObject);
+            Debug.Log("Enemy eated");
+        }
 
         // Stickness, anything not related to it before this line!
         if (!m_IsSticky) return; // return if not sticky!
