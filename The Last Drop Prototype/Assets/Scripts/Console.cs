@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Console : MonoBehaviour {
 
+    public bool m_Is_Gravity = false;
     public GameObject[] object_Linked;
     [Tooltip("Time the console will take to recover, in secs")]
     public float m_Time_To_Recover;
@@ -21,11 +22,17 @@ public class Console : MonoBehaviour {
 	
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.tag == "Player")    
+        if(other.gameObject.tag == "Player")
         {
-            if( m_Player_Particle_Inside == 0 )
+            if ((m_Player_Particle_Inside == 0) &&
+                 (m_Is_Gravity == false))
             {
-                POLIMIGameCollective.EventManager.StartListening( "Shake" , activate);
+                POLIMIGameCollective.EventManager.StartListening("Shake", activate);
+            }
+            if ((m_Player_Particle_Inside == 0) &&
+                 (m_Is_Gravity == true))
+            {
+                POLIMIGameCollective.EventManager.StartListening("Shake", gravity);
             }
 
             m_Player_Particle_Inside++;
@@ -39,9 +46,15 @@ public class Console : MonoBehaviour {
         {
             m_Player_Particle_Inside--;
 
-            if (m_Player_Particle_Inside == 0)
+            if ((m_Player_Particle_Inside == 0) &&
+                 (m_Is_Gravity == false))
             {
-                POLIMIGameCollective.EventManager.StopListening("Shake", activate);
+                POLIMIGameCollective.EventManager.StartListening("Shake", activate);
+            }
+            if ((m_Player_Particle_Inside == 0) &&
+                 (m_Is_Gravity == true))
+            {
+                POLIMIGameCollective.EventManager.StartListening("Shake", gravity);
             }
 
             //Debug.Log( m_Player_Particle_Inside );
@@ -67,5 +80,18 @@ public class Console : MonoBehaviour {
 
             m_last_use = Time.time;
         }
+    }
+
+    void gravity()
+    {
+        if (used == false && Time.time - m_last_use > m_Time_To_Recover)
+        {
+            used = true;
+            // Use The console!
+            GameManager.Instance.Gravity_Change(2);
+
+            m_last_use = Time.time;
+        }
+
     }
 }
