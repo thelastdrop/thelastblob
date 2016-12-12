@@ -32,10 +32,16 @@ public class CameraManager : Singleton<CameraManager>{
         tr = gameObject.GetComponent<Transform>();
         if (m_Camera_Focus == null) m_Camera_Focus = GameObject.Find("Player");
 
+        GameObject Player_start = GameObject.Find("PlayerStart");
+
         m_cam_grav_vector = new Vector3(Physics2D.gravity.x, Physics2D.gravity.y, 0.0f);
         if (m_Player_Camera == null) m_Player_Camera = GameObject.Find("Player_Cameras");
 
         m_Player_Camera.transform.rotation.SetLookRotation(m_cam_grav_vector, Vector3.up);
+
+        Vector3 new_position = (Player_start != null) ? Player_start.transform.position : m_Camera_Focus.transform.position;
+        new_position.z = m_Player_Camera.transform.position.z;
+        m_Player_Camera.transform.position = new_position;
     }
 
     void Update()
