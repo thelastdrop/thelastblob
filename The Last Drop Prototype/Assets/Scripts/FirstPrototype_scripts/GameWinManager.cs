@@ -73,7 +73,6 @@ public class GameWinManager : Singleton<GameWinManager>
 
 	void Start ()
 	{
-		playerAvatar.SetActive (false);
 
 		//set all the levels except the first as not accessible
 		for (int i = 0; i < m_gameplay_screens.Length; i++) {
@@ -136,7 +135,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
 
 		//TODO check if it is correct
-		Time.timeScale = 1f;
+		//Time.timeScale = 1f;
 
 		//duplicate the required level and activate it
 		m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
@@ -189,7 +188,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		//POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
 		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
 		//TODO check if it is correct
-		Time.timeScale = 0f;
+		//Time.timeScale = 0f;
 		//playerAvatar.SetActive (false);
 		this.ClearScreens ();
 		// destroy the currently allocated level screen when a level ends winning/losing
@@ -213,7 +212,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		//playerAvatar.SetActive (false);
 
 		//TODO check if it is correct
-		Time.timeScale = 0f;
+		//Time.timeScale = 0f;
 		m_playing_screen.SetActive (false);
 		m_pauselevel_screen.SetActive (true);
 	}
@@ -225,7 +224,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		//POLIMIGameCollective.EventManager.TriggerEvent ("ResumeLevel");
 		//playerAvatar.SetActive (true);
 		//TODO check if it is correct
-		Time.timeScale = 1f;
+		//Time.timeScale = 1f;
 		m_pauselevel_screen.SetActive (false);
 		m_playing_screen.SetActive (true);
 	}
