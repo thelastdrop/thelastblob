@@ -11,6 +11,9 @@ public class Console : MonoBehaviour {
     private float m_last_use;
     private int m_Player_Particle_Inside;
 
+    // Activate only once
+    private bool used = false;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -48,9 +51,10 @@ public class Console : MonoBehaviour {
     void activate()
     {
         Debug.Log("Shake registered in console!");
-
-        if(Time.time - m_last_use > m_Time_To_Recover)
+        
+        if(used == false && Time.time - m_last_use > m_Time_To_Recover)
         {
+            used = true;
             // Use The console!
             foreach(GameObject go in object_Linked)
             {
