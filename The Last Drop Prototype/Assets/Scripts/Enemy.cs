@@ -37,13 +37,11 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (m_speed == 0f)
-        {
-            moving = false;
-        }
+        if (m_speed == 0f) moving = false;
         Move();
 
         // Shoot player if seen in straight line
+        /*
         RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, verse * Vector2.right);
         if (hits != null)
         {
@@ -54,7 +52,7 @@ public class Enemy : MonoBehaviour
                     Shoot(hit.collider.gameObject);
                 }
             }
-        }
+        } */
 
     }
 
@@ -68,9 +66,10 @@ public class Enemy : MonoBehaviour
     {
         moving = true;
         RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, raycastDirection, 0.5f);
+        RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, verse * Vector2.right, 0.5f);
 
         // If there's no platform under this collider2D
-        if (hits.Length <= 1)
+        if(hits.Length <= 1 || hitsRight.Length > 1)
         {
             Turn();
             // For diagonal vectors
@@ -99,12 +98,11 @@ public class Enemy : MonoBehaviour
     // [TEMP] SetActive(false) if collides with player
     void OnCollisionEnter2D(Collision2D other)
     {
-        Turn();
+        //Turn();
         if(other.gameObject.tag == "Player")
         {
             // Play test sound when this dies
             SoundManager.Instance.PlayModPitch(testClip);
-            gameObject.SetActive(false);
         }
     }
 }
