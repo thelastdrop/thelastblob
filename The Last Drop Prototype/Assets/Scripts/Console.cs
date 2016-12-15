@@ -28,6 +28,7 @@ public class Console : MonoBehaviour {
                  (m_Is_Gravity == false))
             {
                 POLIMIGameCollective.EventManager.StartListening("Shake", activate);
+                Debug.Log( "Console sente " );
             }
             if ((m_Player_Particle_Inside == 0) &&
                  (m_Is_Gravity == true))
@@ -49,15 +50,15 @@ public class Console : MonoBehaviour {
             if ((m_Player_Particle_Inside == 0) &&
                  (m_Is_Gravity == false))
             {
-                POLIMIGameCollective.EventManager.StartListening("Shake", activate);
+                POLIMIGameCollective.EventManager.StopListening("Shake", activate);
+                Debug.Log("Console sorda ");
             }
             if ((m_Player_Particle_Inside == 0) &&
                  (m_Is_Gravity == true))
             {
-                POLIMIGameCollective.EventManager.StartListening("Shake", gravity);
+                POLIMIGameCollective.EventManager.StopListening("Shake", gravity);
             }
 
-            //Debug.Log( m_Player_Particle_Inside );
         }
     }
 
