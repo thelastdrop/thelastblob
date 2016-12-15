@@ -11,11 +11,11 @@ namespace POLIMIGameCollective {
 		public GameObject m_grunt_prefab;
 
 		void OnEnable() {
-			EventManager.StartListening ("Spawn", Spawn);
+//			EventManager.StartListening ("Spawn", Spawn);
 		}
 
 		void OnDisable() {
-			EventManager.StopListening ("Spawn", Spawn);
+//			EventManager.StopListening ("Spawn", Spawn);
 		}
 
 		// Update is called once per frame

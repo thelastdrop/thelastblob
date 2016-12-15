@@ -76,7 +76,7 @@ public class CameraManager : Singleton<CameraManager>{
 
     bool Aprox(Vector3 arg1, Vector3 arg2)  // Return true if two vector are similar enough(based on m_Camera_Abs_Alt_Distance)
     {
-        return (Vector3.Magnitude(arg1 - arg2) < m_Camera_Abs_Alt_Distance) ? true : false;
+        return (Mathf.Abs( Vector3.Magnitude(arg1 - arg2) ) < m_Camera_Abs_Alt_Distance) ? true : false;
     }
 
     public void Reset_To_Start()
