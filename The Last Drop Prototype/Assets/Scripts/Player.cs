@@ -138,6 +138,7 @@ public class Player : MonoBehaviour {
                     (Time.time - m_last_time_ability1) > m_Ability1_CD )
             {
                 Debug.Log("Shoot!");
+                m_Stretch_Condition = 0;
                 m_last_time_ability1 = Time.time;
                 m_Last_Direction = new Vector2(m_H_Axis2, m_V_Axis2).normalized;
                 PC_Swipe( m_Last_Direction );
@@ -295,8 +296,8 @@ public class Player : MonoBehaviour {
             {
                 m_Line_Renderer.enabled = true;
                 GameManager.Instance.m_Player_IsStretching = true;
-                m_Stretch_Condition = 2;
                 Set_Points( elem.point );
+                m_Stretch_Condition = 2;
                 hit_register = true;
                 break;
             }
@@ -364,7 +365,8 @@ public class Player : MonoBehaviour {
         float lerp_time = Mathf.Clamp( ( (Time.time - m_last_time_ability1) / m_Ability1_Extension_Speed), 0f, 1f);
         Debug.Log( lerp_time );
         Vector2 line_end_point = Stretch( Vector2.Lerp( new Vector2(0,0), direction, lerp_time ) );
-        if(lerp_time == 1f)
+        if( (lerp_time          == 1f) ||
+            (m_Stretch_Condition == 2)   )
         {
             m_Stretch_Condition = 2;
             m_Last_Direction = Vector2.zero;
