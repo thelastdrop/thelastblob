@@ -14,8 +14,13 @@ public class Enemy : MonoBehaviour
 
     private int verse = 1;
     private Transform tr;
-    public Vector2 raycastDirection = Vector2.down; //new Vector2(1f,-1f); diagonal vector
     private SpriteRenderer sr;
+
+    [Range(0.1f,2f)]
+    public float raycastMagnitude = 0.5f;
+    private Vector2 rcFloorDir; //new Vector2(1f,-1f); diagonal vector
+    private Vector2 rcRightDir;
+    private Vector2 rcLeftDir;    
 
     // Animator related variables
     private Animator animator;
@@ -27,6 +32,9 @@ public class Enemy : MonoBehaviour
         tr = GetComponent<Transform>() as Transform;
         sr = GetComponent<SpriteRenderer>() as SpriteRenderer;
         animator = GetComponent<Animator>() as Animator;
+        rcFloorDir = -tr.up;
+        rcRightDir = tr.right;
+        rcLeftDir = -rcRightDir;
     }
 
     void Update()
@@ -65,17 +73,12 @@ public class Enemy : MonoBehaviour
     void Move()
     {
         moving = true;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, raycastDirection, 0.5f);
-        RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, Vector2.right, 0.5f);
-        RaycastHit2D[] hitsLeft = Physics2D.RaycastAll(tr.position, Vector2.left, 0.5f);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, rcFloorDir, raycastMagnitude);
+        RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, rcRightDir, raycastMagnitude);
+        RaycastHit2D[] hitsLeft = Physics2D.RaycastAll(tr.position, rcLeftDir, raycastMagnitude);
 
-        // If there's no platform under this collider2D
-        if(hits.Length <= 1 || hitsRight.Length > 1 || hitsLeft.Length > 1)
-        {
-            Turn();
-            // For diagonal vectors
-            // raycastDirection = new Vector2(verse * 1f, -1f); // Flip the raycast direction
-        }
+        if(hits.Length <= 1 || hitsRight.Length > 1 || hitsLeft.Length > 1) Turn();
+
         // Move
         tr.position = tr.position + verse * m_speed * transform.right * Time.fixedDeltaTime;
     }
