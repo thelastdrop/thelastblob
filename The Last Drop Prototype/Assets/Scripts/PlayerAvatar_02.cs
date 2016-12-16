@@ -31,6 +31,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     [Tooltip("Time must pass between a teleport and the other in secs")]
     public float m_Min_Time_ToTeleport = 0.2f;
 
+    [Tooltip("Air control streght, then is multiplied with the number of particles")]
+    public float m_Air_Control = 1.0f;
     [Tooltip("Check if a particle is in contact with the floor every this seconds"), Range(0.008f, 0.1f)]
     public float m_CheckForContact_Repeat_Time = 0.008f;
 
@@ -338,7 +340,14 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     public void AddSpeed( Vector2 Speed )
     {
-        m_Vlist[0].rb.AddForce(Speed * m_Num_In_Contact);
+        if (GameManager.Instance.m_Player_IsStretching == false)
+        {
+            m_Vlist[0].rb.AddForce(Speed * m_Num_In_Contact);
+        }
+        else
+        {
+            m_Vlist[0].rb.AddForce((Speed * m_Num_In_Contact) + ( Speed.normalized * m_Air_Control * m_Vlist.Count ) );
+        }
 //        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
