@@ -50,14 +50,18 @@ public class Enemy : MonoBehaviour
 
         // Shoot player if seen in straight line
         /*
-        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, verse * Vector2.right);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, rcRightDir);
         if (hits != null)
         {
             foreach (RaycastHit2D hit in hits)
             {
+                // If it hits first a platform don't shoot, layer 8 = Platforms
+                if (hit.collider.gameObject.layer == 8) break;
+                
                 if (hit.collider.gameObject.tag == "Player")
                 {
                     Shoot(hit.collider.gameObject);
+                    break;
                 }
             }
         } */
