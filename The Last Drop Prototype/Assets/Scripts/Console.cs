@@ -20,7 +20,6 @@ public class Console : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        if ( m_Time_To_Recover > 0f ) InvokeRepeating("UpDate", m_Update_Tick, m_Update_Tick);
 	}
 	
     void OnTriggerEnter2D(Collider2D other)
@@ -92,6 +91,7 @@ public class Console : MonoBehaviour {
         {
             used = true;
             // Use The console!
+            if (m_Time_To_Recover > 0f) InvokeRepeating("UpDate", m_Update_Tick, m_Update_Tick);
             GameManager.Instance.Gravity_Change( m_Gravity_IND );
 
             m_last_use = Time.time;

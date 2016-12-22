@@ -120,6 +120,9 @@ public class Player : MonoBehaviour {
 
 
 #if UNITY_EDITOR || UNITY_STANDALONE
+
+        Vector2 axis2 = new Vector2( m_H_Axis2, m_V_Axis2 );
+
         // If mouse is in use, or else the controller is in use
         if (m_isUsing_Mouse == true)
         {
@@ -133,9 +136,8 @@ public class Player : MonoBehaviour {
         }
         else
         {
-            if (  ( (m_H_Axis2) != 0 ||
-                    (m_V_Axis2) != 0   ) &&
-                    (Time.time - m_last_time_ability1) > m_Ability1_CD )
+            if ( axis2.magnitude > 0.5  &&
+               ( Time.time - m_last_time_ability1) > m_Ability1_CD )
             {
                 //Debug.Log("Shoot!");
                 m_Stretch_Condition = 0;

@@ -66,7 +66,7 @@ public class Door : MonoBehaviour, IConsoleIteration {
             CancelInvoke("Hodor");
             m_IsOpen = !m_IsOpen;
         }
-        m_Slab_tr.localPosition = Vector3.Lerp(m_Final_Position * 1.0001f, m_Initial_Position * 1.0001f, m_Start_Moving / m_Time);
+        m_Slab_tr.localPosition = Vector3.Lerp(m_Final_Position, m_Initial_Position, m_Start_Moving / m_Time);
         if (!m_IsOpen) m_Start_Moving = 0f;
     }
 }
