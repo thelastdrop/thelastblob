@@ -38,8 +38,6 @@ public class Player : MonoBehaviour {
     public string[] m_Foods = { "Enemy" };
     [Tooltip("How much each food increase particle counts")]
     public int[] m_Nutrition_Value = { 2 };
-    [Tooltip("Maximum particles the player can have")]
-    public int m_Max_Health;
 
     private float m_V_Axis1;
     private float m_H_Axis1;
@@ -224,7 +222,7 @@ public class Player : MonoBehaviour {
                 if (Time.time - m_Carried_Items[i].time_since_eated >= 1.0f)
                 {
                     m_Carried_Items[i].item.SetActive(false);
-                    GameManager.Instance.m_Player_Avatar_Cs.Grow(5);
+                    GameManager.Instance.m_Player_Avatar_Cs.Grow(2);
                     m_Carried_Items.RemoveAt(i);                   
                 }
                 else
