@@ -82,9 +82,9 @@ public class GameManager : Singleton<GameManager> {
             //// BROKENNNNNNN
             // if clockwise add one to ind, or remove one if counter-clockwise
             // if ind is equal than gravity vector length, set it to 0
-            m_current_grav_ind += number;
-            if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
-            if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
+            m_current_grav_ind = number;
+            //if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
+            //if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
             Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind]; // set current gravity
 
             m_last_gravity_change = Time.time;
