@@ -19,6 +19,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public int m_No_Particles = 8;
     [Tooltip("Ideal radius of the drop")]
     public float m_Radius = 1.0f;
+    [Tooltip("Maximum number of particles, after which the blob will not grow")]
+    public float m_Max_Particles = 30;
     [Tooltip("The avatar will surrender to death after his particle count drop under this")]
     public int m_No_PArticle_Death = 5;
 
@@ -31,10 +33,15 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     [Tooltip("Time must pass between a teleport and the other in secs")]
     public float m_Min_Time_ToTeleport = 0.2f;
 
+    [Space(5),Header("Movement")]
     [Tooltip("Air control streght, then is multiplied with the number of particles")]
     public float m_Air_Control = 1.0f;
     [Tooltip("Check if a particle is in contact with the floor every this seconds"), Range(0.008f, 0.1f)]
     public float m_CheckForContact_Repeat_Time = 0.008f;
+    [Tooltip("Curve multipling speed from 0(dimension 0) to 1 depending on a ratio between dimensions and max dimensions")]
+    public AnimationCurve m_Mass_To_Speed;
+    [Tooltip("Curve to correct viscosity depending of ratio between dimensions and max dimension")]
+    public AnimationCurve m_Mass_To_Viscosity;
 
 
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
@@ -133,7 +140,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
         if (m_Vlist.Count == 0) return;
         Debug.Log(m_Vlist.Count);
-        Set_Buond_To_Center( m_Center_Bound_Freq );
+        Evaluate_Bounding();
  //     Set_Surface_Buond();
 
     }
@@ -262,6 +269,14 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
                 }
             }*/
         }
+        Evaluate_Bounding();
+    }
+
+    void Evaluate_Bounding()
+    {
+        float bound_freq = m_Mass_To_Viscosity.Evaluate( Mathf.Clamp((1f - (m_Vlist.Count / m_Max_Particles)), 0, 1 ));
+        Set_Buond_To_Center( bound_freq * m_Center_Bound_Freq);
+        Debug.Log( bound_freq * m_Center_Bound_Freq );
     }
 
     /****************************/
@@ -357,12 +372,17 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         Vector3 position = Vector3.zero;
         for (int i = 0; i < no_particles; i++)
         {
+            if( m_Vlist.Count >= m_Max_Particles )
+            {
+                break;
+            }
             int rand_sincos_ind = Random.Range( 0, m_No_Particles );
 
             position.Set(m_Radius * m_CosSin[rand_sincos_ind].x, m_Radius * m_CosSin[rand_sincos_ind].y, tr.position.z);
             m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position + position, Quaternion.identity));
             m_Vlist[m_Vlist.Count - 1].center_spring(m_Center_Bound_Freq);
         }
+        Evaluate_Bounding();
     }
     /*
         public void Set_Surface_Buond()
