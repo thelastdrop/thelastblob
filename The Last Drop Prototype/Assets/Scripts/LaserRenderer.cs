@@ -43,13 +43,10 @@ public class LaserRenderer : MonoBehaviour
         if(m_sec_offset != 0) switchT = Time.time + m_sec_offset;
     }
 
-    void Update()
-    {
-        LaserInteraction();
-    }
-
     void FixedUpdate()
     {
+        LaserInteraction();
+
         start = new Vector2(source1tr.position.x, source1tr.position.y);
         end = new Vector2(source2tr.position.x, source2tr.position.y);
         lr.SetPositions(new Vector3[] { start, end });
