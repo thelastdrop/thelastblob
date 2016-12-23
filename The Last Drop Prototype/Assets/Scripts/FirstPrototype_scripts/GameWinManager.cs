@@ -132,7 +132,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		this.ClearScreens ();
 		//POLIMIGameCollective.EventManager.TriggerEvent ("LoadLevel");
 		//playerAvatar.SetActive (true);
-		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
+		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
 
 		//TODO check if it is correct
 		//Time.timeScale = 1f;
@@ -186,7 +186,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	void EndLevel ()
 	{
 		//POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
-		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ();
+		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
 		//TODO check if it is correct
 		//Time.timeScale = 0f;
 		//playerAvatar.SetActive (false);

@@ -171,7 +171,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 /*      POLIMIGameCollective.EventManager.StartListening("PlayerReset", PlayerReset);
 
         POLIMIGameCollective.EventManager.StartListening("EndLevel", PlayerDestroy);*/
-        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
+//      POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
 
 /*
         POLIMIGameCollective.EventManager.StartListening("PauseLevel", PlayerDestroy);
@@ -378,7 +378,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     /***************************************/
     /********* TRIGGER EVENTS **************/
     /***************************************/
-    public void PlayerReset()
+    public void PlayerReset( int particles )
     {
         for (int i = 0; i < m_Vlist.Count; i++)
         {
@@ -393,6 +393,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             m_Start_Position = m_Start_Position_Object.transform.position;
         }
         tr.position = m_Start_Position;
+
+        m_No_Particles = particles;
 
         calc_cossin(); 
         make_vertex_list(); 
