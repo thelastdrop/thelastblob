@@ -119,8 +119,8 @@ public class MenuManager : Singleton<MenuManager> {
 
 	public void Play(){
 		MusicManager.Instance.StopAll ();
-		MusicManager.Instance.PlayMusic ("GameplayMusic");
-		SceneManager.LoadScene ("FirstPrototipeLevel");
+		//MusicManager.Instance.PlayMusic ("GameplayMusic");
+		SceneManager.LoadScene ("EmptyMenus_Scene_IndieMeat");
 	}
 
 }

@@ -37,6 +37,7 @@ public class GameManager : Singleton<GameManager> {
     public GameObject m_Player;
     public PlayerAvatar_02 m_Player_Avatar_Cs;
     public GameObject m_Central_Particle;
+    public bool m_Player_IsStretching;
 
     void Awake()
     {
@@ -66,15 +67,24 @@ public class GameManager : Singleton<GameManager> {
         }
     }
 
-    public void Gravity_Change( bool clockwise )
+
+
+    public void Gravity_Reset()
+    {
+        m_current_grav_ind = 0;
+        Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind];
+
+    }
+    public void Gravity_Change( int number )
     {
         if( (Time.time - m_last_gravity_change) > m_Gravity_change_CD)
         {
+            //// BROKENNNNNNN
             // if clockwise add one to ind, or remove one if counter-clockwise
             // if ind is equal than gravity vector length, set it to 0
-            m_current_grav_ind += (clockwise) ? -1 : 1;
-            if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
-            if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
+            m_current_grav_ind = number;
+            //if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
+            //if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
             Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind]; // set current gravity
 
             m_last_gravity_change = Time.time;
