@@ -43,11 +43,6 @@ public class LaserRenderer : MonoBehaviour
         if(m_sec_offset != 0) switchT = Time.time + m_sec_offset;
     }
 
-    void Update()
-    {
-        LaserInteraction();
-    }
-
     void FixedUpdate()
     {
         start = new Vector2(source1tr.position.x, source1tr.position.y);
@@ -58,6 +53,8 @@ public class LaserRenderer : MonoBehaviour
             lr.enabled = !lr.enabled;
             switchT = Time.time + m_sec_offset;
         }
+
+        if(lr.enabled) LaserInteraction();
     }
 
     // Laser kills particles here
