@@ -155,7 +155,7 @@ public class Dynam_Particle : MonoBehaviour
             other.gameObject.GetComponent<Enemy>().enabled = false;
             other.gameObject.GetComponent<Animator>().enabled = false;
             GameManager.Instance.m_Player.GetComponent<Player>().Eat_Carry(other.gameObject);
-            Debug.Log("Enemy eated");
+//            Debug.Log("Enemy eated");
         }
 
         // Stickness, anything not related to it before this line!
