@@ -40,7 +40,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public float m_CheckForContact_Repeat_Time = 0.008f;
     [Tooltip("Curve multipling speed from 0(dimension 0) to 1 depending on a ratio between dimensions and max dimensions")]
     public AnimationCurve m_Mass_To_Speed;
-    [Tooltip("Curve to correct viscosity depending of ratio between dimensions and max dimension")]
+    [Tooltip("Curve to correct viscosity depending of ratio between dimensions and max dimension, it's value is negated so time 0 rapresent maximum dimensions and 1 smallest")]
     public AnimationCurve m_Mass_To_Viscosity;
 
 
@@ -205,7 +205,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     void OnDisable()
     {
         CancelInvoke( "Check_For_Contact" );
-        Debug.Log("Disable");
+//        Debug.Log("Disable");
     }
 
     /************************************/
@@ -276,7 +276,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         float bound_freq = m_Mass_To_Viscosity.Evaluate( Mathf.Clamp((1f - (m_Vlist.Count / m_Max_Particles)), 0, 1 ));
         Set_Buond_To_Center( bound_freq * m_Center_Bound_Freq);
-        Debug.Log( bound_freq * m_Center_Bound_Freq );
+//        Debug.Log( bound_freq * m_Center_Bound_Freq );
     }
 
     /****************************/
@@ -355,20 +355,22 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     public void AddSpeed( Vector2 Speed )
     {
+        float multiplier = m_Mass_To_Speed.Evaluate(Mathf.Clamp(((m_Vlist.Count / m_Max_Particles)), 0, 1));
+
         if (GameManager.Instance.m_Player_IsStretching == false)
         {
-            m_Vlist[0].rb.AddForce(Speed * m_Num_In_Contact);
+            m_Vlist[0].rb.AddForce( ( Speed * m_Num_In_Contact ) * multiplier);
         }
         else
         {
-            m_Vlist[0].rb.AddForce((Speed * m_Num_In_Contact) + ( Speed.normalized * m_Air_Control * m_Vlist.Count ) );
+            m_Vlist[0].rb.AddForce( ( (Speed * m_Num_In_Contact) + ( Speed.normalized * m_Air_Control * m_Vlist.Count ) ) * multiplier);
         }
 //        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
     public void Grow( int no_particles )
     {
-        Debug.Log("Add particle: " + no_particles);
+//        Debug.Log("Add particle: " + no_particles);
         Vector3 position = Vector3.zero;
         for (int i = 0; i < no_particles; i++)
         {
