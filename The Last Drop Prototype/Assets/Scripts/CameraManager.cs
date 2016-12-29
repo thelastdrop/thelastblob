@@ -55,12 +55,15 @@ public class CameraManager : Singleton<CameraManager>{
         }
 
         //       m_isCameraMoving = ;
-        if (!Aprox(m_Player_Camera.transform.position, m_Camera_Focus.transform.position))
+        if (m_Player_Camera != null)
         {
-            //Debug.Log(tr.transform.position + " " + m_Camera_Focus.transform.position);
-            Vector3 new_position = Vector3.Lerp(m_Player_Camera.transform.position, m_Camera_Focus.transform.position, Time.deltaTime * m_Camera_Speed);
-            new_position.z = m_Player_Camera.transform.position.z;
-            m_Player_Camera.transform.position = new_position;
+            if (!Aprox(m_Player_Camera.transform.position, m_Camera_Focus.transform.position))
+            {
+                //Debug.Log(tr.transform.position + " " + m_Camera_Focus.transform.position);
+                Vector3 new_position = Vector3.Lerp(m_Player_Camera.transform.position, m_Camera_Focus.transform.position, Time.deltaTime * m_Camera_Speed);
+                new_position.z = m_Player_Camera.transform.position.z;
+                m_Player_Camera.transform.position = new_position;
+            }
         }
 
     }
@@ -68,7 +71,8 @@ public class CameraManager : Singleton<CameraManager>{
     void LateUpdate()
     {
         
-        m_Player_Camera.transform.rotation = Quaternion.Lerp( m_Player_Camera.transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 1), -m_cam_grav_vector), Time.deltaTime * m_Camera_Rotation_Speed );
+        if(m_Player_Camera != null)
+            m_Player_Camera.transform.rotation = Quaternion.Lerp( m_Player_Camera.transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 1), -m_cam_grav_vector), Time.deltaTime * m_Camera_Rotation_Speed );
         /*
     private float m_Target_Angle;
     private float m_Current_Angle;
