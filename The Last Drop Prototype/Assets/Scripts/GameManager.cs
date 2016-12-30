@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager> {
     public PlayerAvatar_02 m_Player_Avatar_Cs;
     public GameObject m_Central_Particle;
     public bool m_Player_IsStretching;
+    public GameObject m_Player_Start_Position;
 
     void Awake()
     {
@@ -65,8 +66,19 @@ public class GameManager : Singleton<GameManager> {
         {
             m_Player_Avatar_Cs = m_Player.GetComponent<PlayerAvatar_02>() as PlayerAvatar_02;
         }
+
+
+        m_Player_Start_Position = GameObject.Find("Player_Start");
+
     }
 
+    /*************************************************/
+    /*******         PUBLIC METHODS          *********/
+    /*************************************************/
+
+    public void CheckPoint( Vector3 arg_position )
+    {
+    }
 
 
     public void Gravity_Reset()
