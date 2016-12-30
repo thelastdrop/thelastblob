@@ -13,11 +13,14 @@ public class CheckPoint : MonoBehaviour {
         if( (other.gameObject.tag != "Player") ||
             (m_used == true)                       )
         {
+
             return;
         }
 
         // Manager method that change position of start
+        m_used = true;
         GameManager.Instance.CheckPoint(gameObject.transform.position);
+        gameObject.SetActive(false);
     }
 	
 }

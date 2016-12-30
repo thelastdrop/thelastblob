@@ -136,7 +136,6 @@ public class GameWinManager : Singleton<GameWinManager>
 
 
         yield return new WaitForSeconds (m_loading_time);
-        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
 
         //initialization
         this.ClearScreens ();
@@ -149,6 +148,7 @@ public class GameWinManager : Singleton<GameWinManager>
         m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
 		m_playing_screen.SetActive (true);
         playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset(5);
+        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
     }
 
 
