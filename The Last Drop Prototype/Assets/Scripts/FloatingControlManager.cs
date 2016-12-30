@@ -14,7 +14,7 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
     public Vector2 moveDirection;
     private bool moving;
     private float maxMovRange;
-    private float shrinkVectorFactor = 0.015f;
+    //private float shrinkVectorFactor = 0.015f;
 
     // [Right portion] Vector representing swipe input
     public Vector2 swipeVector;
@@ -29,6 +29,8 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
         rightR = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
 
         maxMovRange = Screen.width * 0.05f;
+
+        joystick.SetActive(false);
     }
 
     void Update()
@@ -56,16 +58,28 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
                         case TouchPhase.Began:
                             moving = true;
                             moveStartPos = touch.position;
+                            joystick.moveTransform(moveStartPos);
                             EventManager.TriggerEvent("MoveStart");
                             break;
                         case TouchPhase.Moved:
                             moving = true;
                             // Vector2 tempDirection = touch.position - moveStartPos;
                             // moveDirection = tempDirection.magnitude > maxMovRange ? tempDirection.normalized * maxMovRange * shrinkVectorFactor : tempDirection * shrinkVectorFactor;
-                            moveDirection = Vector2.ClampMagnitude(joystick.inputDirection, maxMovRange);
+                            if(touch.position.x - moveStartPos.x > touch.position.y - moveStartPos.y)
+                            {
+                                // Orizontal joystick
+                                joystick.SetActive(true);
+                                moveDirection = Vector2.ClampMagnitude(joystick.inputDirection, maxMovRange);
+                            }
+                            else
+                            {
+                                // Vertical joystick
+                                ;
+                            }
                             break;
                         case TouchPhase.Ended:
                             moving = false;
+                            joystick.SetActive(false);
                             EventManager.TriggerEvent("MoveEnd");
                             break;
                     }

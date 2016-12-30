@@ -28,15 +28,15 @@ public class FloatingJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, 
 		{
 			pos.x = (pos.x / bgImg.rectTransform.sizeDelta.x);
 			float x = (bgImg.rectTransform.pivot.x == 1) ? pos.x * 2 + 1 : pos.x * 2 - 1;
-			pos.y = (pos.y / bgImg.rectTransform.sizeDelta.y);
-			float y = (bgImg.rectTransform.pivot.y == 1) ? pos.y * 2 + 1 : pos.y * 2 - 1;
+			//pos.y = (pos.y / bgImg.rectTransform.sizeDelta.y);
+			//float y = (bgImg.rectTransform.pivot.y == 1) ? pos.y * 2 + 1 : pos.y * 2 - 1;
 
-			inputDirection = new Vector2(x, y);
+			inputDirection = new Vector2(x, 0);
 			inputDirection = (inputDirection.magnitude > 1) ? inputDirection.normalized : inputDirection;
 
 			joystickImg.rectTransform.anchoredPosition =
-				new Vector2(inputDirection.x * (bgImg.rectTransform.sizeDelta.x / 3),
-				inputDirection.y * (bgImg.rectTransform.sizeDelta.y / 3));
+				new Vector2(inputDirection.x * (bgImg.rectTransform.sizeDelta.x * 0.42f),
+				inputDirection.y * (bgImg.rectTransform.sizeDelta.y * 0.42f));
 		}
 	}
 
@@ -51,4 +51,13 @@ public class FloatingJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, 
 		joystickImg.rectTransform.anchoredPosition = Vector2.zero;
 	}
 
+	public void SetActive(bool cond)
+	{
+		gameObject.SetActive(cond);
+	}
+
+	public void moveTransform(Vector2 pos)
+	{
+		GetComponent<RectTransform>().localPosition = -pos;
+	}
 }
