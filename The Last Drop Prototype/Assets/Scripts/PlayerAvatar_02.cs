@@ -42,6 +42,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public AnimationCurve m_Mass_To_Speed;
     [Tooltip("Curve to correct viscosity depending of ratio between dimensions and max dimension, it's value is negated so time 0 rapresent maximum dimensions and 1 smallest")]
     public AnimationCurve m_Mass_To_Viscosity;
+    [Tooltip("Antrigravity: % of inverted gravity vector added to the blob any time it moves, to help move vertically")]
+    public float m_Antrigrav = 0.52f;
 
 
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
@@ -59,7 +61,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     private Vector3 m_Start_Position;
 
     private Vector2[] m_CosSin;
-    float m_Radii_Segment; // radial segment size by number of raycasts
+    float m_Radii_Segment; 
 
 
     public struct RB_vert
@@ -365,6 +367,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         {
             m_Vlist[0].rb.AddForce( ( (Speed * m_Num_In_Contact) + ( Speed.normalized * m_Air_Control * m_Vlist.Count ) ) * multiplier);
         }
+        // Anti-Gravity
+        if(m_Num_In_Contact > 0) m_Vlist[0].rb.AddForce(-Physics2D.gravity * m_Antrigrav * m_Vlist.Count );
 //        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
