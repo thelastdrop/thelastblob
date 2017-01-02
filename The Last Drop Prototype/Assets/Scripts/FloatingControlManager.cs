@@ -30,7 +30,7 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
 
         maxMovRange = Screen.width * 0.05f;
 
-        joystick.SetActive(false);
+        //joystick.SetActive(false);
     }
 
     void Update()
@@ -53,12 +53,13 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
                 // Left portion of the screen: movement
                 if (leftR.Contains(touch.position))
                 {
+                    bool joystickShowing = false;
+
                     switch (touch.phase)
-                    {
+                    {                    
                         case TouchPhase.Began:
                             moving = true;
                             moveStartPos = touch.position;
-                            joystick.moveTransform(moveStartPos);
                             EventManager.TriggerEvent("MoveStart");
                             break;
                         case TouchPhase.Moved:
@@ -68,7 +69,12 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
                             if(touch.position.x - moveStartPos.x > touch.position.y - moveStartPos.y)
                             {
                                 // Orizontal joystick
-                                joystick.SetActive(true);
+                                if(!joystickShowing) 
+                                {
+                                    //joystick.moveTransform(touch.position);
+                                    joystick.SetActive(true);
+                                    joystickShowing = true;
+                                }
                                 moveDirection = Vector2.ClampMagnitude(joystick.inputDirection, maxMovRange);
                             }
                             else
@@ -79,7 +85,8 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
                             break;
                         case TouchPhase.Ended:
                             moving = false;
-                            joystick.SetActive(false);
+                            joystickShowing = false;
+                            //joystick.SetActive(false);
                             EventManager.TriggerEvent("MoveEnd");
                             break;
                     }

@@ -58,6 +58,6 @@ public class FloatingJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, 
 
 	public void moveTransform(Vector2 pos)
 	{
-		GetComponent<RectTransform>().localPosition = -pos;
+		GetComponent<RectTransform>().transform.position = pos;
 	}
 }
