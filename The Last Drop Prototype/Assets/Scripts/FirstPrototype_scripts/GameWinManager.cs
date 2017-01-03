@@ -81,7 +81,7 @@ public class GameWinManager : Singleton<GameWinManager>
 		}
 
         if (Input.GetKeyDown (KeyCode.P) || Input.GetKeyDown (KeyCode.Menu) ) {
-			PauseLevel ();
+            ReloadLevel();
 		}
 	}
 
@@ -187,7 +187,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	public void WinLevel ()
     {
         Time.timeScale = 0f;
-        this.EndLevel ();
+ //       this.EndLevel ();
 
 
         // set as accessible (true) the next level if the current one is won
@@ -220,7 +220,6 @@ public class GameWinManager : Singleton<GameWinManager>
 	//called when the player loses in a level
 	public void LoseLevel ()
 	{
-		this.EndLevel ();
 		m_loselevel_screen.SetActive (true);
 	}
 
@@ -233,7 +232,7 @@ public class GameWinManager : Singleton<GameWinManager>
 
 		//TODO check if it is correct
 		Time.timeScale = 0f;
-		m_playing_screen.SetActive (false);
+//		m_playing_screen.SetActive (false);
 		m_pauselevel_screen.SetActive (true);
 	}
 
@@ -273,8 +272,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			m_endlevel_screen.SetActive (false);
 		if (m_levels_screen != null)
 			m_levels_screen.SetActive (false);
-		if (m_playing_screen != null)
-			m_playing_screen.SetActive (false);
+//		if (m_playing_screen != null)
+//			m_playing_screen.SetActive (false);
 		if (m_loselevel_screen != null)
 			m_loselevel_screen.SetActive (false);
 		if (m_pauselevel_screen != null)

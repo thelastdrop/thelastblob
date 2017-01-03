@@ -114,7 +114,7 @@ public class Player : MonoBehaviour {
         /*    Ability(jump, shoot, stretch ecc)     */
         /********************************************/
 
-        if (Input.GetKeyDown("escape")) GameWinManager.Instance.LoseLevel();
+        if (Input.GetKeyDown("escape")) GameWinManager.Instance.PauseLevel();
 
 
 #if UNITY_EDITOR || UNITY_STANDALONE
