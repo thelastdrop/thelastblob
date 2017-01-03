@@ -38,8 +38,6 @@ public class Player : MonoBehaviour {
     public string[] m_Foods = { "Enemy" };
     [Tooltip("How much each food increase particle counts")]
     public int[] m_Nutrition_Value = { 2 };
-    [Tooltip("Maximum particles the player can have")]
-    public int m_Max_Health;
 
     private float m_V_Axis1;
     private float m_H_Axis1;
@@ -120,6 +118,9 @@ public class Player : MonoBehaviour {
 
 
 #if UNITY_EDITOR || UNITY_STANDALONE
+
+        Vector2 axis2 = new Vector2( m_H_Axis2, m_V_Axis2 );
+
         // If mouse is in use, or else the controller is in use
         if (m_isUsing_Mouse == true)
         {
@@ -133,11 +134,11 @@ public class Player : MonoBehaviour {
         }
         else
         {
-            if (  ( (m_H_Axis2) != 0 ||
-                    (m_V_Axis2) != 0   ) &&
-                    (Time.time - m_last_time_ability1) > m_Ability1_CD )
+            if ( axis2.magnitude > 0.5  &&
+               ( Time.time - m_last_time_ability1) > m_Ability1_CD )
             {
-                Debug.Log("Shoot!");
+                //Debug.Log("Shoot!");
+                m_Stretch_Condition = 0;
                 m_last_time_ability1 = Time.time;
                 m_Last_Direction = new Vector2(m_H_Axis2, m_V_Axis2).normalized;
                 PC_Swipe( m_Last_Direction );
@@ -221,7 +222,7 @@ public class Player : MonoBehaviour {
                 if (Time.time - m_Carried_Items[i].time_since_eated >= 1.0f)
                 {
                     m_Carried_Items[i].item.SetActive(false);
-                    GameManager.Instance.m_Player_Avatar_Cs.Grow(5);
+                    GameManager.Instance.m_Player_Avatar_Cs.Grow(2);
                     m_Carried_Items.RemoveAt(i);                   
                 }
                 else
@@ -295,8 +296,8 @@ public class Player : MonoBehaviour {
             {
                 m_Line_Renderer.enabled = true;
                 GameManager.Instance.m_Player_IsStretching = true;
-                m_Stretch_Condition = 2;
                 Set_Points( elem.point );
+                m_Stretch_Condition = 2;
                 hit_register = true;
                 break;
             }
@@ -362,9 +363,10 @@ public class Player : MonoBehaviour {
     {
         //  Debug.Log("Stretching direction: " + direction);
         float lerp_time = Mathf.Clamp( ( (Time.time - m_last_time_ability1) / m_Ability1_Extension_Speed), 0f, 1f);
-        Debug.Log( lerp_time );
+        //Debug.Log( lerp_time );
         Vector2 line_end_point = Stretch( Vector2.Lerp( new Vector2(0,0), direction, lerp_time ) );
-        if(lerp_time == 1f)
+        if( (lerp_time          == 1f) ||
+            (m_Stretch_Condition == 2)   )
         {
             m_Stretch_Condition = 2;
             m_Last_Direction = Vector2.zero;

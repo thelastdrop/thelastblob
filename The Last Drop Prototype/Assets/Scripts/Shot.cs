@@ -19,9 +19,9 @@ public class Shot : MonoBehaviour {
 			gameObject.SetActive(false);
 	}
 
-	// TODO
 	void OnTriggerEnter2D(Collider2D other) {
-		if(other.gameObject.tag == "Player") {
+		if(other.gameObject.tag == "Player")
+		{
 			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(other.gameObject);
 		}
 		gameObject.SetActive(false);

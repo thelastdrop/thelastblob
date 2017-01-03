@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager> {
     public PlayerAvatar_02 m_Player_Avatar_Cs;
     public GameObject m_Central_Particle;
     public bool m_Player_IsStretching;
+    public GameObject m_Player_Start_Position;
 
     void Awake()
     {
@@ -52,6 +53,8 @@ public class GameManager : Singleton<GameManager> {
         // Loading Pools
 
         POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
+
+        POLIMIGameCollective.EventManager.StartListening("LoadLevel", LevelRestart);
     }
 
     void Start()
@@ -65,8 +68,20 @@ public class GameManager : Singleton<GameManager> {
         {
             m_Player_Avatar_Cs = m_Player.GetComponent<PlayerAvatar_02>() as PlayerAvatar_02;
         }
+
+
+        m_Player_Start_Position = GameObject.Find("PlayerStart");
+
     }
 
+    /*************************************************/
+    /*******         PUBLIC METHODS          *********/
+    /*************************************************/
+
+    public void CheckPoint( Vector3 arg_position )
+    {
+        m_Player_Start_Position.transform.position = arg_position;
+    }
 
 
     public void Gravity_Reset()
@@ -82,9 +97,9 @@ public class GameManager : Singleton<GameManager> {
             //// BROKENNNNNNN
             // if clockwise add one to ind, or remove one if counter-clockwise
             // if ind is equal than gravity vector length, set it to 0
-            m_current_grav_ind += number;
-            if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
-            if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
+            m_current_grav_ind = number;
+            //if (m_current_grav_ind == m_Gravity_Vectors.Length) m_current_grav_ind = 0;
+            //if (m_current_grav_ind < 0) m_current_grav_ind = m_Gravity_Vectors.Length - 1;
             Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind]; // set current gravity
 
             m_last_gravity_change = Time.time;
@@ -115,5 +130,15 @@ public class GameManager : Singleton<GameManager> {
         }
 
         return direction;
+    }
+
+    /***********************************************************/
+
+    void LevelRestart()
+    {
+        m_Player_Start_Position = GameObject.Find("PlayerStart");
+        if (m_Player_Start_Position == null)
+            Debug.Log("Player Start Position non existant for current level");
+
     }
 }

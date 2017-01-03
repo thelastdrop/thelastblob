@@ -103,4 +103,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # ProjectVersion.txt
-ProjectVersion.txt
+/ProjectSettings/ProjectVersion.txt

@@ -55,11 +55,15 @@ public class CameraManager : Singleton<CameraManager>{
         }
 
         //       m_isCameraMoving = ;
-        if (!Aprox(tr.transform.position, m_Camera_Focus.transform.position))
-        { 
-            Vector3 new_position = Vector3.Lerp(m_Player_Camera.transform.position, m_Camera_Focus.transform.position, Time.deltaTime * m_Camera_Speed);
-            new_position.z = m_Player_Camera.transform.position.z;
-            m_Player_Camera.transform.position = new_position;
+        if (m_Player_Camera != null)
+        {
+            if (!Aprox(m_Player_Camera.transform.position, m_Camera_Focus.transform.position))
+            {
+                //Debug.Log(tr.transform.position + " " + m_Camera_Focus.transform.position);
+                Vector3 new_position = Vector3.Lerp(m_Player_Camera.transform.position, m_Camera_Focus.transform.position, Time.deltaTime * m_Camera_Speed);
+                new_position.z = m_Player_Camera.transform.position.z;
+                m_Player_Camera.transform.position = new_position;
+            }
         }
 
     }
@@ -67,7 +71,8 @@ public class CameraManager : Singleton<CameraManager>{
     void LateUpdate()
     {
         
-        m_Player_Camera.transform.rotation = Quaternion.Lerp( m_Player_Camera.transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 1), -m_cam_grav_vector), Time.deltaTime * m_Camera_Rotation_Speed );
+        if(m_Player_Camera != null)
+            m_Player_Camera.transform.rotation = Quaternion.Lerp( m_Player_Camera.transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 1), -m_cam_grav_vector), Time.deltaTime * m_Camera_Rotation_Speed );
         /*
     private float m_Target_Angle;
     private float m_Current_Angle;
@@ -76,7 +81,9 @@ public class CameraManager : Singleton<CameraManager>{
 
     bool Aprox(Vector3 arg1, Vector3 arg2)  // Return true if two vector are similar enough(based on m_Camera_Abs_Alt_Distance)
     {
-        return (Mathf.Abs( Vector3.Magnitude(arg1 - arg2) ) < m_Camera_Abs_Alt_Distance) ? true : false;
+        Vector2 argo1 = arg1;
+        Vector2 argo2 = arg2;
+        return (Mathf.Abs( Vector3.Magnitude(argo1 - argo2) ) < m_Camera_Abs_Alt_Distance) ? true : false;
     }
 
     public void Reset_To_Start()
