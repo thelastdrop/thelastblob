@@ -65,7 +65,11 @@ public class Enemy : MonoBehaviour
                 foreach (RaycastHit2D hit in hits)
                 {
                     // If it hits first a platform don't shoot, layer 8 = Platforms
-                    if (hit.collider.gameObject.layer == 8) break;
+                    if (hit.collider.gameObject.layer == 8)
+                    {
+                        shooting = false;
+                        break;
+                    }
                     
                     if (hit.collider.gameObject.tag == "Player")
                     {                        
