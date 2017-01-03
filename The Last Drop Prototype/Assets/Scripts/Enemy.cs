@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
 
     // Shooting
     private Transform m_shoottr;
+    private Transform m_shoottr_right;
+    private Transform m_shoottr_left;
     public AudioClip m_shoot_clip;
     public GameObject m_shot_prefab;
 
@@ -28,6 +30,8 @@ public class Enemy : MonoBehaviour
     private bool moving = false;
     private bool shooting = false;
     public float shoot_cd = 2f;
+    public float shoot_duration = 2.4f;
+    public float shot_interval = 0.6f;
     private float last_use = 0f;
 
     void Start()
@@ -38,8 +42,8 @@ public class Enemy : MonoBehaviour
         rcFloorDir = -tr.up;
         rcRightDir = tr.right;
         rcLeftDir = -rcRightDir;
-        m_shoottr = tr;
-        m_shoottr.Translate(Vector2.right);
+        m_shoottr_right = tr.GetChild(0);
+        m_shoottr_left = tr.GetChild(1);
     }
 
     void Update()
@@ -50,7 +54,7 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        if(!shooting) Move();
 
         // Shoot player if seen in straight line
         if(Time.time - last_use > shoot_cd)
@@ -64,9 +68,10 @@ public class Enemy : MonoBehaviour
                     if (hit.collider.gameObject.layer == 8) break;
                     
                     if (hit.collider.gameObject.tag == "Player")
-                    {
-                        // ShootOne(hit.collider.gameObject);
+                    {                        
                         shooting = true;
+                        m_shoottr = m_mov_verse == 1 ? m_shoottr_right : m_shoottr_left;
+                        ShootOne(hit.collider.gameObject);
                         break;
                     }
                 }
@@ -83,7 +88,6 @@ public class Enemy : MonoBehaviour
 
     void Move()
     {
-        if(shooting) return;
         moving = true;
         RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, rcFloorDir, raycastMagnitude);
         RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, rcRightDir, raycastMagnitude);
@@ -106,7 +110,7 @@ public class Enemy : MonoBehaviour
     {
         shooting = true;
         GameObject go = Instantiate(m_shot_prefab, m_shoottr.position, m_shoottr.rotation) as GameObject;
-        Vector2 direction = player.transform.position - tr.position;
+        // Vector2 direction = player.transform.position - tr.position;
 
         SoundManager.Instance.PlayModPitch(m_shoot_clip);
     }

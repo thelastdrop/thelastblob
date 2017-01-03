@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour {
 
-	public float m_speed = 200f;
+	public float m_speed = 25f;
 	Transform tr;
 
 	void Start() {
