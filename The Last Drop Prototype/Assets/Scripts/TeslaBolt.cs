@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class LightningBolt : MonoBehaviour
+public class TeslaBolt : MonoBehaviour
 {
 	
 	private Renderer renderer;
