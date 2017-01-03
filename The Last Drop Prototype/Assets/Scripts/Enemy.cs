@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     // Moving
     [Range(0f, 5f)]
     public float m_speed = 1f;
-    private int m_mov_verse = 1; m // if 1 moving right, else -1: left
+    private int m_mov_verse = 1; // if 1 moving right, else -1: left
     private Transform tr;
     private SpriteRenderer sr;
     [Range(0.1f,2f)]
@@ -83,13 +83,13 @@ public class Enemy : MonoBehaviour
         if(hits.Length <= 1 || hitsRight.Length > 1 || hitsLeft.Length > 1) Turn();
 
         // Move
-        tr.position = tr.position + m_mov_verse * m_mspeed * transform.right * Time.fixedDeltaTime;
+        tr.position = tr.position + m_mov_verse * m_speed * transform.right * Time.fixedDeltaTime;
     }
 
     void Turn()
     {
-        m_mov_verse *= -m1;    // Move in other direction
-        sr.flipX = m_mov_verse > 0 m? false : true;    // Flip the sprite
+        m_mov_verse *= -1;    // Move in other direction
+        sr.flipX = m_mov_verse > 0 ? false : true;    // Flip the sprite
     }
 
     // TODO
