@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 556be80af14443640b485cf93ed3fa96
-timeCreated: 1483438509
+timeCreated: 1483449827
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -21,6 +21,7 @@ TextureImporter:
     21300028: InterfaceMapBlob23_14
     21300030: InterfaceMapBlob23_15
     21300032: InterfaceMapBlob23_16
+    21300034: InterfaceMapBlob23_17
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -326,6 +327,19 @@ TextureImporter:
         y: 466
         width: 425
         height: 423
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_17
+      rect:
+        serializedVersion: 2
+        x: 1558
+        y: 813
+        width: 999
+        height: 159
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
