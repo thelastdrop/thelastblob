@@ -39,7 +39,8 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
 
     void TouchInputTrigger()
     {
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
+// mobile controls
+#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
         // reset value each frame
         // swipeVector = Vector2.zero;
 
