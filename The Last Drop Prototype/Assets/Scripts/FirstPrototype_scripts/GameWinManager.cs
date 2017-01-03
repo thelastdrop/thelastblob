@@ -219,8 +219,9 @@ public class GameWinManager : Singleton<GameWinManager>
 
 	//called when the player loses in a level
 	public void LoseLevel ()
-	{
-		m_loselevel_screen.SetActive (true);
+    {
+        Time.timeScale = 0f;
+        m_loselevel_screen.SetActive (true);
 	}
 
 
