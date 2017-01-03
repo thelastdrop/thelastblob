@@ -44,7 +44,7 @@ public class Door : MonoBehaviour, IConsoleIteration {
 
     void OpenTheDoor()
     {
-        m_Start_Moving += m_TickTime;
+        m_Start_Moving += m_TickTime * Time.timeScale;
         if (m_Start_Moving >= m_Time)
         {
             m_Start_Moving = m_Time;
@@ -59,7 +59,7 @@ public class Door : MonoBehaviour, IConsoleIteration {
     // HODOR! Hodor, hodor.
     void Hodor()
     {
-        m_Start_Moving += m_TickTime;
+        m_Start_Moving += m_TickTime * Time.timeScale;
         if (m_Start_Moving >= m_Time)
         {
             m_Start_Moving = m_Time;

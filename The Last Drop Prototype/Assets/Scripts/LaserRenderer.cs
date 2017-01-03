@@ -20,6 +20,10 @@ public class LaserRenderer : MonoBehaviour
     // Cooldown
     private float lastUse = 0f;
     public float cooldown = 0.1f;
+    // Armonic on/off
+    [Header("Interval on/off, set to 0 for always on")]
+    public float m_sec_offset = 0f;
+    private float switchT;
 
     // Use this for initialization
     void Start()
@@ -36,19 +40,22 @@ public class LaserRenderer : MonoBehaviour
         end = new Vector2(source2tr.position.x, source2tr.position.y);
         lr.SetPositions(new Vector3[] { start, end });
         lr.enabled = true;
-    }
-
-    void Update()
-    {
-        LaserInteraction();
+        if(m_sec_offset != 0) switchT = Time.time + m_sec_offset;
     }
 
     void FixedUpdate()
     {
+        LaserInteraction();
         start = new Vector2(source1tr.position.x, source1tr.position.y);
         end = new Vector2(source2tr.position.x, source2tr.position.y);
         lr.SetPositions(new Vector3[] { start, end });
-        lr.enabled = true;
+        if(m_sec_offset != 0 && Time.time > switchT)
+        {
+            lr.enabled = !lr.enabled;
+            switchT = Time.time + m_sec_offset;
+        }
+
+        if(lr.enabled) LaserInteraction();
     }
 
     // Laser kills particles here

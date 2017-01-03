@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public AudioClip testClip;
     public GameObject m_shot_prefab;
 
-    private int verse = 1;
+    private int verse = 1;  // if 1 moving right, else -1: left
     private Transform tr;
     private SpriteRenderer sr;
 
@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
 
         // Shoot player if seen in straight line
         /*
-        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, rcRightDir);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, verse * rcRightDir);
         if (hits != null)
         {
             foreach (RaycastHit2D hit in hits)
@@ -97,7 +97,7 @@ public class Enemy : MonoBehaviour
     void Shoot(GameObject player)
     {
         shooting = true;
-        // GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
+        GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
         Vector2 direction = player.transform.position - tr.position;
 
         // SoundManager.Instance.PlayModPitch(shoot_clip);

@@ -38,6 +38,7 @@ public class GameManager : Singleton<GameManager> {
     public PlayerAvatar_02 m_Player_Avatar_Cs;
     public GameObject m_Central_Particle;
     public bool m_Player_IsStretching;
+    public GameObject m_Player_Start_Position;
 
     void Awake()
     {
@@ -52,6 +53,8 @@ public class GameManager : Singleton<GameManager> {
         // Loading Pools
 
         POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
+
+        POLIMIGameCollective.EventManager.StartListening("LoadLevel", LevelRestart);
     }
 
     void Start()
@@ -65,8 +68,20 @@ public class GameManager : Singleton<GameManager> {
         {
             m_Player_Avatar_Cs = m_Player.GetComponent<PlayerAvatar_02>() as PlayerAvatar_02;
         }
+
+
+        m_Player_Start_Position = GameObject.Find("PlayerStart");
+
     }
 
+    /*************************************************/
+    /*******         PUBLIC METHODS          *********/
+    /*************************************************/
+
+    public void CheckPoint( Vector3 arg_position )
+    {
+        m_Player_Start_Position.transform.position = arg_position;
+    }
 
 
     public void Gravity_Reset()
@@ -115,5 +130,15 @@ public class GameManager : Singleton<GameManager> {
         }
 
         return direction;
+    }
+
+    /***********************************************************/
+
+    void LevelRestart()
+    {
+        m_Player_Start_Position = GameObject.Find("PlayerStart");
+        if (m_Player_Start_Position == null)
+            Debug.Log("Player Start Position non existant for current level");
+
     }
 }
