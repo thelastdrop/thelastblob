@@ -6,21 +6,21 @@ using POLIMIGameCollective;
 public class Enemy : MonoBehaviour
 {
 
+    // Moving
     [Range(0f, 5f)]
     public float m_speed = 1f;
-    // Test clip
-    public AudioClip m_shoot_clip;
-    public GameObject m_shot_prefab;
-
-    private int verse = 1;  // if 1 moving right, else -1: left
+    private int m_mov_verse = 1; m // if 1 moving right, else -1: left
     private Transform tr;
     private SpriteRenderer sr;
-
     [Range(0.1f,2f)]
     public float raycastMagnitude = 0.5f;
     private Vector2 rcFloorDir; //new Vector2(1f,-1f); diagonal vector
     private Vector2 rcRightDir;
     private Vector2 rcLeftDir;    
+
+    // Shooting
+    public AudioClip m_shoot_clip;
+    public GameObject m_shot_prefab;
 
     // Animator related variables
     private Animator animator;
@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
 
         // Shoot player if seen in straight line
         /*
-        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, verse * rcRightDir);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, m_mov_verse * rcmRightDir);
         if (hits != null)
         {
             foreach (RaycastHit2D hit in hits)
@@ -83,13 +83,13 @@ public class Enemy : MonoBehaviour
         if(hits.Length <= 1 || hitsRight.Length > 1 || hitsLeft.Length > 1) Turn();
 
         // Move
-        tr.position = tr.position + verse * m_speed * transform.right * Time.fixedDeltaTime;
+        tr.position = tr.position + m_mov_verse * m_mspeed * transform.right * Time.fixedDeltaTime;
     }
 
     void Turn()
     {
-        verse *= -1;    // Move in other direction
-        sr.flipX = verse > 0 ? false : true;    // Flip the sprite
+        m_mov_verse *= -m1;    // Move in other direction
+        sr.flipX = m_mov_verse > 0 m? false : true;    // Flip the sprite
     }
 
     // TODO
