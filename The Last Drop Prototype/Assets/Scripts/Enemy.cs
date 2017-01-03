@@ -30,8 +30,8 @@ public class Enemy : MonoBehaviour
     private bool moving = false;
     private bool shooting = false;
     public float shoot_cd = 2f;
-    public float shoot_duration = 2.4f;
-    public float shot_interval = 0.6f;
+    public int shots_count = 4;
+    public float shot_interval = 0.3f;
     private float last_use = 0f;
 
     void Start()
@@ -75,7 +75,9 @@ public class Enemy : MonoBehaviour
                     {                        
                         shooting = true;
                         m_shoottr = m_mov_verse == 1 ? m_shoottr_right : m_shoottr_left;
-                        ShootOne(hit.collider.gameObject);
+                        if(m_mov_verse == -1)
+                            m_shoottr.localScale = new Vector3(1.0f, -1.0f, 1.0f);;
+                        StartCoroutine(Shoot());
                         break;
                     }
                 }
@@ -110,13 +112,21 @@ public class Enemy : MonoBehaviour
     }
 
     // TODO
-    void ShootOne(GameObject player)
+    void ShootOne()
     {
         shooting = true;
         GameObject go = Instantiate(m_shot_prefab, m_shoottr.position, m_shoottr.rotation) as GameObject;
-        // Vector2 direction = player.transform.position - tr.position;
-
         SoundManager.Instance.PlayModPitch(m_shoot_clip);
+    }
+
+    IEnumerator Shoot() {
+        yield return new WaitForSeconds(0.5f);
+        for(int i = 0; i < shots_count; i++)
+        {
+            ShootOne();
+            yield return new WaitForSeconds(shot_interval);
+        }
+        shooting = false;
     }
 
     // [TEMP] SetActive(false) if collides with player
