@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private Vector2 rcLeftDir;    
 
     // Shooting
+    private Transform m_shoottr;
     public AudioClip m_shoot_clip;
     public GameObject m_shot_prefab;
 
@@ -26,6 +27,8 @@ public class Enemy : MonoBehaviour
     private Animator animator;
     private bool moving = false;
     private bool shooting = false;
+    public float shoot_cd = 2f;
+    private float last_use = 0f;
 
     void Start()
     {
@@ -35,6 +38,8 @@ public class Enemy : MonoBehaviour
         rcFloorDir = -tr.up;
         rcRightDir = tr.right;
         rcLeftDir = -rcRightDir;
+        m_shoottr = tr;
+        m_shoottr.Translate(Vector2.right);
     }
 
     void Update()
@@ -48,23 +53,26 @@ public class Enemy : MonoBehaviour
         Move();
 
         // Shoot player if seen in straight line
-        /*
-        RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, m_mov_verse * rcmRightDir);
-        if (hits != null)
+        if(Time.time - last_use > shoot_cd)
         {
-            foreach (RaycastHit2D hit in hits)
+            RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, m_mov_verse * rcRightDir);
+            if (hits != null)
             {
-                // If it hits first a platform don't shoot, layer 8 = Platforms
-                if (hit.collider.gameObject.layer == 8) break;
-                
-                if (hit.collider.gameObject.tag == "Player")
+                foreach (RaycastHit2D hit in hits)
                 {
-                    ShootOne(hit.collider.gameObject);
-                    break;
+                    // If it hits first a platform don't shoot, layer 8 = Platforms
+                    if (hit.collider.gameObject.layer == 8) break;
+                    
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        // ShootOne(hit.collider.gameObject);
+                        shooting = true;
+                        break;
+                    }
                 }
             }
-        } */
-
+            last_use = Time.time;
+        }
     }
 
     void Idle()
@@ -75,6 +83,7 @@ public class Enemy : MonoBehaviour
 
     void Move()
     {
+        if(shooting) return;
         moving = true;
         RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, rcFloorDir, raycastMagnitude);
         RaycastHit2D[] hitsRight = Physics2D.RaycastAll(tr.position, rcRightDir, raycastMagnitude);
@@ -96,7 +105,7 @@ public class Enemy : MonoBehaviour
     void ShootOne(GameObject player)
     {
         shooting = true;
-        GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
+        GameObject go = Instantiate(m_shot_prefab, m_shoottr.position, m_shoottr.rotation) as GameObject;
         Vector2 direction = player.transform.position - tr.position;
 
         SoundManager.Instance.PlayModPitch(m_shoot_clip);
