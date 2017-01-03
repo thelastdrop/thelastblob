@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     [Range(0f, 5f)]
     public float m_speed = 1f;
     // Test clip
-    public AudioClip testClip;
+    public AudioClip m_shoot_clip;
     public GameObject m_shot_prefab;
 
     private int verse = 1;  // if 1 moving right, else -1: left
@@ -45,7 +45,6 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (m_speed == 0f) moving = false;
         Move();
 
         // Shoot player if seen in straight line
@@ -60,7 +59,7 @@ public class Enemy : MonoBehaviour
                 
                 if (hit.collider.gameObject.tag == "Player")
                 {
-                    Shoot(hit.collider.gameObject);
+                    ShootOne(hit.collider.gameObject);
                     break;
                 }
             }
@@ -94,13 +93,13 @@ public class Enemy : MonoBehaviour
     }
 
     // TODO
-    void Shoot(GameObject player)
+    void ShootOne(GameObject player)
     {
         shooting = true;
         GameObject go = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
         Vector2 direction = player.transform.position - tr.position;
 
-        // SoundManager.Instance.PlayModPitch(shoot_clip);
+        SoundManager.Instance.PlayModPitch(m_shoot_clip);
     }
 
     // [TEMP] SetActive(false) if collides with player
