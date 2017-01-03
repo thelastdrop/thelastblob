@@ -1,9 +1,26 @@
 fileFormatVersion: 2
 guid: 556be80af14443640b485cf93ed3fa96
-timeCreated: 1483107508
+timeCreated: 1483438509
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: InterfaceMapBlob23_0
+    21300002: InterfaceMapBlob23_1
+    21300004: InterfaceMapBlob23_2
+    21300006: InterfaceMapBlob23_3
+    21300008: InterfaceMapBlob23_4
+    21300010: InterfaceMapBlob23_5
+    21300012: InterfaceMapBlob23_6
+    21300014: InterfaceMapBlob23_7
+    21300016: InterfaceMapBlob23_8
+    21300018: InterfaceMapBlob23_9
+    21300020: InterfaceMapBlob23_10
+    21300022: InterfaceMapBlob23_11
+    21300024: InterfaceMapBlob23_12
+    21300026: InterfaceMapBlob23_13
+    21300028: InterfaceMapBlob23_14
+    21300030: InterfaceMapBlob23_15
+    21300032: InterfaceMapBlob23_16
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -34,7 +51,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -58,9 +75,262 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: iPhone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: WebGL
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_0
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 944
+        width: 1268
+        height: 1116
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_1
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 2131
+        width: 1261
+        height: 1404
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_2
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 3644
+        width: 159
+        height: 298
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_3
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 3657
+        width: 163
+        height: 277
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_4
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 3666
+        width: 176
+        height: 268
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_5
+      rect:
+        serializedVersion: 2
+        x: 1179
+        y: 3670
+        width: 163
+        height: 269
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_6
+      rect:
+        serializedVersion: 2
+        x: 1456
+        y: 3664
+        width: 152
+        height: 274
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_7
+      rect:
+        serializedVersion: 2
+        x: 1719
+        y: 3664
+        width: 143
+        height: 265
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_8
+      rect:
+        serializedVersion: 2
+        x: 1965
+        y: 3653
+        width: 132
+        height: 280
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_9
+      rect:
+        serializedVersion: 2
+        x: 1651
+        y: 3084
+        width: 903
+        height: 334
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_10
+      rect:
+        serializedVersion: 2
+        x: 1615
+        y: 2567
+        width: 875
+        height: 261
+      alignment: 9
+      pivot: {x: 0.5, y: 0.58770263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_11
+      rect:
+        serializedVersion: 2
+        x: 1744
+        y: 2242
+        width: 641
+        height: 197
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_12
+      rect:
+        serializedVersion: 2
+        x: 1780
+        y: 1818
+        width: 485
+        height: 163
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_13
+      rect:
+        serializedVersion: 2
+        x: 1646
+        y: 1422
+        width: 688
+        height: 190
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_14
+      rect:
+        serializedVersion: 2
+        x: 1848
+        y: 1039
+        width: 379
+        height: 182
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_15
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 587
+        width: 749
+        height: 193
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: InterfaceMapBlob23_16
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 466
+        width: 425
+        height: 423
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 
