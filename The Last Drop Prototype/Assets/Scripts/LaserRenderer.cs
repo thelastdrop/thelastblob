@@ -61,17 +61,20 @@ public class LaserRenderer : MonoBehaviour
     // Laser kills particles here
     void LaserInteraction()
     {
-        RaycastHit2D[] hits = Physics2D.LinecastAll(start, end);
-
-        foreach (RaycastHit2D hit in hits)
-        {
-            GameObject elem = hit.collider.gameObject;
-            if (elem.tag == "Player")
+        if(lr.enabled)
             {
-                if(Time.time - lastUse > cooldown)
+            RaycastHit2D[] hits = Physics2D.LinecastAll(start, end);
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                GameObject elem = hit.collider.gameObject;
+                if (elem.tag == "Player")
                 {
-                    GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elem);
-                    lastUse = Time.time;
+                    if(Time.time - lastUse > cooldown)
+                    {
+                        GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elem);
+                        lastUse = Time.time;
+                    }
                 }
             }
         }
