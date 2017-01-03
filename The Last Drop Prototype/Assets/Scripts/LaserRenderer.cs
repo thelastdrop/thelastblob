@@ -29,7 +29,6 @@ public class LaserRenderer : MonoBehaviour
     void Start()
     {
         lr = gameObject.GetComponent<LineRenderer>() as LineRenderer;
-        lr.SetColors(Color.red, Color.red);
         lr.startWidth = width;
         lr.endWidth = width;
         tr = gameObject.GetComponent<Transform>() as Transform;

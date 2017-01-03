@@ -23,6 +23,7 @@ public class Shot : MonoBehaviour {
 		if(other.gameObject.tag == "Player")
 		{
 			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(other.gameObject);
+			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(other.gameObject);
 		}
 		gameObject.SetActive(false);
 	}
