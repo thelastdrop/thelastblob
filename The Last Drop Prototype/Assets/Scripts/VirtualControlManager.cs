@@ -20,7 +20,8 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
     public Vector2 swipeVector;
     private Vector2 touchOrigin;
 
-    public VirtualJoystick joystick;
+    public VirtualJoystick joystickLeft;
+    public VirtualJoystick joystickRight;
 
     void Start()
     {
@@ -62,7 +63,7 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
                             moving = true;
                             // Vector2 tempDirection = touch.position - moveStartPos;
                             // moveDirection = tempDirection.magnitude > maxMovRange ? tempDirection.normalized * maxMovRange * shrinkVectorFactor : tempDirection * shrinkVectorFactor;
-                            moveDirection = Vector2.ClampMagnitude(joystick.inputDirection, maxMovRange);
+                            moveDirection = Vector2.ClampMagnitude(joystickLeft.inputDirection, maxMovRange);
                             break;
                         case TouchPhase.Ended:
                             moving = false;
@@ -73,19 +74,19 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
                 } 
                 else if (rightR.Contains(touch.position))
                 {
-                    if (touch.phase == TouchPhase.Began)
+                    /* if (touch.phase == TouchPhase.Began)
                     {
                         touchOrigin = touch.position;
-                    }
-                    else if (touch.phase == TouchPhase.Ended)
+                    } */
+                    if (touch.phase == TouchPhase.Moved)
                     {
-                        Vector2 touchEnd = touch.position;
-                        swipeVector = touchEnd - touchOrigin;
+                        // Vector2 touchEnd = touch.position;
+                        swipeVector = joystickRight.inputDirection * 10;
 
                         // Trigger event: i.e. swipeVector has changed 
                         EventManager.TriggerEvent("Swipe");
 
-                        if (moving)
+                        if(moving)
                         {
                             moving = false;
                             EventManager.TriggerEvent("MoveEnd");
