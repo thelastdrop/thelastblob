@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Shot : MonoBehaviour {
 
-	public float m_speed = 25f;
+	[Range(20f, 150f)]
+	public float m_speed = 50f;
 	Transform tr;
 
 	void Start() {
@@ -22,7 +23,6 @@ public class Shot : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if(other.gameObject.tag == "Player")
 		{
-			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(other.gameObject);
 			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(other.gameObject);
 		}
 		gameObject.SetActive(false);

@@ -62,18 +62,16 @@ public class Enemy : MonoBehaviour
             {
                 foreach (RaycastHit2D hit in hits)
                 {
-                    // If it hits first a platform don't shoot, layer 8 = Platforms
-                    if (hit.collider.gameObject.layer == 8)
-                    {
-                        shooting = false;
-                        break;
-                    }
-                    
                     if (hit.collider.gameObject.tag == "Player")
                     {                        
                         shooting = true;
                         m_shoottr = !sr.flipX ? m_shoottr_right : m_shoottr_left;                            
                         StartCoroutine(Shoot());
+                        break;
+                    }
+                    else if(hit.collider.gameObject.layer == 8)
+                    {
+                        shooting = false;
                         break;
                     }
                 }
@@ -108,16 +106,8 @@ public class Enemy : MonoBehaviour
         sr.flipX = m_mov_verse > 0 ? false : true;    // Flip the sprite
     }
 
-    // TODO
-    void ShootOne()
+    IEnumerator Shoot()
     {
-        GameObject shot = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);//Instantiate(m_shot_prefab, m_shoottr.position, m_shoottr.rotation) as GameObject;
-        shot.transform.position = m_shoottr.position;
-        shot.transform.rotation = m_shoottr.rotation;
-        SoundManager.Instance.PlayModPitch(m_shoot_clip);
-    }
-
-    IEnumerator Shoot() {
         yield return new WaitForSeconds(0.5f);
         shooting = true;
         for(int i = 0; i < shots_count; i++)
@@ -126,4 +116,13 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(shot_interval);
         }
     }
+
+    void ShootOne()
+    {
+        GameObject shot = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
+        shot.transform.position = m_shoottr.position;
+        shot.transform.rotation = m_shoottr.rotation;
+        SoundManager.Instance.PlayModPitch(m_shoot_clip);
+    }
+
 }
