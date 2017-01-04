@@ -17,7 +17,7 @@ public class Shot : MonoBehaviour {
 	void FixedUpdate() {
 		tr.position = tr.position + tr.right * m_speed * Time.fixedDeltaTime;
 		RaycastHit2D hits = Physics2D.Raycast(tr.position, tr.right, raycastMagnitude, layerMaskPlatforms);
-		if(hits != null)
+		if(hits)
 		{
 			gameObject.SetActive(false);
 		}

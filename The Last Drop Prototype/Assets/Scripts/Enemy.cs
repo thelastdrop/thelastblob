@@ -58,11 +58,11 @@ public class Enemy : MonoBehaviour
         if(Time.time - last_use > shoot_cd)
         {
             RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, m_mov_verse * tr.right);
-            if (hits != null)
+            if(hits != null)
             {
                 foreach (RaycastHit2D hit in hits)
                 {
-                    if (hit.collider.gameObject.tag == "Player")
+                    if(hit.collider.gameObject.tag == "Player")
                     {                        
                         shooting = true;
                         m_shoottr = !sr.flipX ? m_shoottr_right : m_shoottr_left;                            
