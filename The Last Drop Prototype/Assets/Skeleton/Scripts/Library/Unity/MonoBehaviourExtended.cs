@@ -1,7 +1,8 @@
-﻿namespace POLIMIGameCollective
+﻿using UnityEngine;
+using System.Collections.Generic;
+
+namespace POLIMIGameCollective
 {
-    using UnityEngine;
-    using System.Collections.Generic;
 
     static public class MethodExtensionForMonoBehaviourTransform
     {
