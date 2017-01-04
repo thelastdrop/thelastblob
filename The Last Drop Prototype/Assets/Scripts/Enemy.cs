@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     private Transform m_shoottr;
     private Transform m_shoottr_right;
     private Transform m_shoottr_left;
-    public AudioClip m_shoot_clip;
+    public AudioClip[] m_shot_clips;
     public GameObject m_shot_prefab;
     public float shoot_cd = 1f;
     public int shots_count = 4;
@@ -122,7 +122,8 @@ public class Enemy : MonoBehaviour
         GameObject shot = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
         shot.transform.position = m_shoottr.position;
         shot.transform.rotation = m_shoottr.rotation;
-        SoundManager.Instance.PlayModPitch(m_shoot_clip);
+        int randomClipIndex = (int)Mathf.Floor(Random.Range(0, m_shot_clips.Length - 1));
+        SoundManager.Instance.PlayModPitch(m_shot_clips[randomClipIndex]);
     }
 
 }
