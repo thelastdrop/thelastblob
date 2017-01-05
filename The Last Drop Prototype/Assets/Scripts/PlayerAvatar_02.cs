@@ -210,6 +210,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 //        Debug.Log("Disable");
     }
 
+    void OnApplicationQuit()
+    {
+        CancelInvoke("Check_For_Contact");
+    }
     /************************************/
     /***    Invoke and coroutines     ***/
     /************************************/
