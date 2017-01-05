@@ -24,6 +24,8 @@ public class LaserRenderer : MonoBehaviour
     [Header("Interval on/off, set to 0 for always on")]
     public float m_sec_offset = 0f;
     private float switchT;
+    // Sound
+    public AudioClip[] audioclips;
 
     // Use this for initialization
     void Start()
@@ -72,6 +74,8 @@ public class LaserRenderer : MonoBehaviour
                     if(Time.time - lastUse > cooldown)
                     {
                         GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elem);
+                        int randomClipIndex = (int)Mathf.Floor(Random.Range(0, audioclips.Length - 1));
+                        SoundManager.Instance.PlayModPitch(audioclips[randomClipIndex]);
                         lastUse = Time.time;
                     }
                 }
