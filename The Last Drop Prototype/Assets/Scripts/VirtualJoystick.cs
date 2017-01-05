@@ -51,4 +51,8 @@ public class VirtualJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, I
 		joystickImg.rectTransform.anchoredPosition = Vector2.zero;
 	}
 
+	public Rect GetRect()
+	{
+		return GetComponent<RectTransform>().rect;
+	}
 }

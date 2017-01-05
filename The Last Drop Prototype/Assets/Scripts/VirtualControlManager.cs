@@ -14,7 +14,6 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
     public Vector2 moveDirection;
     private bool moving;
     private float maxMovRange;
-    private float shrinkVectorFactor = 0.015f;
 
     // [Right portion] Vector representing swipe input
     public Vector2 swipeVector;
@@ -26,8 +25,10 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
     void Start()
     {
         // These rectangles represent the two halfs of the screen
-        leftR = new Rect(0f, 0f, Screen.width * 0.5f, Screen.height);
-        rightR = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
+        //leftR = new Rect(0f, 0f, Screen.width * 0.5f, Screen.height);
+        //rightR = new Rect(Screen.width * 0.5f, 0f, Screen.width * 0.5f, Screen.height);
+        leftR = joystickLeft.GetRect();
+        rightR = joystickRight.GetRect();
 
         maxMovRange = Screen.width * 0.05f;
     }
