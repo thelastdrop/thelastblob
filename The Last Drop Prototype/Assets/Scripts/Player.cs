@@ -38,6 +38,7 @@ public class Player : MonoBehaviour {
     public string[] m_Foods = { "Enemy" };
     [Tooltip("How much each food increase particle counts")]
     public int[] m_Nutrition_Value = { 2 };
+    public AudioClip[] m_Death_Sound_Eated;
 
     private float m_V_Axis1;
     private float m_H_Axis1;
@@ -382,5 +383,6 @@ public class Player : MonoBehaviour {
     public void Eat_Carry( GameObject object_carried )
     {
         m_Carried_Items.Add(new carried_items(object_carried, true));
+        SoundManager.Instance.PlayDeathSound( m_Death_Sound_Eated[Random.Range(0, m_Death_Sound_Eated.Length - 1)]);
     }
 }
