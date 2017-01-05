@@ -156,6 +156,7 @@ public class GameWinManager : Singleton<GameWinManager>
         m_playing_screen = Instantiate ( m_gameplay_screens [current_level] );
 		m_playing_screen.SetActive (true);
         playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset(7);
+        SoundManager.Instance.PlayMusic();
 
         POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
     }

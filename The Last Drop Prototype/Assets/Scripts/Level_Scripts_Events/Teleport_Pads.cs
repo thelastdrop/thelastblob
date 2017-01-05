@@ -8,7 +8,8 @@ public class Teleport_Pads : MonoBehaviour
     [Tooltip("The teleport will have this offset in the direction facing by the pad")]
     public float m_OffSet = 1.0f;
     [Tooltip("The speed of teleported object will be multiply by this magnitude")]
-    public float m_Power = 1.0f;        
+    public float m_Power = 1.0f;
+    public AudioClip m_Teleport_Sound;        
 
     private Vector3 m_other_end_loc;
 
@@ -41,6 +42,7 @@ public class Teleport_Pads : MonoBehaviour
         if(tp != null)
         {
             tp.Teleport_To(m_other_end_loc, -m_Other_Teleport_Pad.transform.right * m_Power);
+            SoundManager.Instance.PlayLevelSound(m_Teleport_Sound,false, 0f);
         }
     }
 }
