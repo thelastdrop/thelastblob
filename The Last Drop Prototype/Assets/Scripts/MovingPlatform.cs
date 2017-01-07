@@ -5,9 +5,9 @@ using UnityEngine;
 public class MovingPlatform : MonoBehaviour {
 
 	[Header("Movement speed"), Range(0f, 5f)]
-    public float m_speed;
+    public float m_speed = 0.75f;
     [Header("Movement stops at extremes for this time:")]
-    public float m_pause = 0;
+    public float m_pause = 1;
 	private int m_mov_verse = 1;
 	private float tspeed;
 
@@ -16,7 +16,7 @@ public class MovingPlatform : MonoBehaviour {
     private Transform endtr;
 
 	void Start () {
-		tr = gameObject.GetComponent<Transform>() as Transform;
+		tr = GetComponent<Transform>().GetChild(2);
 		starttr = tr.parent.GetChild(0);
         starttr.position = tr.position;
 		endtr = tr.parent.GetChild(1);
@@ -48,4 +48,15 @@ public class MovingPlatform : MonoBehaviour {
        	yield return new WaitForSeconds(m_pause);
 		m_speed = tspeed;
     }
+
+	/// <summary>
+	/// Sent each frame where a collider on another object is touching
+	/// this object's collider (2D physics only).
+	/// </summary>
+	/// <param name="other">The Collision2D data associated with this collision.</param>
+	void OnCollisionStay2D(Collision2D other)
+	{
+		Vector2 verse = m_mov_verse == 1 ? endtr.position - tr.position : starttr.position - tr.position;
+		other.rigidbody.velocity = m_speed * verse;
+	}
 }
