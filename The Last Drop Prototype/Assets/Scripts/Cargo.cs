@@ -52,7 +52,7 @@ public class Cargo : MonoBehaviour, IConsoleIteration {
                 {
                     float distance = (GameManager.Instance.m_Player.transform.position - gameObject.transform.position).magnitude;
                     if (distance < SoundManager.Instance.m_Max_Distance)
-                        SoundManager.Instance.PlayLevelSound(m_Destruct_Sound[Random.Range(0, m_Hit_Sound.Length - 1)], true, distance);
+                        SoundManager.Instance.PlayLevelSound(m_Hit_Sound[Random.Range(0, m_Hit_Sound.Length - 1)], true, distance);
                 }
             }
         }
