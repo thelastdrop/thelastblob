@@ -5,6 +5,8 @@ using UnityEngine;
 public class MovingPlatformChild : MonoBehaviour {
 
 	private MovingPlatform mp;
+	[Range(0f,10f)]
+	public float factor;
 
 	void Start()
 	{
@@ -19,7 +21,7 @@ public class MovingPlatformChild : MonoBehaviour {
 	/// <param name="other">The Collision2D data associated with this collision.</param>
 	void OnCollisionStay2D(Collision2D other)
 	{
-		float mulfactor = mp.m_speed >= 1 ? mp.m_speed * 4f + 9.8f : mp.m_speed * 4.2f + 8f;
-		other.rigidbody.AddForce(Vector2.right * mp.m_mov_verse * mulfactor);
+		float mulfactor = mp.m_speed >= 1 ? mp.m_speed * 4f + 10f : mp.m_speed * 4.2f + 8f;
+		other.rigidbody.velocity += Vector2.right * mp.m_mov_verse * mp.m_speed * factor;
 	}
 }
