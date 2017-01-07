@@ -59,6 +59,20 @@ public class Player : MonoBehaviour {
     private Vector3[] m_Streching_Points;
     private Vector3 m_Screen_Size;
 
+    public struct stretch_data
+    {
+        GameObject hit;
+        Vector3 relative_position;
+
+        stretch_data( GameObject stretch_to )
+        {
+            hit = stretch_to;
+            relative_position = new Vector3(0, 0, 0);
+        }
+    }
+
+    private stretch_data stretch;
+
     //Eating/carry
     private List<carried_items> m_Carried_Items = new List<carried_items>();
 
@@ -239,7 +253,11 @@ public class Player : MonoBehaviour {
     /************************************/
     void swipe()
     {
-        Stretch( TouchControlManager.Instance.GetSwipeVector().normalized );
+        m_Stretch_Condition = 0;
+        m_last_time_ability1 = Time.time;
+        m_Last_Direction = TouchControlManager.Instance.GetSwipeVector().normalized;
+        PC_Swipe(m_Last_Direction);
+//      Stretch( TouchControlManager.Instance.GetSwipeVector().normalized );
     }
 
     void MoveStart()
