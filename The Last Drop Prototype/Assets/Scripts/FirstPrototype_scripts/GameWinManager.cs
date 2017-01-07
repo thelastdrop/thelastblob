@@ -222,8 +222,14 @@ public class GameWinManager : Singleton<GameWinManager>
 	public void LoseLevel ()
     {
         Time.timeScale = 0f;
-        m_loselevel_screen.SetActive (true);
-	}
+        if (m_loselevel_screen != null)
+        {
+            m_loselevel_screen.SetActive(true);
+        } else
+        {
+            Debug.Log("No LoseLevel Screen is set! Add reference to a UI for losing level!");
+        }
+    }
 
 
 	//called when the player pauses the game

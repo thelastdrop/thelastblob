@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:The Last Drop Prototype/Assets/Prefab/BetaInteractiveElements/MovinPLongParent.prefab.meta
 guid: 6c82c96a2e3354cca9cd968e8f803a07
 timeCreated: 1483790635
+=======
+guid: 7ac4f69dc3795184dae05aa52bb0e8cf
+timeCreated: 1483309934
+>>>>>>> 1465548cf081e009dea1434b2d38b25d63764214:The Last Drop Prototype/Assets/Prefab/BetaInteractiveElements/MovingPlatf1.prefab.meta
 licenseType: Free
 NativeFormatImporter:
   userData: 
