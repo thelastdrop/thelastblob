@@ -122,7 +122,7 @@ public class Enemy : MonoBehaviour
         GameObject shot = ObjectPoolingManager.Instance.GetObject(m_shot_prefab.name);
         shot.transform.position = m_shoottr.position;
         shot.transform.rotation = m_shoottr.rotation;
-        int randomClipIndex = (int)Mathf.Floor(Random.Range(0, audioclips.Length - 1));
+        int randomClipIndex = Random.Range(0, audioclips.Length - 1);
         SoundManager.Instance.PlayModPitch(audioclips[randomClipIndex]);
     }
 
