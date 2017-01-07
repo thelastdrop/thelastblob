@@ -59,19 +59,19 @@ public class Player : MonoBehaviour {
     private Vector3[] m_Streching_Points;
     private Vector3 m_Screen_Size;
 
-    public struct stretch_data
+    public struct stretching_data
     {
         GameObject hit;
         Vector3 relative_position;
 
-        stretch_data( GameObject stretch_to )
+        stretching_data( GameObject stretch_to )
         {
             hit = stretch_to;
             relative_position = new Vector3(0, 0, 0);
         }
     }
 
-    private stretch_data stretch;
+    private stretching_data stretch_data;
 
     //Eating/carry
     private List<carried_items> m_Carried_Items = new List<carried_items>();
@@ -318,6 +318,7 @@ public class Player : MonoBehaviour {
                 Set_Points( elem.point );
                 m_Stretch_Condition = 2;
                 hit_register = true;
+//                stretch
                 break;
             }
         }

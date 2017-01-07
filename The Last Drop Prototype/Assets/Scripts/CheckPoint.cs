@@ -13,7 +13,6 @@ public class CheckPoint : MonoBehaviour {
         if( (other.gameObject.tag != "Player") ||
             (m_used == true)                       )
         {
-
             return;
         }
 
