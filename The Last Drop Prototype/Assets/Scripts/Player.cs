@@ -318,7 +318,7 @@ public class Player : MonoBehaviour {
                 Set_Points( elem.point );
                 m_Stretch_Condition = 2;
                 hit_register = true;
-                stretch
+//                stretch
                 break;
             }
         }
