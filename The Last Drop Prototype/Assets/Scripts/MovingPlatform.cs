@@ -8,7 +8,7 @@ public class MovingPlatform : MonoBehaviour {
     public float m_speed = 0.75f;
     [Header("Movement stops at extremes for this time:")]
     public float m_pause = 1;
-	private int m_mov_verse = 1;
+	public int m_mov_verse = 1;
 	private float tspeed;
 
 	private Transform tr;
@@ -48,15 +48,4 @@ public class MovingPlatform : MonoBehaviour {
        	yield return new WaitForSeconds(m_pause);
 		m_speed = tspeed;
     }
-
-	/// <summary>
-	/// Sent each frame where a collider on another object is touching
-	/// this object's collider (2D physics only).
-	/// </summary>
-	/// <param name="other">The Collision2D data associated with this collision.</param>
-	void OnCollisionStay2D(Collision2D other)
-	{
-		Vector2 verse = m_mov_verse == 1 ? endtr.position - tr.position : starttr.position - tr.position;
-		other.rigidbody.velocity = m_speed * verse;
-	}
 }
