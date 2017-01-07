@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour {
 
-	[Header("Movement speed"), Range(0f, 5f)]
+	[Header("Movement speed"), Range(0f, 2f)]
     public float m_speed = 0.75f;
     [Header("Movement stops at extremes for this time:")]
     public float m_pause = 1;
