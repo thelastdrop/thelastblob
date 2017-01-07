@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour {
 
-	[Header("Movement speed"), Range(0f, 5f)]
-    public float m_speed;
+	[Header("Movement speed"), Range(0f, 2f)]
+    public float m_speed = 0.75f;
     [Header("Movement stops at extremes for this time:")]
-    public float m_pause = 0;
-	private int m_mov_verse = 1;
+    public float m_pause = 1;
+	public int m_mov_verse = 1;
 	private float tspeed;
 
 	private Transform tr;
@@ -16,7 +16,7 @@ public class MovingPlatform : MonoBehaviour {
     private Transform endtr;
 
 	void Start () {
-		tr = gameObject.GetComponent<Transform>() as Transform;
+		tr = GetComponent<Transform>().GetChild(2);
 		starttr = tr.parent.GetChild(0);
         starttr.position = tr.position;
 		endtr = tr.parent.GetChild(1);
