@@ -155,7 +155,8 @@ public class GameWinManager : Singleton<GameWinManager>
         //duplicate the required level and activate it
         m_playing_screen = Instantiate ( m_gameplay_screens [current_level] );
 		m_playing_screen.SetActive (true);
-        playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset(7);
+        playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset( GameManager.Instance.m_Player_Restart_Particles);
+        GameManager.Instance.Gravity_Change( GameManager.Instance.m_Restart_Gravity_Ind );
         SoundManager.Instance.PlayMusic();
 
         POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");

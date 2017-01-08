@@ -4,8 +4,10 @@ using POLIMIGameCollective;
 using System.Collections;
 
 public class GameManager : Singleton<GameManager> {
- //   public static GameManager Instance = null;
-    
+    //   public static GameManager Instance = null;
+    [Header("Starting/Restarting parameters"),Tooltip("How many particles the player will have when the level start")]
+    public int m_Player_Restart_Particles = 7;
+    public int m_Restart_Gravity_Ind = 0;
 
     [Space(5), Header("Prefab for object pooling"), Tooltip("Liquid Particles object")]
     public GameObject m_dynam_particle;
@@ -34,6 +36,7 @@ public class GameManager : Singleton<GameManager> {
 
     [Header("Public variable used externally, Do not set them")]
     // Used player references(scripts, informations ecc)
+
     public GameObject m_Player;
     public PlayerAvatar_02 m_Player_Avatar_Cs;
     public GameObject m_Central_Particle;
@@ -42,14 +45,14 @@ public class GameManager : Singleton<GameManager> {
 
     void Awake()
     {
-/*        if( Instance == null)
-        {
-            Instance = this;
-        } else
-        {
-            Destroy(gameObject);
-        }
-*/
+        /*        if( Instance == null)
+                {
+                    Instance = this;
+                } else
+                {
+                    Destroy(gameObject);
+                }
+        */
         // Loading Pools
 
         POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
@@ -78,9 +81,11 @@ public class GameManager : Singleton<GameManager> {
     /*******         PUBLIC METHODS          *********/
     /*************************************************/
 
-    public void CheckPoint( Vector3 arg_position )
+    public void CheckPoint( Vector3 arg_position, int player_particles, int gravity_ind )
     {
         m_Player_Start_Position.transform.position = arg_position;
+        m_Player_Restart_Particles = player_particles;
+        m_Restart_Gravity_Ind = gravity_ind;
     }
 
 
@@ -90,10 +95,11 @@ public class GameManager : Singleton<GameManager> {
         Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind];
 
     }
+
     public void Gravity_Change( int number )
     {
-        if( (Time.time - m_last_gravity_change) > m_Gravity_change_CD)
-        {
+//        if( (Time.time - m_last_gravity_change) > m_Gravity_change_CD)
+//        {
             //// BROKENNNNNNN
             // if clockwise add one to ind, or remove one if counter-clockwise
             // if ind is equal than gravity vector length, set it to 0
@@ -103,7 +109,7 @@ public class GameManager : Singleton<GameManager> {
             Physics2D.gravity = m_Gravity_Vectors[m_current_grav_ind]; // set current gravity
 
             m_last_gravity_change = Time.time;
-        }
+ //       }
     }
 
     /*******************************/
