@@ -33,6 +33,8 @@ public class Player : MonoBehaviour {
     public float m_Ability1_Tensile_Str = 1.0f;
     [Tooltip("In how much time the elastic will reach full extend?")]
     public float m_Ability1_Extension_Speed = 0.3f;
+    [Tooltip("Restitution force multiplier: How much force will be applied to the other object(if rigid body is present)")]
+    public float m_Ability1_Restitution = 0.15f;
 
     [Header("Feeding Params"), Tooltip("Array of names of objects that the player can eat")]
     public string[] m_Foods = { "Enemy" };
@@ -61,17 +63,38 @@ public class Player : MonoBehaviour {
 
     public struct stretching_data
     {
-        GameObject hit;
-        Vector3 relative_position;
+        static public GameObject relative_position; // GameObject with position relative to the gameobject origin
+        public GameObject hit;
+        public Rigidbody2D rb;
 
-        stretching_data( GameObject stretch_to )
+        public stretching_data( GameObject stretch_to, Vector2 point)
         {
             hit = stretch_to;
-            relative_position = new Vector3(0, 0, 0);
+            rb = hit.GetComponent<Rigidbody2D>();
+            relative_position.transform.parent = hit.transform;
+            relative_position.transform.position = new Vector3(point.x, point.y, 0);
+            Debug.Log("Passato di qui: " + relative_position.transform.position);
+        }
+
+        public void initialize()
+        {
+            relative_position = Instantiate(new GameObject("stretch_hit"));
+        }
+
+        public void reset()
+        {
+            hit = null;
+            relative_position.transform.parent = null;
+            rb = null;
+        }
+
+        public Vector3 get_point()
+        {
+            return (relative_position.transform.position);
         }
     }
 
-    private stretching_data stretch_data;
+    private stretching_data m_stretch_data;
 
     //Eating/carry
     private List<carried_items> m_Carried_Items = new List<carried_items>();
@@ -109,6 +132,7 @@ public class Player : MonoBehaviour {
         StartCoroutine(set_central_particle()); // Set the central particle later on. Also setup other things as well, it's kind of a late start routine
 
         m_Screen_Size = new Vector3( Screen.width, Screen.height, 0f) / 2;
+        m_stretch_data.initialize();
 
         // Triggers Events registration
         POLIMIGameCollective.EventManager.StartListening("Swipe", swipe);
@@ -142,8 +166,14 @@ public class Player : MonoBehaviour {
             if ((Input.GetButton("Fire1")) &&
                  (Time.time - m_last_time_ability1) > m_Ability1_CD)
             {
+                Stop_Strectching();
+                m_Stretch_Condition = 0;
                 m_last_time_ability1 = Time.time;
-                Stretch(Input.mousePosition - m_Screen_Size);
+                Vector3 cozy = Input.mousePosition - m_Screen_Size;
+                m_Last_Direction = new Vector2(cozy.x, cozy.y).normalized;
+                PC_Swipe(m_Last_Direction);
+
+                m_last_time_ability1 = Time.time;
                 // Logic of ability one
             }
         }
@@ -153,6 +183,8 @@ public class Player : MonoBehaviour {
                ( Time.time - m_last_time_ability1) > m_Ability1_CD )
             {
                 //Debug.Log("Shoot!");
+
+                Stop_Strectching();
                 m_Stretch_Condition = 0;
                 m_last_time_ability1 = Time.time;
                 m_Last_Direction = new Vector2(m_H_Axis2, m_V_Axis2).normalized;
@@ -216,10 +248,12 @@ public class Player : MonoBehaviour {
         if( (m_Line_Renderer.enabled)  &&
             (m_Stretch_Condition == 2)   ) // Condition 2 = the stretch is latched
         {
-            m_Central_Particle_rb.velocity = m_Central_Particle_rb.velocity + ( ( new Vector2(m_Streching_Points[0].x, m_Streching_Points[0].y) - new Vector2( m_Streching_Points[1].x, m_Streching_Points[1].y) ) * m_Ability1_Tensile_Str);
+            Vector2 velocity = ((new Vector2(m_Streching_Points[0].x, m_Streching_Points[0].y) - new Vector2(m_Streching_Points[1].x, m_Streching_Points[1].y)) * m_Ability1_Tensile_Str);
+            if(m_stretch_data.rb != null) m_stretch_data.rb.AddForceAtPosition( -velocity * (float) GameManager.Instance.m_Player_Avatar_Cs.No_Particles() * m_Ability1_Restitution, m_stretch_data.get_point());
+            m_Central_Particle_rb.velocity = (m_stretch_data.rb == null) ? m_Central_Particle_rb.velocity + velocity : m_Central_Particle_rb.velocity + velocity * m_stretch_data.rb.mass * m_Ability1_Restitution;
+
             Set_Points();
             // Current maximum lenght is: 1.0f * parts_used* m_Ability1_Length
-            float lenght = Vector3.Magnitude(m_Streching_Points[0] - m_Streching_Points[1]);
 
             m_Line_Renderer.enabled = Check_Stretch_Length();
         }
@@ -236,6 +270,11 @@ public class Player : MonoBehaviour {
             {
                 if (Time.time - m_Carried_Items[i].time_since_eated >= 1.0f)
                 {
+                    if(m_Carried_Items[i].item == null)
+                    {
+                        m_Carried_Items.RemoveAt(i);
+                        continue;
+                    }
                     m_Carried_Items[i].item.SetActive(false);
                     GameManager.Instance.m_Player_Avatar_Cs.Grow(2);
                     m_Carried_Items.RemoveAt(i);                   
@@ -254,6 +293,7 @@ public class Player : MonoBehaviour {
     void swipe()
     {
         m_Stretch_Condition = 0;
+        Stop_Strectching();
         m_last_time_ability1 = Time.time;
         m_Last_Direction = TouchControlManager.Instance.GetSwipeVector().normalized;
         PC_Swipe(m_Last_Direction);
@@ -272,8 +312,8 @@ public class Player : MonoBehaviour {
 
     void Shake()
     {
-        GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel.z + " " + Shake_Manager.Instance.m_Shake_Min_Accel;
-        m_Line_Renderer.enabled = false;
+        //        GameManager.Instance.m_Debug_Text.text = " Accel var: " + Shake_Manager.Instance.m_Unbiased_Accel.z + " " + Shake_Manager.Instance.m_Shake_Min_Accel;
+        Stop_Strectching();
         //        GameManager.Instance.m_Player_Avatar_Cs.PlayerReset();
     }
 
@@ -292,7 +332,7 @@ public class Player : MonoBehaviour {
         m_Central_Particle_rb = m_Central_Particle.GetComponent<Rigidbody2D>();
 
         m_Stretch_Pointer = GameObject.Find("tentacle_pointer");
-}
+    }
 
     Vector2 Stretch( Vector2 direction )
     {
@@ -318,6 +358,7 @@ public class Player : MonoBehaviour {
                 Set_Points( elem.point );
                 m_Stretch_Condition = 2;
                 hit_register = true;
+                m_stretch_data = new stretching_data( elem.collider.gameObject, elem.point );
 //                stretch
                 break;
             }
@@ -351,20 +392,22 @@ public class Player : MonoBehaviour {
         if ((lenght > (float)GameManager.Instance.m_Player_Avatar_Cs.No_Particles() / m_Ability1_Perc_Particle_Used * m_Ability1_Length) ||
             (lenght < m_Ability1_Min_Length))
         {
+            Stop_Strectching();
             return false;
         }
         return true;
     }
 
-    void Set_Points(Vector3 distant_point)
+    void Set_Points(Vector3 distant_point) // Set the points when the stretch is not latched
     {
         m_Streching_Points = new Vector3[] { new Vector3(distant_point.x, distant_point.y, 0f), new Vector3(tr.position.x, tr.position.y, 0.0f) };
         m_Line_Renderer.SetPositions(m_Streching_Points);
     }
 
-    void Set_Points()
+    void Set_Points() // Set the points when the position is latched
     {
         m_Streching_Points[1] = tr.position;
+        m_Streching_Points[0] = m_stretch_data.get_point();
         m_Line_Renderer.SetPositions(m_Streching_Points);
     }
 
@@ -377,6 +420,7 @@ public class Player : MonoBehaviour {
         m_Line_Renderer.enabled = false;
         GameManager.Instance.m_Player_IsStretching = false;
         m_Stretch_Condition = 0;
+        m_stretch_data.reset();
     }
 
     public void PC_Swipe( Vector2 direction )

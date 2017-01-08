@@ -45,14 +45,14 @@ public class GameManager : Singleton<GameManager> {
 
     void Awake()
     {
-/*        if( Instance == null)
-        {
-            Instance = this;
-        } else
-        {
-            Destroy(gameObject);
-        }
-*/
+        /*        if( Instance == null)
+                {
+                    Instance = this;
+                } else
+                {
+                    Destroy(gameObject);
+                }
+        */
         // Loading Pools
 
         POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
