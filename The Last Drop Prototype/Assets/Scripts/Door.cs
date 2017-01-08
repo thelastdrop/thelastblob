@@ -7,6 +7,10 @@ public class Door : MonoBehaviour, IConsoleIteration {
     public GameObject Slab;
     public GameObject Engine;
 
+    public GameObject m_Red_Light;
+    public GameObject m_Green_Light;
+    bool m_flipflop;
+
     [Tooltip("Speed at which the door open")]
     public float m_Time;
     [Tooltip("Distance of the slab to open")]
@@ -27,6 +31,7 @@ public class Door : MonoBehaviour, IConsoleIteration {
         m_Initial_Position = m_Slab_tr.localPosition;
         m_Final_Position = m_Initial_Position;
         m_Final_Position.y = m_Final_Position.y + m_Distance;
+        red_light();
     }
 
 	public void Activate_Once()
@@ -35,10 +40,12 @@ public class Door : MonoBehaviour, IConsoleIteration {
         if (m_IsOpen == false)
         {
             InvokeRepeating("OpenTheDoor", m_TickTime, m_TickTime);
+            green_light();
         }
         else
         {
             InvokeRepeating("Hodor", m_TickTime, m_TickTime);
+            red_light();
         }
     }
 
@@ -68,5 +75,20 @@ public class Door : MonoBehaviour, IConsoleIteration {
         }
         m_Slab_tr.localPosition = Vector3.Lerp(m_Final_Position, m_Initial_Position, m_Start_Moving / m_Time);
         if (!m_IsOpen) m_Start_Moving = 0f;
+    }
+
+
+    void red_light()
+    {
+        m_flipflop = true;
+        m_Red_Light.SetActive(true);
+        m_Green_Light.SetActive(false);
+    }
+
+    void green_light()
+    {
+        m_flipflop = false;
+        m_Red_Light.SetActive(false);
+        m_Green_Light.SetActive(true);
     }
 }
