@@ -5,8 +5,12 @@ using UnityEngine;
 public class Cargo : MonoBehaviour, IConsoleIteration {
     Rigidbody2D rb;
 
+    public GameObject m_Red_Light;
+    public GameObject m_Green_Light;
     public AudioClip[] m_Destruct_Sound;
     public AudioClip[] m_Hit_Sound;
+    bool m_flipflop;
+
 
     [Tooltip("This value is compared with a multiplation of cargo speed and point of impact normal, to get only perpendicular speed")]
     public float m_Breaking_Speed = 1.4f;
@@ -18,6 +22,14 @@ public class Cargo : MonoBehaviour, IConsoleIteration {
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (m_Red_Light == null) return;
+        if (rb.isKinematic)
+        {
+            red_light();
+        } else
+        {
+            green_light();
+        }
     }
 
 	void OnCollisionEnter2D(Collision2D other)
@@ -61,5 +73,22 @@ public class Cargo : MonoBehaviour, IConsoleIteration {
 	public void Activate_Once()
 	{
         gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
+
+        if (m_Red_Light == null) return;
+        green_light();
+    }
+
+    void red_light()
+    {
+        m_flipflop = true;
+        m_Red_Light.SetActive(true);
+        m_Green_Light.SetActive(false);
+    }
+
+    void green_light()
+    {
+        m_flipflop = false;
+        m_Red_Light.SetActive(false);
+        m_Green_Light.SetActive(true);
     }
 }
