@@ -6,11 +6,11 @@ public class TeslaCoil : MonoBehaviour {
 
 	public AudioClip[] audioclips;
 
-	void OnCollisionEnter2D (Collision2D collision)
+	void OnTriggerEnter2D (Collider2D collider)
 	{
-		if (collision.gameObject.tag == "Player")
+		if (collider.gameObject.tag == "Player")
 		{
-			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02> ().Deactivate_Particle (collision.gameObject);
+			GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02> ().Deactivate_Particle(collider.gameObject);
 			int randomClipIndex = (int)Mathf.Floor(Random.Range(0, audioclips.Length - 1));
             SoundManager.Instance.PlayModPitch(audioclips[randomClipIndex]);
 		}
