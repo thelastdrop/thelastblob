@@ -195,7 +195,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void Update()
     {
-        tr.position = m_Vlist[0].get_center_position();
+//        tr.position = m_Vlist[0].get_center_position();
+        Check_Median_Point();
     }
 
     void OnEnable()
@@ -229,6 +230,17 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             }
         }
         //Debug.Log("Num in contacts:" + m_Num_In_Contact);
+    }
+
+    void Check_Median_Point()
+    {
+        Vector3 median_pos = new Vector3();
+        for(int i = 0; i < m_Vlist.Count; i++)
+        {
+            median_pos += m_Vlist[i].particle.transform.position;
+        }
+
+        tr.position = median_pos / m_Vlist.Count;
     }
 
     /************************************/
