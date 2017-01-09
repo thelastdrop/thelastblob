@@ -100,15 +100,20 @@ public class GameWinManager : Singleton<GameWinManager>
         //set all the levels up to m_First_Unlocked to active
         for (int i = 0; i < m_gameplay_screens.Length; i++)
         {
-            if (i <= m_FirstUnlocked)
-            {
-                m_levels_accessible[i] = true;
-                m_levels_buttons[i].SetActive(true);
-            }
-            else
-            {
-                m_levels_accessible[i] = false;
-            }
+            /*  
+              if (i <= m_FirstUnlocked)
+              {
+                  m_levels_accessible[i] = true;
+                  m_levels_buttons[i].SetActive(true);
+              }
+              else
+              {
+                  //m_levels_accessible[i] = false;
+              }
+              */
+
+            m_levels_accessible[i] = true;
+            m_levels_buttons[i].SetActive(true);
             //deactivate all the level screens, they will never be used directly 
             m_gameplay_screens[i].SetActive(false);
         }

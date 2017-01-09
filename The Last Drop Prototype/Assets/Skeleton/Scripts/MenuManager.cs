@@ -123,4 +123,8 @@ public class MenuManager : Singleton<MenuManager> {
 		SceneManager.LoadScene ("EmptyMenus_Scene_IndieMeat");
 	}
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
