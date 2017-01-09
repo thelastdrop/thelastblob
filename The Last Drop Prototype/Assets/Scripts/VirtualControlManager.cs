@@ -87,7 +87,6 @@ public class VirtualControlManager : Singleton<VirtualControlManager>
 
                         // Trigger event: i.e. swipeVector has changed 
                         EventManager.TriggerEvent("Swipe");
-
                     }
                 }
             }
