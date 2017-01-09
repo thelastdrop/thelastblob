@@ -297,6 +297,7 @@ public class GameWinManager : Singleton<GameWinManager>
 	//come back to main menu
 	public void SwitchToMenu ()
 	{
+        Time.timeScale = 1.0f;
 		SceneManager.LoadScene ("Menu");
 	}
 
