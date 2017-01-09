@@ -252,8 +252,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position, Quaternion.identity));
         m_Vlist[0].set_center();
-//        m_Vlist[0].particle.GetComponentInChildren<Sprite>
-        
+        m_Vlist[0].particle.GetComponent<CircleCollider2D>().enabled = false;
+        m_Vlist[0].particle.GetComponent<SpriteRenderer>().enabled = false;
+        //      m_Vlist[0].particle.GetComponentInChildren<Sprite>
+
         Vector3 position = Vector3.zero;
         
 
