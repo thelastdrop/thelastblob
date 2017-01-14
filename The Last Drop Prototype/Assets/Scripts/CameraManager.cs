@@ -16,6 +16,8 @@ public class CameraManager : Singleton<CameraManager>{
     public float m_Camera_Rotation_Speed = 4.0f;
     [Tooltip("The camera will not adjust position when xy coords are this discrete distance from the player")]
     public float m_Camera_Abs_Alt_Distance = 0.2f;
+    [Tooltip("When the absolute distance from the camera is this much the camera will teleport to the focus object")]
+    public float m_Camera_Abs_Max_Distance = 20.0f;
 
     private bool m_isCameraMoving = false;
     private bool m_isCameraRotating = false;
@@ -57,6 +59,10 @@ public class CameraManager : Singleton<CameraManager>{
         //       m_isCameraMoving = ;
         if (m_Player_Camera != null)
         {
+            if( Mathf.Abs(m_Player_Camera.transform.position.magnitude - m_Camera_Focus.transform.position.magnitude) > m_Camera_Abs_Max_Distance )
+            {
+                m_Player_Camera.transform.position = m_Camera_Focus.transform.position;
+            }
             if (!Aprox(m_Player_Camera.transform.position, m_Camera_Focus.transform.position))
             {
                 //Debug.Log(tr.transform.position + " " + m_Camera_Focus.transform.position);

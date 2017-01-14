@@ -433,7 +433,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
         m_Vlist.Clear();
 
-        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        m_Start_Position_Object = GameObject.Find("PlayerRestart");
         if (m_Start_Position_Object != null)
         {
             m_Start_Position = m_Start_Position_Object.transform.position;

@@ -127,7 +127,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			current_level = n;
             Time.timeScale = 1.0f;
             StartCoroutine (LoadLevel ());
-            Debug.Log(n);
+            POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+ //           Debug.Log(n);
         }
 		//else it does nothing and the button doesn't work
 	
@@ -141,23 +142,18 @@ public class GameWinManager : Singleton<GameWinManager>
 	{
 
 
-        yield return new WaitForSeconds (m_loading_time);
 
         //initialization
         this.ClearScreens ();
         //playerAvatar.SetActive (true);
-
-
         if (m_playing_screen != null) Destroy( m_playing_screen );
 
         //duplicate the required level and activate it
         m_playing_screen = Instantiate ( m_gameplay_screens [current_level] );
 		m_playing_screen.SetActive (true);
-        playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset( GameManager.Instance.m_Player_Restart_Particles);
-        GameManager.Instance.Gravity_Change( GameManager.Instance.m_Restart_Gravity_Ind );
         SoundManager.Instance.PlayMusic();
 
-        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+        yield return new WaitForSeconds(m_loading_time);
     }
 
 
@@ -167,8 +163,8 @@ public class GameWinManager : Singleton<GameWinManager>
 		current_level++;
         Time.timeScale = 1.0f;
         StartCoroutine (LoadLevel ());
-
-	}
+        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+    }
 
 
 
@@ -177,7 +173,8 @@ public class GameWinManager : Singleton<GameWinManager>
     {
         Time.timeScale = 1.0f;
         StartCoroutine (LoadLevel ());
-	}
+        POLIMIGameCollective.EventManager.TriggerEvent("ReLoadLevel");
+    }
 
 
 
@@ -197,7 +194,6 @@ public class GameWinManager : Singleton<GameWinManager>
             save_progress();
 		}
 		m_endlevel_screen.SetActive (true);
-
 	}
 
 
@@ -206,7 +202,8 @@ public class GameWinManager : Singleton<GameWinManager>
 	void EndLevel ()
 	{
 		POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
-		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
+//		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
+
 		//TODO check if it is correct
 		//Time.timeScale = 0f;
 		//playerAvatar.SetActive (false);
