@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager> {
     public GameObject m_Central_Particle;
     public bool m_Player_IsStretching;
     public GameObject m_Player_Start_Position;
+    public GameObject m_Player_ReStart_Position; // It's player.cs responsability to update this one!
 
     void Awake()
     {
@@ -57,7 +58,8 @@ public class GameManager : Singleton<GameManager> {
 
         POLIMIGameCollective.ObjectPoolingManager.Instance.CreatePool(m_dynam_particle, m_dynam_particle_no_instaces, m_dynam_particle_no_instaces);
 
-        POLIMIGameCollective.EventManager.StartListening("LoadLevel", LevelRestart);
+        POLIMIGameCollective.EventManager.StartListening("LoadLevel", LevelStart);
+        POLIMIGameCollective.EventManager.StartListening("ReLoadLevel", LevelReStart);
     }
 
     void Start()
@@ -83,7 +85,7 @@ public class GameManager : Singleton<GameManager> {
 
     public void CheckPoint( Vector3 arg_position, int player_particles, int gravity_ind )
     {
-        m_Player_Start_Position.transform.position = arg_position;
+        m_Player_ReStart_Position.transform.position = arg_position;
         m_Player_Restart_Particles = player_particles;
         m_Restart_Gravity_Ind = gravity_ind;
     }
@@ -139,12 +141,27 @@ public class GameManager : Singleton<GameManager> {
     }
 
     /***********************************************************/
+    /*************         EVENT METHODS             ***********/
+    /***********************************************************/
 
-    void LevelRestart()
+    void LevelStart()
     {
         m_Player_Start_Position = GameObject.Find("PlayerStart");
         if (m_Player_Start_Position == null)
             Debug.Log("Player Start Position non existant for current level");
+        if (m_Player_ReStart_Position == null)
+            Debug.Log("Player Restart Position not found");
 
+        m_Player_ReStart_Position.transform.position = m_Player_Start_Position.transform.position;
+        m_Restart_Gravity_Ind = 0;
+        Gravity_Change(GameManager.Instance.m_Restart_Gravity_Ind);
+        m_Player_Avatar_Cs.PlayerReset(m_Player_Restart_Particles);
+    }
+
+    void LevelReStart()
+    {
+        if (m_Player_ReStart_Position == null)
+            Debug.Log("Player ReStart Position non existant, check prefab!");
+        m_Player_Avatar_Cs.PlayerReset(m_Player_Restart_Particles);
     }
 }
