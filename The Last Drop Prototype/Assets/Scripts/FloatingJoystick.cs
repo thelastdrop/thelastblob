@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class FloatingJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler {
+public class FloatingJoystick : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler {
 
 	private Image bgImg;
 	private Image joystickImg;
@@ -17,7 +17,7 @@ public class FloatingJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, 
 		joystickImg = transform.GetChild(0).GetComponent<Image>();
 	}
 
-	public virtual void OnDrag(PointerEventData ped)
+	public void OnDrag(PointerEventData ped)
 	{
 		Vector2 pos = Vector2.zero;
 		if(RectTransformUtility.ScreenPointToLocalPointInRectangle
@@ -40,15 +40,14 @@ public class FloatingJoystick : MonoBehaviour, IDragHandler, IPointerUpHandler, 
 		}
 	}
 
-	public virtual void OnPointerDown(PointerEventData ped)
+	public void OnBeginDrag(PointerEventData ped)
 	{
-		OnDrag(ped);
+		
 	}
 
-	public virtual void OnPointerUp(PointerEventData ped)
+	public void OnEndDrag(PointerEventData ped)
 	{
-		inputDirection = Vector2.zero;
-		joystickImg.rectTransform.anchoredPosition = Vector2.zero;
+		
 	}
 
 	public void SetActive(bool cond)

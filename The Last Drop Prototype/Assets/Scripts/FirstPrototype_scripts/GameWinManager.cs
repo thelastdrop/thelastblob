@@ -16,6 +16,8 @@ public class GameWinManager : Singleton<GameWinManager>
 
 
 	// index of the first level accesible by the player at the first opening
+	[Header("How many levels are accesible")]
+	public int m_unlock_until = 0;
 	private int m_FirstUnlocked;
 
 
@@ -52,7 +54,6 @@ public class GameWinManager : Singleton<GameWinManager>
 	/* array of booleans with the same length of levels and same indexes, if a level is playable because the gamers 
 	 * won it the m_levels_accessible[i] is true otherwise is false and that level isn't accessible */
 
-	[Header ("Levels accessible")]
 	public bool[] m_levels_accessible;
 
 	[Header ("Buttons in Choose-Levels Screen")]
@@ -92,28 +93,20 @@ public class GameWinManager : Singleton<GameWinManager>
         // This will get the progress of the player, and setup the variable used to store his progress through the game
         Get_Player_Progress();
 
-        foreach(GameObject elem in m_levels_buttons)
-        {
-            elem.SetActive(false);
-        }
-
         //set all the levels up to m_First_Unlocked to active
         for (int i = 0; i < m_gameplay_screens.Length; i++)
         {
-            /*  
-              if (i <= m_FirstUnlocked)
+              if (i <= m_FirstUnlocked || i < m_unlock_until)
               {
                   m_levels_accessible[i] = true;
                   m_levels_buttons[i].SetActive(true);
               }
               else
               {
-                  //m_levels_accessible[i] = false;
+                  m_levels_accessible[i] = false;
+				  m_levels_buttons[i].SetActive(false);
               }
-              */
 
-            m_levels_accessible[i] = true;
-            m_levels_buttons[i].SetActive(true);
             //deactivate all the level screens, they will never be used directly 
             m_gameplay_screens[i].SetActive(false);
         }
