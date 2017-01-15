@@ -124,8 +124,10 @@ public class Player : MonoBehaviour {
     void Awake()
     {
         tr = gameObject.GetComponent<Transform>();
+        DontDestroyOnLoad(gameObject);
 
         Transform cozy_Restart = tr.GetChild(0);
+        DontDestroyOnLoad(cozy_Restart.gameObject);
 
         if (cozy_Restart == null)
         {
