@@ -14,7 +14,10 @@ public class MenuManager : Singleton<MenuManager> {
 	public GameObject	m_about;
 	public GameObject	m_playlevel;
 
-	public enum eMenuScreen {SplashScreen=0, MainMenu=1, Tutorial=2, Score=3, Settings=4, About=5, PlayLevel=6};
+    public string PlayScene = "Beta_Final";
+
+
+    public enum eMenuScreen {SplashScreen=0, MainMenu=1, Tutorial=2, Score=3, Settings=4, About=5, PlayLevel=6};
 
 	[Header("Start with Splashscreen?")]
 	public bool m_start_with_splashscreen = true;
@@ -119,9 +122,20 @@ public class MenuManager : Singleton<MenuManager> {
 
 	public void Play(){
 		MusicManager.Instance.StopAll ();
-		//MusicManager.Instance.PlayMusic ("GameplayMusic");
-		SceneManager.LoadScene ("Beta_Final");
-	}
+        //MusicManager.Instance.PlayMusic ("GameplayMusic");
+        POLIMIGameCollective.EventManager.TriggerEvent("DestroyOnNewScene");
+        WaitBeforeLoad();
+        SceneManager.LoadScene(PlayScene);
+
+    }
+
+    IEnumerator WaitBeforeLoad()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.05f);
+
+        yield return wait;
+
+    }
 
     public void Quit()
     {
