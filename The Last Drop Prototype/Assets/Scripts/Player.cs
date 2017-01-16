@@ -96,6 +96,7 @@ public class Player : MonoBehaviour {
 
     private stretching_data m_stretch_data;
 
+
     //Eating/carry
     private List<carried_items> m_Carried_Items = new List<carried_items>();
 
@@ -119,12 +120,34 @@ public class Player : MonoBehaviour {
             }
         }
     }
+    
+    void Awake()
+    {
+        tr = gameObject.GetComponent<Transform>();
+        DontDestroyOnLoad(gameObject);
+
+        Transform cozy_Restart = tr.GetChild(0);
+        DontDestroyOnLoad(cozy_Restart.gameObject);
+
+        if (cozy_Restart == null)
+        {
+            Debug.Log("Player is missing PlayerRestart object");
+        } else
+        if (cozy_Restart.gameObject.name != "PlayerRestart")
+        {
+            Debug.Log("Player has a child not named PlayerRestart!");
+        }
+        else
+        {
+            cozy_Restart.transform.parent = null; // Detaching the children, so that can be moved indipendently
+            GameManager.Instance.m_Player_ReStart_Position = cozy_Restart.gameObject;
+        }
+    }
+    
 
     // Use this for initialization
     void Start ()
     {
-        tr = gameObject.GetComponent<Transform>();
-    
         m_Line_Renderer = gameObject.GetComponent<LineRenderer>();
         if (m_Line_Renderer == null) Debug.Log("Found no line renderer on player!");
         m_Line_Renderer.enabled = false;
@@ -139,7 +162,7 @@ public class Player : MonoBehaviour {
         POLIMIGameCollective.EventManager.StartListening("MoveStart", MoveStart);
         POLIMIGameCollective.EventManager.StartListening("MoveEnd", MoveEnd);
         POLIMIGameCollective.EventManager.StartListening("Shake", Shake);
-//        POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
+//      POLIMIGameCollective.EventManager.StartListening("LoadLevel", PlayerReset);
     }
 
     // Update is called once per frame

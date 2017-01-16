@@ -40,7 +40,6 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
 
     void TouchInputTrigger()
     {
-#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE // mobile controls
         // reset value each frame
         // swipeVector = Vector2.zero;
 
@@ -115,7 +114,6 @@ public class FloatingControlManager : Singleton<FloatingControlManager>
                 }
             }
         }
-#endif
     }
 
     // Ignore if using TriggerEvent

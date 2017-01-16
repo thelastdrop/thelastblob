@@ -52,6 +52,6 @@ public class VirtualJoystickMove : MonoBehaviour, IDragHandler, IPointerUpHandle
 	{
 		inputDirection = Vector2.zero;
 		joystickImg.rectTransform.anchoredPosition = Vector2.zero;
-        EventManager.TriggerEvent("MoveStart"); 
+        EventManager.TriggerEvent("MoveEnd"); 
 	}
 }

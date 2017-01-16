@@ -16,6 +16,8 @@ public class GameWinManager : Singleton<GameWinManager>
 
 
 	// index of the first level accesible by the player at the first opening
+	[Header("How many levels are accesible")]
+	public int m_unlock_until = 0;
 	private int m_FirstUnlocked;
 
 
@@ -52,7 +54,6 @@ public class GameWinManager : Singleton<GameWinManager>
 	/* array of booleans with the same length of levels and same indexes, if a level is playable because the gamers 
 	 * won it the m_levels_accessible[i] is true otherwise is false and that level isn't accessible */
 
-	[Header ("Levels accessible")]
 	public bool[] m_levels_accessible;
 
 	[Header ("Buttons in Choose-Levels Screen")]
@@ -92,23 +93,20 @@ public class GameWinManager : Singleton<GameWinManager>
         // This will get the progress of the player, and setup the variable used to store his progress through the game
         Get_Player_Progress();
 
-        foreach(GameObject elem in m_levels_buttons)
-        {
-            elem.SetActive(false);
-        }
-
         //set all the levels up to m_First_Unlocked to active
         for (int i = 0; i < m_gameplay_screens.Length; i++)
         {
-            if (i <= m_FirstUnlocked)
-            {
-                m_levels_accessible[i] = true;
-                m_levels_buttons[i].SetActive(true);
-            }
-            else
-            {
-                m_levels_accessible[i] = false;
-            }
+              if (i <= m_FirstUnlocked || i < m_unlock_until)
+              {
+                  m_levels_accessible[i] = true;
+                  m_levels_buttons[i].SetActive(true);
+              }
+              else
+              {
+                  m_levels_accessible[i] = false;
+				  m_levels_buttons[i].SetActive(false);
+              }
+
             //deactivate all the level screens, they will never be used directly 
             m_gameplay_screens[i].SetActive(false);
         }
@@ -129,7 +127,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			current_level = n;
             Time.timeScale = 1.0f;
             StartCoroutine (LoadLevel ());
-            Debug.Log(n);
+            POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+ //           Debug.Log(n);
         }
 		//else it does nothing and the button doesn't work
 	
@@ -143,23 +142,18 @@ public class GameWinManager : Singleton<GameWinManager>
 	{
 
 
-        yield return new WaitForSeconds (m_loading_time);
 
         //initialization
         this.ClearScreens ();
         //playerAvatar.SetActive (true);
-
-
         if (m_playing_screen != null) Destroy( m_playing_screen );
 
         //duplicate the required level and activate it
         m_playing_screen = Instantiate ( m_gameplay_screens [current_level] );
 		m_playing_screen.SetActive (true);
-        playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset( GameManager.Instance.m_Player_Restart_Particles);
-        GameManager.Instance.Gravity_Change( GameManager.Instance.m_Restart_Gravity_Ind );
         SoundManager.Instance.PlayMusic();
 
-        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+        yield return new WaitForSeconds(m_loading_time);
     }
 
 
@@ -169,8 +163,8 @@ public class GameWinManager : Singleton<GameWinManager>
 		current_level++;
         Time.timeScale = 1.0f;
         StartCoroutine (LoadLevel ());
-
-	}
+        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+    }
 
 
 
@@ -179,7 +173,8 @@ public class GameWinManager : Singleton<GameWinManager>
     {
         Time.timeScale = 1.0f;
         StartCoroutine (LoadLevel ());
-	}
+        POLIMIGameCollective.EventManager.TriggerEvent("ReLoadLevel");
+    }
 
 
 
@@ -199,7 +194,6 @@ public class GameWinManager : Singleton<GameWinManager>
             save_progress();
 		}
 		m_endlevel_screen.SetActive (true);
-
 	}
 
 
@@ -208,7 +202,8 @@ public class GameWinManager : Singleton<GameWinManager>
 	void EndLevel ()
 	{
 		POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
-		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
+//		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
+
 		//TODO check if it is correct
 		//Time.timeScale = 0f;
 		//playerAvatar.SetActive (false);
