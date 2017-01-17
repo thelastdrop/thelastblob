@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using POLIMIGameCollective;
 
 // This class manages all the game architecture, loading a level, pausing,  restarting, winning, losing
+// Also keep in memory progress made by the player.
 
 public class GameWinManager : Singleton<GameWinManager>
 {
@@ -15,7 +16,9 @@ public class GameWinManager : Singleton<GameWinManager>
 
 
 	// index of the first level accesible by the player at the first opening
-	private const int tutorial = 0;
+	[Header("How many levels are accesible")]
+	public int m_unlock_until = 0;
+	private int m_FirstUnlocked;
 
 
 	[Header ("EndLevel Screen")]
@@ -51,7 +54,6 @@ public class GameWinManager : Singleton<GameWinManager>
 	/* array of booleans with the same length of levels and same indexes, if a level is playable because the gamers 
 	 * won it the m_levels_accessible[i] is true otherwise is false and that level isn't accessible */
 
-	[Header ("Levels accessible")]
 	public bool[] m_levels_accessible;
 
 	[Header ("Buttons in Choose-Levels Screen")]
@@ -79,8 +81,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			ReloadLevel ();
 		}
 
-		if (Input.GetKeyDown (KeyCode.P)) {
-			PauseLevel ();
+        if (Input.GetKeyDown (KeyCode.P) || Input.GetKeyDown (KeyCode.Menu) ) {
+            ReloadLevel();
 		}
 	}
 
@@ -88,20 +90,23 @@ public class GameWinManager : Singleton<GameWinManager>
     //scene is then exited and re-entered start is not going to fire.
     public void Activate_GamePlay_Level()
     {
+        // This will get the progress of the player, and setup the variable used to store his progress through the game
+        Get_Player_Progress();
 
-        //set all the levels except the first as not accessible
+        //set all the levels up to m_First_Unlocked to active
         for (int i = 0; i < m_gameplay_screens.Length; i++)
         {
-            if (i == tutorial)
-            {
-                m_levels_accessible[i] = true;
-                m_levels_buttons[i].SetActive(true);
-            }
-            else
-            {
-                m_levels_accessible[i] = false;
-                m_levels_buttons[i].SetActive(false);
-            }
+              if (i <= m_FirstUnlocked || i < m_unlock_until)
+              {
+                  m_levels_accessible[i] = true;
+                  m_levels_buttons[i].SetActive(true);
+              }
+              else
+              {
+                  m_levels_accessible[i] = false;
+				  m_levels_buttons[i].SetActive(false);
+              }
+
             //deactivate all the level screens, they will never be used directly 
             m_gameplay_screens[i].SetActive(false);
         }
@@ -117,12 +122,14 @@ public class GameWinManager : Singleton<GameWinManager>
     //called when the user choses one level
     public void ChooseLevel (int n)
 	{
-        Time.timeScale = 1.0f;
             
 		if (m_levels_accessible [n]) {
 			current_level = n;
-			StartCoroutine (LoadLevel ());
-		}
+            Time.timeScale = 1.0f;
+            StartCoroutine (LoadLevel ());
+            POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+ //           Debug.Log(n);
+        }
 		//else it does nothing and the button doesn't work
 	
 	}
@@ -135,20 +142,18 @@ public class GameWinManager : Singleton<GameWinManager>
 	{
 
 
-        yield return new WaitForSeconds (m_loading_time);
 
         //initialization
         this.ClearScreens ();
         //playerAvatar.SetActive (true);
-
-        //TODO check if it is correct
-        Time.timeScale = 1f;
+        if (m_playing_screen != null) Destroy( m_playing_screen );
 
         //duplicate the required level and activate it
-        m_playing_screen = Instantiate (m_gameplay_screens [current_level]);
+        m_playing_screen = Instantiate ( m_gameplay_screens [current_level] );
 		m_playing_screen.SetActive (true);
-        playerAvatar.GetComponent<PlayerAvatar_02>().PlayerReset(5);
-        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+        SoundManager.Instance.PlayMusic();
+
+        yield return new WaitForSeconds(m_loading_time);
     }
 
 
@@ -156,17 +161,20 @@ public class GameWinManager : Singleton<GameWinManager>
 	public void NextLevel ()
 	{
 		current_level++;
-		StartCoroutine (LoadLevel ());
-
-	}
+        Time.timeScale = 1.0f;
+        StartCoroutine (LoadLevel ());
+        POLIMIGameCollective.EventManager.TriggerEvent("LoadLevel");
+    }
 
 
 
 	//triggered by the button "play again" in Lose/Win screens
 	public void ReloadLevel ()
-	{
-		StartCoroutine (LoadLevel ());
-	}
+    {
+        Time.timeScale = 1.0f;
+        StartCoroutine (LoadLevel ());
+        POLIMIGameCollective.EventManager.TriggerEvent("ReLoadLevel");
+    }
 
 
 
@@ -174,18 +182,18 @@ public class GameWinManager : Singleton<GameWinManager>
 
 	//called when the player reaches the end of the level
 	public void WinLevel ()
-	{
-		this.EndLevel ();
+    {
+        Time.timeScale = 0f;
+ //       this.EndLevel ();
 
-        Time.timeScale = 1f;
 
         // set as accessible (true) the next level if the current one is won
         if (current_level + 1 < m_levels_accessible.Length) {
 			m_levels_accessible [current_level + 1] = true;
 			m_levels_buttons [current_level + 1].SetActive (true);
+            save_progress();
 		}
 		m_endlevel_screen.SetActive (true);
-
 	}
 
 
@@ -194,23 +202,30 @@ public class GameWinManager : Singleton<GameWinManager>
 	void EndLevel ()
 	{
 		POLIMIGameCollective.EventManager.TriggerEvent ("EndLevel");
-		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
+//		playerAvatar.GetComponent<PlayerAvatar_02> ().PlayerReset ( 5 );
+
 		//TODO check if it is correct
 		//Time.timeScale = 0f;
 		//playerAvatar.SetActive (false);
 		this.ClearScreens ();
-		// destroy the currently allocated level screen when a level ends winning/losing
-		Destroy (m_playing_screen);
-		
-	}
+        // destroy the currently allocated level screen when a level ends winning/losing
+        Destroy(m_playing_screen);
+
+    }
 
 
 	//called when the player loses in a level
 	public void LoseLevel ()
-	{
-		this.EndLevel ();
-		m_loselevel_screen.SetActive (true);
-	}
+    {
+        Time.timeScale = 0f;
+        if (m_loselevel_screen != null)
+        {
+            m_loselevel_screen.SetActive(true);
+        } else
+        {
+            Debug.Log("No LoseLevel Screen is set! Add reference to a UI for losing level!");
+        }
+    }
 
 
 	//called when the player pauses the game
@@ -221,7 +236,7 @@ public class GameWinManager : Singleton<GameWinManager>
 
 		//TODO check if it is correct
 		Time.timeScale = 0f;
-		m_playing_screen.SetActive (false);
+//		m_playing_screen.SetActive (false);
 		m_pauselevel_screen.SetActive (true);
 	}
 
@@ -261,8 +276,8 @@ public class GameWinManager : Singleton<GameWinManager>
 			m_endlevel_screen.SetActive (false);
 		if (m_levels_screen != null)
 			m_levels_screen.SetActive (false);
-		if (m_playing_screen != null)
-			m_playing_screen.SetActive (false);
+//		if (m_playing_screen != null)
+//			m_playing_screen.SetActive (false);
 		if (m_loselevel_screen != null)
 			m_loselevel_screen.SetActive (false);
 		if (m_pauselevel_screen != null)
@@ -277,8 +292,28 @@ public class GameWinManager : Singleton<GameWinManager>
 	//come back to main menu
 	public void SwitchToMenu ()
 	{
+        Time.timeScale = 1.0f;
 		SceneManager.LoadScene ("Menu");
 	}
-		 
+
+    void Get_Player_Progress()
+    {
+        if (PlayerPrefs.HasKey("LevelUnlocked"))
+        {
+            m_FirstUnlocked = PlayerPrefs.GetInt("LevelUnlocked");
+        } else
+        {
+            PlayerPrefs.SetInt("LevelUnlocked", 0);
+            m_FirstUnlocked = 0;
+            PlayerPrefs.Save();
+        }
+    }
+
+
+    void save_progress()
+    {
+        PlayerPrefs.SetInt("LevelUnlocked", current_level + 1);
+        PlayerPrefs.Save();
+    }
 
 }

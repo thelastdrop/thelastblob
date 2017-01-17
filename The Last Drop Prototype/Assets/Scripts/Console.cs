@@ -9,8 +9,9 @@ public class Console : MonoBehaviour {
     public GameObject[] object_Linked;
     [Tooltip("Time the console will take to recover, in secs")]
     public float m_Time_To_Recover;
-
     public float m_Update_Tick = 0.032f;
+
+    public AudioClip m_Active_Sound;
 
     private float m_last_use;
     private int m_Player_Particle_Inside;
@@ -77,6 +78,7 @@ public class Console : MonoBehaviour {
                 IConsoleIteration iconGO = (IConsoleIteration)go.GetComponent(typeof(IConsoleIteration));
                 if (iconGO != null)
                 {
+                    SoundManager.Instance.PlayLevelSound(m_Active_Sound, false, 0f);
                     iconGO.Activate_Once();
                 }
             }
@@ -93,6 +95,7 @@ public class Console : MonoBehaviour {
             // Use The console!
             if (m_Time_To_Recover > 0f) InvokeRepeating("UpDate", m_Update_Tick, m_Update_Tick);
             GameManager.Instance.Gravity_Change( m_Gravity_IND );
+            SoundManager.Instance.PlayLevelSound(m_Active_Sound, false, 0f);
 
             m_last_use = Time.time;
         }

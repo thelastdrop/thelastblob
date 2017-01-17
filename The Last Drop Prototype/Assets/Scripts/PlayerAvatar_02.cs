@@ -42,6 +42,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     public AnimationCurve m_Mass_To_Speed;
     [Tooltip("Curve to correct viscosity depending of ratio between dimensions and max dimension, it's value is negated so time 0 rapresent maximum dimensions and 1 smallest")]
     public AnimationCurve m_Mass_To_Viscosity;
+    [Tooltip("Antrigravity: % of inverted gravity vector added to the blob any time it moves, to help move vertically")]
+    public float m_Antrigrav = 0.52f;
 
 
     // List to store values of the verts in the procedural mesh, based on the numbers of raycasts
@@ -59,7 +61,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     private Vector3 m_Start_Position;
 
     private Vector2[] m_CosSin;
-    float m_Radii_Segment; // radial segment size by number of raycasts
+    float m_Radii_Segment; 
 
 
     public struct RB_vert
@@ -193,7 +195,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
     void Update()
     {
-        tr.position = m_Vlist[0].get_center_position();
+//        tr.position = m_Vlist[0].get_center_position();
+        Check_Median_Point();
     }
 
     void OnEnable()
@@ -208,6 +211,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 //        Debug.Log("Disable");
     }
 
+    void OnApplicationQuit()
+    {
+        CancelInvoke("Check_For_Contact");
+    }
     /************************************/
     /***    Invoke and coroutines     ***/
     /************************************/
@@ -223,6 +230,17 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
             }
         }
         //Debug.Log("Num in contacts:" + m_Num_In_Contact);
+    }
+
+    void Check_Median_Point()
+    {
+        Vector3 median_pos = new Vector3();
+        for(int i = 0; i < m_Vlist.Count; i++)
+        {
+            median_pos += m_Vlist[i].particle.transform.position;
+        }
+
+        tr.position = median_pos / m_Vlist.Count;
     }
 
     /************************************/
@@ -246,7 +264,10 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
     {
         m_Vlist.Add(new RB_vert(POLIMIGameCollective.ObjectPoolingManager.Instance.GetObject(m_Particle.name), tr.position, Quaternion.identity));
         m_Vlist[0].set_center();
-        
+        m_Vlist[0].particle.GetComponent<CircleCollider2D>().enabled = false;
+        m_Vlist[0].particle.GetComponent<SpriteRenderer>().enabled = false;
+        //      m_Vlist[0].particle.GetComponentInChildren<Sprite>
+
         Vector3 position = Vector3.zero;
         
 
@@ -310,6 +331,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
                 }
             }
         }
+        SoundManager.Instance.PlayBlobDamage();
         Check_For_Death();
     }
 
@@ -365,6 +387,8 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
         {
             m_Vlist[0].rb.AddForce( ( (Speed * m_Num_In_Contact) + ( Speed.normalized * m_Air_Control * m_Vlist.Count ) ) * multiplier);
         }
+        // Anti-Gravity
+        if(m_Num_In_Contact > 0) m_Vlist[0].rb.AddForce(-Physics2D.gravity * m_Antrigrav * m_Vlist.Count );
 //        Debug.Log("Speed: " + (Speed * m_Num_In_Contact) );
     }
 
@@ -409,7 +433,7 @@ public class PlayerAvatar_02 : MonoBehaviour, ITeleport
 
         m_Vlist.Clear();
 
-        m_Start_Position_Object = GameObject.Find("PlayerStart");
+        m_Start_Position_Object = GameObject.Find("PlayerRestart");
         if (m_Start_Position_Object != null)
         {
             m_Start_Position = m_Start_Position_Object.transform.position;

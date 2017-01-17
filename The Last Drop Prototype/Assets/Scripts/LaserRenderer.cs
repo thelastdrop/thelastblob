@@ -24,12 +24,13 @@ public class LaserRenderer : MonoBehaviour
     [Header("Interval on/off, set to 0 for always on")]
     public float m_sec_offset = 0f;
     private float switchT;
+    // Sound
+    public AudioClip[] audioclips;
 
     // Use this for initialization
     void Start()
     {
         lr = gameObject.GetComponent<LineRenderer>() as LineRenderer;
-        lr.SetColors(Color.red, Color.red);
         lr.startWidth = width;
         lr.endWidth = width;
         tr = gameObject.GetComponent<Transform>() as Transform;
@@ -45,6 +46,7 @@ public class LaserRenderer : MonoBehaviour
 
     void FixedUpdate()
     {
+        LaserInteraction();
         start = new Vector2(source1tr.position.x, source1tr.position.y);
         end = new Vector2(source2tr.position.x, source2tr.position.y);
         lr.SetPositions(new Vector3[] { start, end });
@@ -60,17 +62,22 @@ public class LaserRenderer : MonoBehaviour
     // Laser kills particles here
     void LaserInteraction()
     {
-        RaycastHit2D[] hits = Physics2D.LinecastAll(start, end);
-
-        foreach (RaycastHit2D hit in hits)
-        {
-            GameObject elem = hit.collider.gameObject;
-            if (elem.tag == "Player")
+        if(lr.enabled)
             {
-                if(Time.time - lastUse > cooldown)
+            RaycastHit2D[] hits = Physics2D.LinecastAll(start, end);
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                GameObject elem = hit.collider.gameObject;
+                if (elem.tag == "Player")
                 {
-                    GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elem);
-                    lastUse = Time.time;
+                    if(Time.time - lastUse > cooldown)
+                    {
+                        GameManager.Instance.m_Player.GetComponent<PlayerAvatar_02>().Deactivate_Particle(elem);
+                        int randomClipIndex = (int)Mathf.Floor(Random.Range(0, audioclips.Length - 1));
+                        SoundManager.Instance.PlayModPitch(audioclips[randomClipIndex]);
+                        lastUse = Time.time;
+                    }
                 }
             }
         }

@@ -6,13 +6,13 @@
  *
  * https://blogs.msdn.microsoft.com/dave_crooks_dev_blog/2014/07/21/object-pooling-for-unity3d/
  */
+
+using UnityEngine;
+using System.Collections.Generic;
+using System;
+using System.Linq;
+
 namespace POLIMIGameCollective {
-
-	using UnityEngine;
-	using System.Collections.Generic;
-	using System;
-	using System.Linq;
-
 
 	/// <summary>
 	/// The object pool is a list of already instantiated game objects of the same type.
