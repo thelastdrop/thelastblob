@@ -1,4 +1,4 @@
-# The Last Drop
+# Last Blob 
 
 The blobs originated from planet BlobLoblob, which was destroyed by the federation of planets as a preemptive strike, right before they could build their first warp drive. But the most intelligent blob was capable of stealing a stealth ship used by the federation to launch the attack, and now he will try to avenge his blobs!
 
