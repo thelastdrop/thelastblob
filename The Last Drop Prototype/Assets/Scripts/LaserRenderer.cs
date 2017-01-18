@@ -26,6 +26,7 @@ public class LaserRenderer : MonoBehaviour
     private float switchT;
     // Sound
     public AudioClip[] audioclips;
+    public AudioClip[] cargo_Destruct_Sound;
 
     // Use this for initialization
     void Start()
@@ -78,6 +79,13 @@ public class LaserRenderer : MonoBehaviour
                         SoundManager.Instance.PlayModPitch(audioclips[randomClipIndex]);
                         lastUse = Time.time;
                     }
+                }
+                else if(elem.tag == "Cargo")
+                {
+                    float distance = (GameManager.Instance.m_Player.transform.position - elem.transform.position).magnitude;
+                    if (distance < SoundManager.Instance.m_Max_Distance)
+                        SoundManager.Instance.PlayLevelSound(cargo_Destruct_Sound[Random.Range(0, cargo_Destruct_Sound.Length - 1)], true, distance);
+                    tr.parent.gameObject.SetActive(false); 
                 }
             }
         }
