@@ -34,17 +34,20 @@ public class VirtualControlManager2 : Singleton<VirtualControlManager2>
             {
                 Touch touch = Input.touches[i];
                 
-                if (rightR.Contains(touch.position) && touch.phase == TouchPhase.Began)
+                if(rightR.Contains(touch.position))
                 {
-                    touchOrigin = touch.position;
-                }
-                else if (touch.phase == TouchPhase.Ended)
-                {
-                    Vector2 touchEnd = touch.position;
-                    swipeVector = touchEnd - touchOrigin;
+                    if (touch.phase == TouchPhase.Began)
+                    {
+                        touchOrigin = touch.position;
+                    }
+                    else if (touch.phase == TouchPhase.Ended)
+                    {
+                        Vector2 touchEnd = touch.position;
+                        swipeVector = touchEnd - touchOrigin;
 
-                    // Trigger event: i.e. swipeVector has changed 
-                    EventManager.TriggerEvent("Swipe");
+                        // Trigger event: i.e. swipeVector has changed 
+                        EventManager.TriggerEvent("Swipe");
+                    }
                 }
             }
         }        
