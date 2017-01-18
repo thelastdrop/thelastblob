@@ -163,5 +163,6 @@ public class GameManager : Singleton<GameManager> {
         if (m_Player_ReStart_Position == null)
             Debug.Log("Player ReStart Position non existant, check prefab!");
         m_Player_Avatar_Cs.PlayerReset(m_Player_Restart_Particles);
+        Gravity_Change(GameManager.Instance.m_Restart_Gravity_Ind);
     }
 }
