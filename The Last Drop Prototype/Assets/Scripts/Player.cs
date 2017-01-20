@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
             rb = hit.GetComponent<Rigidbody2D>();
             relative_position.transform.parent = hit.transform;
             relative_position.transform.position = new Vector3(point.x, point.y, 0);
-            Debug.Log("Passato di qui: " + relative_position.transform.position);
+ //           Debug.Log("Passato di qui: " + relative_position.transform.position);
         }
 
         public void initialize()
