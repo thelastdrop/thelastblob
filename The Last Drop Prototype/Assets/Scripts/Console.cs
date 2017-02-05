@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Console : MonoBehaviour {
 
+
+    public GameObject m_Red_Light;
+    public GameObject m_Green_Light;
+
     public bool m_Is_Gravity = false;
     public int m_Gravity_IND = 0;
     public GameObject[] object_Linked;
@@ -15,6 +19,8 @@ public class Console : MonoBehaviour {
 
     private float m_last_use;
     private int m_Player_Particle_Inside;
+
+    private bool m_flipflop;
 
     // Activate only once
     private bool used = false;
@@ -108,5 +114,19 @@ public class Console : MonoBehaviour {
             used = false;
             CancelInvoke("UpDate");
         }
+    }
+
+    void red_light()
+    {
+        m_flipflop = true;
+        m_Red_Light.SetActive(true);
+        m_Green_Light.SetActive(false);
+    }
+
+    void green_light()
+    {
+        m_flipflop = false;
+        m_Red_Light.SetActive(false);
+        m_Green_Light.SetActive(true);
     }
 }
