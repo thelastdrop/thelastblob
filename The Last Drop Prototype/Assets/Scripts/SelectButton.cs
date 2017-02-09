@@ -9,11 +9,7 @@ public class SelectButton : MonoBehaviour {
 
     private void OnEnable()
     {
-        selectit();
-    }
-
-    void selectit()
-    {
         Button.Select();
     }
+    
 }

@@ -20,7 +20,7 @@ public class Console : MonoBehaviour {
     private float m_last_use;
     private int m_Player_Particle_Inside;
 
-    private bool m_flipflop;
+    private bool m_flipflop = false;
 
     // Activate only once
     private bool used = false;
@@ -89,6 +89,11 @@ public class Console : MonoBehaviour {
                 }
             }
 
+            if (m_Red_Light != null)
+            {
+                if (m_flipflop == false) green_light();
+                else red_light();
+            }
             m_last_use = Time.time;
         }
     }
