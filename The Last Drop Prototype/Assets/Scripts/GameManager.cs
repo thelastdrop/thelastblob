@@ -60,6 +60,7 @@ public class GameManager : Singleton<GameManager> {
 
         POLIMIGameCollective.EventManager.StartListening("LoadLevel", LevelStart);
         POLIMIGameCollective.EventManager.StartListening("ReLoadLevel", LevelReStart);
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
