@@ -14,7 +14,7 @@ public class MenuManager : Singleton<MenuManager> {
 	public GameObject	m_about;
 	public GameObject	m_playlevel;
 
-    public string PlayScene = "Beta_Final";
+    public string PlayScene = "Final_Submission";
 
 
     public enum eMenuScreen {SplashScreen=0, MainMenu=1, Tutorial=2, Score=3, Settings=4, About=5, PlayLevel=6};
